@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import TextReveal from "./TextReveal";
 import Scene from "./Scene";
 import FloatingTechCards from "./FloatingTechCards";
+import LetterReveal from "./LetterReveal";
 
 export default function Hero() {
   const container = {
@@ -61,7 +62,7 @@ export default function Hero() {
         </motion.h1>
         
         <motion.h2 variants={item} className="text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-black mb-8 tracking-wide animate-gradient-x">
-          DESENVOLVEDOR FULL STACK
+          <LetterReveal text="DESENVOLVEDOR FULL STACK" />
         </motion.h2>
         
         <div className="max-w-2xl mx-auto mb-12">

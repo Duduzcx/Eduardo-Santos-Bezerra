@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Code2, Monitor, Database } from "lucide-react";
 import TextReveal from "./TextReveal";
 import CircleReveal from "./CircleReveal";
+import LetterReveal from "./LetterReveal";
 
 export default function About() {
   const cards = [
@@ -53,7 +54,7 @@ export default function About() {
               transition={{ duration: 1, type: "spring" }}
             >
               <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
-                Sobre mim
+                <LetterReveal text="Sobre mim" />
               </h2>
             </motion.div>
             

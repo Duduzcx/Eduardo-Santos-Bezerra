@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageOff } from "lucide-react";
 
@@ -20,16 +20,30 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.94, 1]);
   const rotateX = useTransform(scrollYProgress, [0, 1], [6, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const [imageFailed, setImageFailed] = useState(false);
+  const [forceReveal, setForceReveal] = useState(false);
   const featured = index === 0;
 
+  useEffect(() => {
+    const timer = setTimeout(() => setForceReveal(true), 900 + index * 100);
+    return () => clearTimeout(timer);
+  }, [index]);
+
   return (
-    <motion.article ref={cardRef} style={{ y, scale, rotateX, opacity, transformPerspective: 1200 }} className={featured ? "md:col-span-2" : ""}>
+    <motion.article
+      ref={cardRef}
+      style={{ y, scale, rotateX, transformPerspective: 1200 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      animate={forceReveal ? { opacity: 1 } : undefined}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.6 }}
+      className={featured ? "md:col-span-2" : ""}
+    >
       <motion.div whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
         <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
         <div className={`grid h-full ${featured ? "md:grid-cols-[1.15fr_0.85fr]" : "grid-cols-1"}`}>
-          <motion.div initial={{ clipPath: "inset(0 100% 0 0)" }} whileInView={{ clipPath: "inset(0 0% 0 0)" }} viewport={{ once: true, amount: 0.1 }} transition={{ duration: 0.8, delay: 0.1 }} className={`relative overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15 ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
+          <div className={`relative overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15 ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
             {imageFailed ? (
               <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-500">
                 <ImageOff className="h-6 w-6" />
@@ -45,14 +59,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-alt)] via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/20 via-transparent to-[var(--color-cyan)]/15 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-          </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.18 } } }} className="relative z-10 flex flex-col items-start p-6 md:p-8">
-            <motion.span variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">{project.category}</motion.span>
-            <motion.h3 variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">{project.name}</motion.h3>
-            <motion.p variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">{project.desc}</motion.p>
-            <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span key={tag} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">{tag}</span>)}</motion.div>
-            <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></motion.div>
-          </motion.div>
+          </div>
+          <div className="relative z-10 flex flex-col items-start p-6 md:p-8">
+            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">{project.category}</span>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">{project.name}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">{project.desc}</p>
+            <div className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span key={tag} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">{tag}</span>)}</div>
+            <div className="mt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
+          </div>
         </div>
       </motion.div>
     </motion.article>

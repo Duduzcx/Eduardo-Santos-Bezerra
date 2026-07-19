@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import { useForceReveal } from "@/hooks/useForceReveal";
 
 interface LetterRevealProps {
   text: string;
@@ -28,6 +29,8 @@ const letterVariant: Variants = {
 const NBSP = " ";
 
 export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
+  const forceReveal = useForceReveal();
+
   return (
     <motion.span
       className={`inline-block ${className}`}
@@ -35,6 +38,7 @@ export default function LetterReveal({ text, className = "" }: LetterRevealProps
       variants={container}
       initial="hidden"
       whileInView="visible"
+      animate={forceReveal ? "visible" : undefined}
       viewport={{ once: true, margin: "-80px" }}
       aria-label={text}
     >

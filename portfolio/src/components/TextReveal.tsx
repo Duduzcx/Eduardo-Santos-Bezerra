@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
+import { useForceReveal } from "@/hooks/useForceReveal";
 
 interface TextRevealProps {
   text: string;
@@ -9,6 +10,7 @@ interface TextRevealProps {
 
 export default function TextReveal({ text, className = "" }: TextRevealProps) {
   const words = text.split(" ");
+  const forceReveal = useForceReveal();
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -45,6 +47,7 @@ export default function TextReveal({ text, className = "" }: TextRevealProps) {
       variants={container}
       initial="hidden"
       whileInView="visible"
+      animate={forceReveal ? "visible" : undefined}
       viewport={{ once: true, margin: "-100px" }}
     >
       {words.map((word, index) => (

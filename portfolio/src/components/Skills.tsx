@@ -65,16 +65,16 @@ export default function Skills() {
               transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
               whileHover={{ scale: 1.1, y: -10, rotateZ: index % 2 === 0 ? 2 : -2 }}
               whileTap={{ scale: 0.96 }}
-              className={`group flex flex-col items-center justify-center p-8 bg-[var(--color-surface)] border border-neutral-800 rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
+              className={`group flex flex-col items-center justify-center p-8 bg-[var(--color-surface)] border border-[var(--border-subtle)] rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
             >
               {/* Overlay com a cor original da tech no fundo quando dá hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${skill.bg}`} />
               
               <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-white/10 blur-2xl opacity-0 transition-all duration-500 group-hover:scale-150 group-hover:opacity-100" />
-              <div className={`text-neutral-500 transition-all duration-500 mb-4 group-hover:${skill.color} group-hover:rotate-[12deg] group-hover:scale-110 relative z-10`}>
+              <div className={`text-[var(--text-tertiary)] transition-all duration-500 mb-4 group-hover:${skill.color} group-hover:rotate-[12deg] group-hover:scale-110 relative z-10`}>
                 {skill.icon}
               </div>
-              <span className={`text-neutral-400 font-medium group-hover:${skill.color} transition-colors relative z-10`}>
+              <span className={`text-[var(--text-secondary)] font-medium group-hover:${skill.color} transition-colors relative z-10`}>
                 {skill.name}
               </span>
             </motion.div>

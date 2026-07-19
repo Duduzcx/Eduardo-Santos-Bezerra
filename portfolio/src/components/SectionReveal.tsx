@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 type SectionRevealVariant = "up" | "left" | "right" | "scale";
@@ -12,13 +13,21 @@ interface SectionRevealProps {
 export default function SectionReveal({ children, variant = "up" }: SectionRevealProps) {
   const x = variant === "left" ? -56 : variant === "right" ? 56 : 0;
   const y = variant === "scale" ? 32 : variant === "up" ? 64 : 0;
+  const [forceReveal, setForceReveal] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setForceReveal(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const revealed = { opacity: 1, x: 0, y: 0, scale: 1, clipPath: "inset(0 0 0% 0 round 0rem)" };
 
   return (
     <motion.div
       className="w-full relative"
-      style={{ transformPerspective: 1400 }}
-      initial={{ opacity: 0, x, y, scale: 0.94, rotateX: variant === "up" ? 6 : 0, clipPath: "inset(0 0 10% 0 round 2rem)" }}
-      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, rotateX: 0, clipPath: "inset(0 0 0% 0 round 0rem)" }}
+      initial={{ opacity: 0, x, y, scale: 0.94, clipPath: "inset(0 0 10% 0 round 2rem)" }}
+      whileInView={revealed}
+      animate={forceReveal ? revealed : undefined}
       viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
     >

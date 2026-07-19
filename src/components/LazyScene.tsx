@@ -1,25 +1,30 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-
-const Scene = dynamic(() => import("./Scene"), { ssr: false });
+import { View } from "@react-three/drei";
+import { AnimatedShape, type ShapeGeometry } from "./Scene";
 
 interface LazySceneProps {
   color?: string;
   opacity?: number;
-  geometry?: "icosahedron" | "torus";
+  geometry?: ShapeGeometry;
   className?: string;
 }
 
-export default function LazyScene({ className, ...sceneProps }: LazySceneProps) {
-  const ref = useRef<HTMLDivElement>(null);
+export default function LazyScene({ className, color = "#67e8f9", opacity = 0.35, geometry = "icosahedron" }: LazySceneProps) {
+  const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "200px" });
 
   return (
-    <div ref={ref} className={className}>
-      {inView && <Scene {...sceneProps} />}
-    </div>
+    <View ref={ref} className={className}>
+      {inView && (
+        <>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[10, 10, 5]} intensity={1} />
+          <AnimatedShape color={color} opacity={opacity} geometry={geometry} />
+        </>
+      )}
+    </View>
   );
 }

@@ -1,17 +1,19 @@
 "use client";
 
 import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
+
+export type ShapeGeometry = "icosahedron" | "torus" | "dodecahedron" | "octahedron" | "torusknot";
 
 interface AnimatedShapeProps {
   color: string;
   opacity: number;
-  geometry: "icosahedron" | "torus";
+  geometry: ShapeGeometry;
 }
 
-function AnimatedShape({ color, opacity, geometry }: AnimatedShapeProps) {
+export function AnimatedShape({ color, opacity, geometry }: AnimatedShapeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
@@ -26,35 +28,17 @@ function AnimatedShape({ color, opacity, geometry }: AnimatedShapeProps) {
       <mesh ref={meshRef}>
         {geometry === "torus" ? (
           <torusGeometry args={[1.3, 0.45, 8, 32]} />
+        ) : geometry === "dodecahedron" ? (
+          <dodecahedronGeometry args={[1.5, 0]} />
+        ) : geometry === "octahedron" ? (
+          <octahedronGeometry args={[1.6, 0]} />
+        ) : geometry === "torusknot" ? (
+          <torusKnotGeometry args={[1, 0.35, 100, 12]} />
         ) : (
           <icosahedronGeometry args={[1.5, 1]} />
         )}
-        <meshStandardMaterial
-          color={color}
-          wireframe
-          transparent
-          opacity={opacity}
-        />
+        <meshStandardMaterial color={color} wireframe transparent opacity={opacity} />
       </mesh>
     </Float>
-  );
-}
-
-interface SceneProps {
-  color?: string;
-  opacity?: number;
-  geometry?: "icosahedron" | "torus";
-}
-
-export default function Scene({ color = "#67e8f9", opacity = 0.35, geometry = "icosahedron" }: SceneProps) {
-  return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
-        <AnimatedShape color={color} opacity={opacity} geometry={geometry} />
-        <Environment preset="city" />
-      </Canvas>
-    </div>
   );
 }

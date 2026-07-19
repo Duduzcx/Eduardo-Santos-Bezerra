@@ -26,7 +26,7 @@ const SKILLS = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="w-full py-32 bg-[#0a0814] relative overflow-hidden">
+    <section id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
       
       {/* Objeto 3D "Fake" Flutuante girando loucamente no fundo */}
       <motion.div 
@@ -48,7 +48,7 @@ export default function Skills() {
           transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
           className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">
+          <h2 className="text-3xl md:text-5xl font-semibold text-[var(--foreground)] mb-6">
             <LetterReveal text="Stack " />
             <LetterReveal text="Principal" className="text-[var(--color-cyan)]" />
           </h2>

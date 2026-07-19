@@ -76,7 +76,7 @@ export default function About() {
               </motion.div>
             </div>
 
-            <div className="space-y-6 text-neutral-300 text-xl leading-relaxed">
+            <div className="space-y-6 text-[var(--text-secondary)] text-xl leading-relaxed">
               <TextReveal text="Sou um Desenvolvedor Full Stack apaixonado por transformar problemas complexos em interfaces elegantes e sistemas de alta performance." />
               <TextReveal text="Com sólida formação em Engenharia de Software, meu foco é sempre a entrega de valor real. Já atuei no desenvolvimento de plataformas EdTech, automação IoT e análise de dados massivos." />
               <TextReveal text="Recentemente, fui o arquiteto-chefe de uma startup de IA focada no agronegócio, liderando o design de uma infraestrutura em nuvem capaz de processar dados em tempo real e impactar milhares de agricultores." />
@@ -87,7 +87,7 @@ export default function About() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6 }}
               >
-                Chega de sistemas <span className="text-white font-semibold">obsoletos</span> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
+                Chega de sistemas <span className="text-[var(--foreground)] font-semibold">obsoletos</span> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
               </motion.p>
             </div>
           </div>
@@ -101,16 +101,16 @@ export default function About() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.7, type: "spring", bounce: 0.4 }}
                 whileHover={{ scale: 1.05, rotate: idx % 2 === 0 ? 2 : -2 }}
-                className={`group p-8 rounded-3xl bg-[#111111] border border-neutral-800 hover:border-[var(--color-cyan)] transition-colors duration-500 cursor-pointer ${idx === 2 ? 'sm:col-span-2' : ''} shadow-2xl relative overflow-hidden`}
+                className={`group p-8 rounded-3xl bg-[var(--background-panel)] border border-[var(--border-subtle)] hover:border-[var(--color-cyan)] transition-colors duration-500 cursor-pointer ${idx === 2 ? 'sm:col-span-2' : ''} shadow-2xl relative overflow-hidden`}
               >
                 {/* Efeito de brilho de fundo no hover */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--color-accent)]/5 to-[var(--color-cyan)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="mb-6 bg-black w-16 h-16 rounded-2xl flex items-center justify-center border border-neutral-800 relative z-10">
+                <div className="mb-6 bg-[var(--background)] w-16 h-16 rounded-2xl flex items-center justify-center border border-[var(--border-subtle)] relative z-10">
                   {card.icon}
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3 relative z-10">{card.title}</h3>
-                <p className="text-neutral-400 leading-relaxed font-light relative z-10">{card.desc}</p>
+                <h3 className="text-2xl font-bold text-[var(--foreground)] mb-3 relative z-10">{card.title}</h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed font-light relative z-10">{card.desc}</p>
               </motion.div>
             ))}
           </div>

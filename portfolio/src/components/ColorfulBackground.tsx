@@ -19,7 +19,7 @@ export default function ColorfulBackground() {
   }, [mouseX, mouseY]);
 
   return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden bg-[#0a0814] pointer-events-none">
+    <div className="fixed inset-0 z-[-1] overflow-hidden bg-[var(--background)] transition-colors duration-500 pointer-events-none">
       
       {/* Bolha dinâmica seguindo o mouse */}
       <motion.div 

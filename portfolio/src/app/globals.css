@@ -7,25 +7,48 @@
 :root {
   --background: #0a0814;
   --foreground: #ffffff;
-  
+  --background-alt: #08070d;
+  --background-panel: #0d0a17;
+
   --color-surface: #14101f;
   --color-border: rgba(168, 85, 247, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
   --color-accent: #7c3aed;
   --color-accent-light: #a855f7;
   --color-pink: #e879f9;
   --color-cyan: #67e8f9;
-  
+
   --font-mono: 'Fira Code', monospace;
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --background: #f4f2f9;
+  --foreground: #0f0a1c;
+  --background-alt: #eeeaf6;
+  --background-panel: #ffffff;
+
+  --color-surface: #ffffff;
+  --color-border: rgba(124, 58, 237, 0.16);
+  --border-subtle: rgba(15, 10, 28, 0.09);
+  --text-secondary: #52525b;
+  --text-tertiary: #71717a;
+
+  color-scheme: light;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  background-image: 
+  background-image:
     radial-gradient(ellipse at top right, rgba(168,85,247,0.05) 0%, transparent 60%),
     radial-gradient(ellipse at bottom left, rgba(232,121,249,0.04) 0%, transparent 60%);
   background-attachment: fixed;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 html {
@@ -75,8 +98,8 @@ html {
   50% { opacity: 1; }
 }
 
-.animate-twinkle {
-  animation-name: twinkle;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+@keyframes star-drift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -18px); }
+  100% { transform: translate(0, 0); }
 }

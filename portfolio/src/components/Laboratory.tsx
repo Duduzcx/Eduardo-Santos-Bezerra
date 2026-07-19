@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import LetterReveal from "./LetterReveal";
 import LazyScene from "./LazyScene";
@@ -33,6 +33,7 @@ function BentoCard({
   const imageScale = useTransform(mouseX, [-0.5, 0.5], [1.1, 1.2]); // Zoom dinâmico
   const imageX = useTransform(mouseX, [-0.5, 0.5], ["-5%", "5%"]);
   const imageY = useTransform(mouseY, [-0.5, 0.5], ["-5%", "5%"]);
+  const [imageFailed, setImageFailed] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -61,11 +62,11 @@ function BentoCard({
         rotateY,
         transformStyle: "preserve-3d"
       }}
-      className={`relative group overflow-hidden rounded-3xl bg-neutral-900 border border-white/[0.05] p-8 md:p-12 flex flex-col justify-end cursor-pointer shadow-2xl ${className}`}
+      className={`relative group overflow-hidden rounded-3xl bg-[var(--background-panel)] border border-[var(--border-subtle)] p-8 md:p-12 flex flex-col justify-end cursor-pointer shadow-2xl ${className}`}
       data-magnetic
     >
       {/* Background Image / Noise com Parallax no Mouse */}
-      {image && (
+      {image && !imageFailed && (
         <motion.div
           className="absolute inset-0 z-0 opacity-75 group-hover:opacity-95 transition-opacity duration-700"
           style={{
@@ -75,7 +76,7 @@ function BentoCard({
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/30 to-transparent z-10" />
-          <img src={image} alt={title} className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-100 transition-all duration-700" />
+          <img src={image} alt={title} onError={() => setImageFailed(true)} className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-100 transition-all duration-700" />
         </motion.div>
       )}
 
@@ -84,13 +85,13 @@ function BentoCard({
         style={{ transform: "translateZ(60px)" }} 
         className="relative z-20 flex flex-col gap-4 mt-32"
       >
-        <div className="text-white bg-white/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 mb-2 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+        <div className="text-[var(--foreground)] bg-[var(--foreground)]/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-[var(--border-subtle)] mb-2 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
           {icon}
         </div>
-        <h3 className="text-2xl md:text-4xl font-medium tracking-tight text-white leading-tight">
+        <h3 className="text-2xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] leading-tight">
           {title}
         </h3>
-        <p className="text-neutral-400 font-light text-base md:text-lg max-w-sm">
+        <p className="text-[var(--text-secondary)] font-light text-base md:text-lg max-w-sm">
           {desc}
         </p>
       </motion.div>
@@ -100,7 +101,7 @@ function BentoCard({
 
 export default function Laboratory() {
   return (
-    <section className="relative w-full py-40 z-20 bg-neutral-950 overflow-hidden">
+    <section className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
       {/* Objeto 3D em loop, estilo Thor, bem sutil no fundo da seção */}
       <LazyScene className="absolute inset-0 opacity-[0.15] pointer-events-none" color="#7c3aed" opacity={0.4} />
 
@@ -113,7 +114,7 @@ export default function Laboratory() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mt-4 text-3xl md:text-4xl font-light text-neutral-300 tracking-tight"
+          className="mt-4 text-3xl md:text-4xl font-light text-[var(--text-secondary)] tracking-tight"
         >
           Onde a engenharia vira arte.
         </motion.p>

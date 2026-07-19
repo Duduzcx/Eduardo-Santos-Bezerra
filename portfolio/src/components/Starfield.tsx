@@ -5,7 +5,8 @@ import { useMemo } from "react";
 interface Layer {
   shadow: string;
   size: number;
-  duration: number;
+  twinkleDuration: number;
+  driftDuration: number;
 }
 
 function buildLayer(count: number, spread: number, size: number, seed: number): string {
@@ -26,9 +27,9 @@ function buildLayer(count: number, spread: number, size: number, seed: number): 
 export default function Starfield() {
   const layers = useMemo<Layer[]>(
     () => [
-      { shadow: buildLayer(140, 2000, 1, 11), size: 1, duration: 6 },
-      { shadow: buildLayer(70, 2000, 2, 47), size: 2, duration: 4.5 },
-      { shadow: buildLayer(30, 2000, 3, 91), size: 3, duration: 8 },
+      { shadow: buildLayer(140, 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
+      { shadow: buildLayer(70, 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
+      { shadow: buildLayer(30, 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
     ],
     []
   );
@@ -38,14 +39,13 @@ export default function Starfield() {
       {layers.map((layer, i) => (
         <div
           key={i}
-          className="absolute left-0 top-0 rounded-full animate-twinkle"
+          className="absolute left-0 top-0 rounded-full"
           style={{
             width: layer.size,
             height: layer.size,
             background: "transparent",
             boxShadow: layer.shadow,
-            animationDuration: `${layer.duration}s`,
-            animationDelay: `${i * 0.6}s`,
+            animation: `twinkle ${layer.twinkleDuration}s ease-in-out ${i * 0.6}s infinite, star-drift ${layer.driftDuration}s ease-in-out infinite`,
           }}
         />
       ))}

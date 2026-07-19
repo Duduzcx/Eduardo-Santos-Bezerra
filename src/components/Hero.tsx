@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import TextReveal from "./TextReveal";
 import Scene from "./Scene";
+import FloatingTechCards from "./FloatingTechCards";
 
 export default function Hero() {
   const container = {
@@ -40,6 +41,8 @@ export default function Hero() {
       <div className="absolute inset-0 z-[1] opacity-60 pointer-events-none">
         <Scene />
       </div>
+
+      <FloatingTechCards />
 
       <motion.div 
         variants={container}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { useInView } from "framer-motion";
+import { useInView, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
 import type { ShapeGeometry } from "./Scene";
@@ -19,10 +19,14 @@ export default function LazyScene({ className, color = "#67e8f9", opacity = 0.35
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "200px" });
   const isDesktop = useIsDesktop();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const scrollProgress = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
 
   return (
     <div ref={ref} className={className}>
-      {inView && isDesktop && <LazySceneContent color={color} opacity={opacity} geometry={geometry} />}
+      {inView && isDesktop && (
+        <LazySceneContent color={color} opacity={opacity} geometry={geometry} scrollProgress={scrollProgress} />
+      )}
     </div>
   );
 }

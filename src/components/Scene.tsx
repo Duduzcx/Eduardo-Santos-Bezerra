@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
+import type { MotionValue } from "framer-motion";
 import * as THREE from "three";
 
 export type ShapeGeometry = "icosahedron" | "torus" | "dodecahedron" | "octahedron" | "torusknot";
@@ -11,15 +12,20 @@ interface AnimatedShapeProps {
   color: string;
   opacity: number;
   geometry: ShapeGeometry;
+  scrollProgress?: MotionValue<number>;
 }
 
-export function AnimatedShape({ color, opacity, geometry }: AnimatedShapeProps) {
+export function AnimatedShape({ color, opacity, geometry, scrollProgress }: AnimatedShapeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2;
-      meshRef.current.rotation.y += delta * 0.3;
+    if (!meshRef.current) return;
+    meshRef.current.rotation.x += delta * 0.2;
+    meshRef.current.rotation.y += delta * 0.3;
+    if (scrollProgress) {
+      const progress = scrollProgress.get();
+      meshRef.current.rotation.z = progress * Math.PI * 0.5;
+      meshRef.current.scale.setScalar(0.85 + progress * 0.25);
     }
   });
 

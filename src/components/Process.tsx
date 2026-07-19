@@ -41,13 +41,25 @@ export default function Process() {
           <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
             <LetterReveal text="O Processo" />
           </h2>
-          <p className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight"
+          >
             Engenharia de Ponta a Ponta
-          </p>
+          </motion.p>
         </div>
-        <p className="mt-6 md:mt-0 text-neutral-500 max-w-sm text-sm font-light leading-relaxed">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mt-6 md:mt-0 text-neutral-500 max-w-sm text-sm font-light leading-relaxed"
+        >
           Nenhuma etapa é subestimada. Do bit armazenado no banco à física do cursor na tela, o controle arquitetural é absoluto.
-        </p>
+        </motion.p>
       </div>
 
       <div className="flex flex-col w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-24">

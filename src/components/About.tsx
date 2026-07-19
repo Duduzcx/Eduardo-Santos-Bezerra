@@ -1,12 +1,20 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Code2, Monitor, Database } from "lucide-react";
 import TextReveal from "./TextReveal";
 import CircleReveal from "./CircleReveal";
 import LetterReveal from "./LetterReveal";
 
 export default function About() {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: titleProgress } = useScroll({
+    target: titleRef,
+    offset: ["start 90%", "start 30%"],
+  });
+  const bgTextClip = useTransform(titleProgress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
+
   const cards = [
     {
       icon: <Monitor className="w-8 h-8 text-[var(--color-cyan)]" />,
@@ -47,17 +55,28 @@ export default function About() {
         <div className="flex flex-col lg:flex-row gap-20 items-center">
           
           <div className="flex-1 space-y-8">
-            <motion.div 
-              initial={{ opacity: 0, scale: 1.2, rotateX: -45 }}
-              whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, type: "spring" }}
-            >
-              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
-                <LetterReveal text="Sobre mim" />
-              </h2>
-            </motion.div>
-            
+            <div ref={titleRef} className="relative">
+              {/* Texto de fundo gigante, revela progressivamente conforme o scroll passa pela seção */}
+              <motion.div
+                style={{ clipPath: bgTextClip }}
+                className="absolute -top-6 md:-top-14 left-0 text-[16vw] md:text-[7vw] font-black text-white/5 leading-none whitespace-nowrap pointer-events-none select-none -z-10"
+                aria-hidden="true"
+              >
+                SOBRE MIM
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 1.2, rotateX: -45 }}
+                whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1, type: "spring" }}
+              >
+                <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
+                  <LetterReveal text="Sobre mim" />
+                </h2>
+              </motion.div>
+            </div>
+
             <div className="space-y-6 text-neutral-300 text-xl leading-relaxed">
               <TextReveal text="Sou um Desenvolvedor Full Stack apaixonado por transformar problemas complexos em interfaces elegantes e sistemas de alta performance." />
               <TextReveal text="Com sólida formação em Engenharia de Software, meu foco é sempre a entrega de valor real. Já atuei no desenvolvimento de plataformas EdTech, automação IoT e análise de dados massivos." />

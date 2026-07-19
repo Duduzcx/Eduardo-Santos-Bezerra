@@ -45,18 +45,26 @@ export default function Contact() {
           </motion.h1>
         </div>
 
-        <div className="mt-20 flex flex-col md:flex-row gap-12 md:gap-24">
-          <a 
-            href="mailto:seu-email@exemplo.com" 
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+          className="mt-20 flex flex-col md:flex-row gap-12 md:gap-24"
+        >
+          <motion.a
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            href="mailto:seu-email@exemplo.com"
             className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
             data-magnetic
           >
             <Mail className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
             <span>E-mail</span>
-          </a>
-          
-          <a 
-            href="https://linkedin.com/in/seulinkedin" 
+          </motion.a>
+
+          <motion.a
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            href="https://linkedin.com/in/seulinkedin"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
@@ -64,10 +72,11 @@ export default function Contact() {
           >
             <LinkedinIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
             <span>LinkedIn</span>
-          </a>
-          
-          <a 
-            href="https://github.com/seugithub" 
+          </motion.a>
+
+          <motion.a
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+            href="https://github.com/seugithub"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
@@ -75,8 +84,8 @@ export default function Contact() {
           >
             <GithubIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
             <span>GitHub</span>
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-end md:items-center mt-24 text-neutral-600 text-sm font-light">

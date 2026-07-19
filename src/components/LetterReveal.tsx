@@ -24,6 +24,8 @@ const letterVariant: Variants = {
   },
 };
 
+const NBSP = " ";
+
 export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
   return (
     <motion.span
@@ -36,7 +38,7 @@ export default function LetterReveal({ text, className = "" }: LetterRevealProps
     >
       {text.split("").map((char, i) => (
         <motion.span key={i} variants={letterVariant} className="inline-block" aria-hidden="true">
-          {char}
+          {char === " " ? NBSP : char}
         </motion.span>
       ))}
     </motion.span>

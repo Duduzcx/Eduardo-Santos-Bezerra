@@ -48,6 +48,10 @@ function BentoCard({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
       style={{
         rotateX,
         rotateY,
@@ -97,9 +101,15 @@ export default function Laboratory() {
         <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
           <LetterReveal text="Laboratório & Explorações" />
         </h2>
-        <p className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight"
+        >
           Onde a engenharia vira arte.
-        </p>
+        </motion.p>
       </div>
 
       {/* O Bento Grid Distorcido */}

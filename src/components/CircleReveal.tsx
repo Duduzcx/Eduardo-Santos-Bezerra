@@ -23,7 +23,7 @@ export default function CircleReveal({ word, className = "" }: CircleRevealProps
   return (
     <span ref={ref} className={`relative inline-block px-2 ${className}`}>
       {word}
-      <svg viewBox="0 0 66 66" className="absolute -inset-3 w-[calc(100%+1.5rem)] h-[calc(100%+1.5rem)] pointer-events-none" fill="none">
+      <svg viewBox="0 0 66 66" className="absolute -inset-3 w-[calc(100%+1.5rem)] h-[calc(100%+1.5rem)] pointer-events-none" fill="none" aria-hidden="true">
         <motion.path
           d={CIRCLE_PATH}
           stroke="#ef4444"

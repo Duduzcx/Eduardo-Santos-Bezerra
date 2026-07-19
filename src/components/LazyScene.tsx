@@ -2,8 +2,11 @@
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { View } from "@react-three/drei";
-import { AnimatedShape, type ShapeGeometry } from "./Scene";
+import dynamic from "next/dynamic";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import type { ShapeGeometry } from "./Scene";
+
+const LazySceneContent = dynamic(() => import("./LazySceneContent"), { ssr: false });
 
 interface LazySceneProps {
   color?: string;
@@ -13,18 +16,13 @@ interface LazySceneProps {
 }
 
 export default function LazyScene({ className, color = "#67e8f9", opacity = 0.35, geometry = "icosahedron" }: LazySceneProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "200px" });
+  const isDesktop = useIsDesktop();
 
   return (
-    <View ref={ref} className={className}>
-      {inView && (
-        <>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <AnimatedShape color={color} opacity={opacity} geometry={geometry} />
-        </>
-      )}
-    </View>
+    <div ref={ref} className={className}>
+      {inView && isDesktop && <LazySceneContent color={color} opacity={opacity} geometry={geometry} />}
+    </div>
   );
 }

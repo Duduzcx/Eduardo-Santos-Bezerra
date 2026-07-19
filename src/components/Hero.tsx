@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import TextReveal from "./TextReveal";
 import Scene from "./Scene";
@@ -19,6 +20,24 @@ export default function Hero() {
   const item = {
     hidden: { opacity: 0, y: 50 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  };
+
+  const btnRef = useRef<HTMLAnchorElement>(null);
+  const btnX = useMotionValue(0);
+  const btnY = useMotionValue(0);
+  const springX = useSpring(btnX, { damping: 15, stiffness: 150, mass: 0.5 });
+  const springY = useSpring(btnY, { damping: 15, stiffness: 150, mass: 0.5 });
+
+  const handleBtnMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    btnX.set((e.clientX - (rect.left + rect.width / 2)) * 0.35);
+    btnY.set((e.clientY - (rect.top + rect.height / 2)) * 0.35);
+  };
+
+  const handleBtnMouseLeave = () => {
+    btnX.set(0);
+    btnY.set(0);
   };
 
   return (
@@ -73,10 +92,17 @@ export default function Hero() {
         </div>
         
         <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-4">
-          <a href="#projects" className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-pink)] text-white font-bold text-lg hover:scale-105 transition-all shadow-[0_0_40px_rgba(232,121,249,0.4)] flex items-center gap-3">
+          <motion.a
+            ref={btnRef}
+            href="#projects"
+            onMouseMove={handleBtnMouseMove}
+            onMouseLeave={handleBtnMouseLeave}
+            style={{ x: springX, y: springY }}
+            className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-pink)] text-white font-bold text-lg hover:scale-105 transition-all shadow-[0_0_40px_rgba(232,121,249,0.4)] flex items-center gap-3"
+          >
             Explorar Projetos
             <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-          </a>
+          </motion.a>
         </motion.div>
       </motion.div>
     </section>

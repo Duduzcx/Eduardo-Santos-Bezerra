@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import LetterReveal from "./LetterReveal";
 import LazyScene from "./LazyScene";
 import { 
@@ -25,7 +26,17 @@ const SKILLS = [
   { name: "React Native", icon: <Smartphone strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#61DAFB]", bg: "bg-[#61DAFB]/10 border-[#61DAFB]/20" },
 ];
 
+function SkillFillBar({ scrollYProgress, index, total }: { scrollYProgress: MotionValue<number>; index: number; total: number }) {
+  const start = index / total;
+  const end = Math.min(1, start + 1 / total + 0.15);
+  const scaleX = useTransform(scrollYProgress, [start, end], [0, 1]);
+  return <motion.div style={{ scaleX }} className="absolute bottom-0 left-0 h-[3px] w-full origin-left bg-[var(--color-cyan)]" />;
+}
+
 export default function Skills() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: gridRef, offset: ["start 85%", "end 60%"] });
+
   return (
     <section id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
       
@@ -57,7 +68,7 @@ export default function Skills() {
         </motion.div>
 
         {/* Animação nova: Cada card não vem de baixo, mas gira em X (estilo moeda caindo) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {SKILLS.map((skill, index) => (
             <motion.div
               key={index}
@@ -79,6 +90,7 @@ export default function Skills() {
               <span className={`text-[var(--text-secondary)] font-medium group-hover:${skill.color} transition-colors relative z-10`}>
                 {skill.name}
               </span>
+              <SkillFillBar scrollYProgress={scrollYProgress} index={index} total={SKILLS.length} />
             </motion.div>
           ))}
         </div>

@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Code2, Monitor, Database } from "lucide-react";
 import TextReveal from "./TextReveal";
 import LetterReveal from "./LetterReveal";
+import LazyScene from "./LazyScene";
 
 export default function About() {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -49,6 +50,8 @@ export default function About() {
           <polygon points="50,10 90,90 10,90" strokeDasharray="2 6" />
         </svg>
       </motion.div>
+
+      <LazyScene className="absolute inset-0 opacity-20 pointer-events-none" geometry="dodecahedron" color="#67e8f9" opacity={0.35} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-20 items-center">

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import LetterReveal from "./LetterReveal";
+import LazyScene from "./LazyScene";
 import { 
   FileCode2, 
   Database, 
@@ -34,11 +35,12 @@ export default function Skills() {
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute right-[-10%] top-[30%] w-[50vw] h-[50vw] border border-[var(--color-pink)]/10 rounded-3xl pointer-events-none"
       />
-      <motion.div 
+      <motion.div
         animate={{ rotateZ: -360, rotateX: -360, rotateY: 180 }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         className="absolute right-[-5%] top-[20%] w-[40vw] h-[40vw] border border-[var(--color-cyan)]/10 rounded-full pointer-events-none"
       />
+      <LazyScene className="absolute inset-0 opacity-20 pointer-events-none" geometry="torusknot" color="#e879f9" opacity={0.35} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div 

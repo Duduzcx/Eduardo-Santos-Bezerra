@@ -17,29 +17,45 @@ Spec: `docs/superpowers/specs/2026-07-19-perf-3d-scroll-design.md`
 - **No real browser available in this execution environment** (no admin rights to install Chrome; `npx playwright install chromium` also fails without `@playwright/test` as a project dependency, which is out of scope to add). Every task's "manual visual check" step must still be written out in full — the user runs it themselves in their own browser. Do not claim a visual/interaction result was confirmed unless it actually was.
 - Current lint baseline (before this plan): 3 pre-existing warnings only, no errors — `@next/next/no-img-element` in `Laboratory.tsx:89`, `Process.tsx:112`, `Projects.tsx:53` (all pre-existing `<img>` tags, unrelated to this work). Do not fix these — out of scope. A scoped `npx eslint <files touched this task>` should show **zero new warnings or errors** beyond these three when the touched file is one of those three.
 - Brand color tokens (from `src/app/globals.css`): accent `#7c3aed`, accent-light `#a855f7`, pink `#e879f9`, cyan `#67e8f9`. Use these exact hex values when passing `color` to `LazyScene` (its prop is a raw hex string, not a CSS var, matching existing usage in `Laboratory.tsx`/`Contact.tsx`).
-- **The `View`-based shared-canvas architecture in Task 1 was already spiked and verified working in this environment** before this plan was written: `npx tsc --noEmit` clean, `npm run build` clean, and the dev server compiled `/` with `GET / 200` and no console/server errors. The spike was reverted (this is the plan, not the implementation), so Task 1 must still be executed and re-verified for real, but the exact code below is known-good, not speculative.
+- **The `View`-based shared-canvas architecture in Task 1 was spiked, verified, then implemented and reviewed for real.** First review pass found the original spike's `LazyScene.tsx` broke the mobile bundle-exclusion goal (static top-level `View`/`AnimatedShape` imports, reachable unconditionally through Hero/Laboratory/Contact). Fixed by splitting the heavy JSX into `LazySceneContent.tsx` (dynamically imported, gated on `inView && isDesktop`) and a shared `useIsDesktop` hook. Re-reviewed and approved — see Task 1's amendment note for the final, landed shape. Tasks 2+ below are written against that final shape.
 - Each `View` instance gets its **own** lights (`ambientLight`/`directionalLight`) — confirmed by reading `@react-three/drei`'s `View.js` source: every `<View>` creates its own `THREE.Scene()` and portals its children into it, so lights do not leak between sections' views. Do not try to hoist lights into a single shared location — that would leave every section but one unlit.
 - **Git state:** repo working tree should be clean before starting (only this plan's own commits). Every commit in this plan must run `git add <exact files listed in that task>` — **never** `git add -A` or `git add .`.
 - Windows/PowerShell dev environment, but all commands below are plain `npm`/`npx` and work identically from either shell.
-- 3D is desktop-only (`lg` = `min-width: 1024px`). This is enforced in `SceneCanvasGate.tsx` (Task 1) via `window.matchMedia`, not CSS `hidden` — the goal is that mobile never triggers the `next/dynamic` import of the Three.js/drei bundle at all, not just that it's visually hidden.
+- 3D is desktop-only (`lg` = `min-width: 1024px`). Enforced by the shared `useIsDesktop()` hook (`src/hooks/useIsDesktop.ts`, Task 1), consumed by both `SceneCanvasGate.tsx` (gates the shared `<Canvas>`) and `LazyScene.tsx` (gates the `next/dynamic` import of `LazySceneContent.tsx`, the file that actually pulls in Three.js/drei) — the goal is that mobile never triggers that download at all, not just that it's visually hidden. Both gates must stay in sync; do not add a new `LazyScene`-style consumer of Three.js without routing it through the same hook.
 
 ---
 
 ### Task 1: Shared 3D canvas foundation
 
+> **AMENDED after implementation + review.** The original version of this task
+> had `LazyScene.tsx` import `View` and `AnimatedShape` at module scope. Task
+> review caught that this defeated the mobile-exclusion goal — `LazyScene` is
+> used unconditionally by `Hero.tsx`/`Laboratory.tsx`/`Contact.tsx`, so the
+> ~865KB Three.js bundle loaded for every device, not just desktop, even
+> though `SceneCanvasGate` correctly kept the separate `SceneCanvas` singleton
+> off mobile. Fixed by splitting the heavy JSX into a new
+> `LazySceneContent.tsx`, dynamically imported and gated (together with
+> `SceneCanvasGate`) behind a new shared `src/hooks/useIsDesktop.ts` hook. The
+> steps below reflect the final, reviewed state — this is what actually
+> landed (commits `800c8fa`, `8651a17`), not a hypothetical.
+
 **Files:**
 - Modify: `src/components/Scene.tsx` (full file rewrite, currently 60 lines)
 - Modify: `src/components/LazyScene.tsx` (full file rewrite, currently 25 lines)
+- Create: `src/components/LazySceneContent.tsx`
 - Create: `src/components/SceneCanvas.tsx`
 - Create: `src/components/SceneCanvasGate.tsx`
+- Create: `src/hooks/useIsDesktop.ts`
 - Modify: `src/app/layout.tsx:12` (import) and `src/app/layout.tsx:46` (mount)
 
 **Interfaces:**
 - Produces: `AnimatedShape` (named export from `Scene.tsx`) — `{ color: string; opacity: number; geometry: ShapeGeometry }`, no longer a default export, no longer creates its own `<Canvas>`.
 - Produces: `ShapeGeometry` (named type export from `Scene.tsx`) — `"icosahedron" | "torus" | "dodecahedron" | "octahedron" | "torusknot"`.
-- Produces: `LazyScene` (default export, unchanged public props: `{ color?: string; opacity?: number; geometry?: ShapeGeometry; className?: string }`) — existing callers in `Hero.tsx`, `Laboratory.tsx`, `Contact.tsx` need no changes for this task.
+- Produces: `useIsDesktop(query?: string): boolean` (named export from `src/hooks/useIsDesktop.ts`) — SSR-safe `matchMedia` hook, defaults to `"(min-width: 1024px)"`, returns `false` until the client effect resolves.
+- Produces: `LazySceneContent` (default export from `LazySceneContent.tsx`) — `{ color: string; opacity: number; geometry: ShapeGeometry }`, renders the actual `<View>`/lights/`AnimatedShape`. Always dynamically imported by `LazyScene`, never imported directly by section components.
+- Produces: `LazyScene` (default export, unchanged public props: `{ color?: string; opacity?: number; geometry?: ShapeGeometry; className?: string }`) — existing callers in `Hero.tsx`, `Laboratory.tsx`, `Contact.tsx` need no changes for this task. Internally now only imports `ShapeGeometry` as a type (erased at compile time) — never imports `View`/`AnimatedShape`/`LazySceneContent` at module scope, only via a gated `next/dynamic`.
 - Produces: `SceneCanvas` (default export, no props) — the single shared `<Canvas>` with `<View.Port />`.
-- Produces: `SceneCanvasGate` (default export, no props) — desktop-only gate that dynamically imports and mounts `SceneCanvas`.
+- Produces: `SceneCanvasGate` (default export, no props) — desktop-only gate (via `useIsDesktop`) that dynamically imports and mounts `SceneCanvas`.
 
 - [ ] **Step 1: Rewrite `Scene.tsx`**
 
@@ -94,7 +110,59 @@ export function AnimatedShape({ color, opacity, geometry }: AnimatedShapeProps) 
 
 Two things dropped from the original on purpose: the `<Canvas>`/`<ambientLight>`/`<directionalLight>` wrapper (now lives per-`View`, see Step 2) and `<Environment preset="city" />` (downloaded an HDR for a wireframe transparent material that barely reflects it — real network/GPU cost for near-zero visual gain; this is one of the two root causes of slow first load from the spec).
 
-- [ ] **Step 2: Rewrite `LazyScene.tsx`**
+- [ ] **Step 2: Create `src/hooks/useIsDesktop.ts`**
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+export function useIsDesktop(query = "(min-width: 1024px)") {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- matchMedia can only be read client-side, after mount
+    setIsDesktop(mq.matches);
+    const handleChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, [query]);
+
+  return isDesktop;
+}
+```
+
+Follows the same `"use client"`-hook-file convention already used by `src/hooks/useForceReveal.ts`. The `eslint-disable` line is required — `eslint-config-next` pulls in `eslint-plugin-react-hooks`'s `recommended` config, which sets `react-hooks/set-state-in-effect` to `"error"`, and there is no way to read `window.matchMedia` during render (it doesn't exist on the server, and reading it synchronously during a client render would desync from SSR output).
+
+- [ ] **Step 3: Create `LazySceneContent.tsx`**
+
+```tsx
+"use client";
+
+import { View } from "@react-three/drei";
+import { AnimatedShape, type ShapeGeometry } from "./Scene";
+
+interface LazySceneContentProps {
+  color: string;
+  opacity: number;
+  geometry: ShapeGeometry;
+}
+
+export default function LazySceneContent({ color, opacity, geometry }: LazySceneContentProps) {
+  return (
+    <View className="absolute inset-0 w-full h-full pointer-events-none">
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <AnimatedShape color={color} opacity={opacity} geometry={geometry} />
+    </View>
+  );
+}
+```
+
+This is the file that actually imports `View` and `AnimatedShape` — the heavy Three.js/drei code. It is never imported directly by a section component; only `LazyScene.tsx` (Step 4) reaches it, and only via a gated dynamic import, so this is the one piece that must never end up in an eagerly-loaded bundle.
+
+- [ ] **Step 4: Rewrite `LazyScene.tsx`**
 
 Replace the full contents of `src/components/LazyScene.tsx`:
 
@@ -103,8 +171,11 @@ Replace the full contents of `src/components/LazyScene.tsx`:
 
 import { useRef } from "react";
 import { useInView } from "framer-motion";
-import { View } from "@react-three/drei";
-import { AnimatedShape, type ShapeGeometry } from "./Scene";
+import dynamic from "next/dynamic";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import type { ShapeGeometry } from "./Scene";
+
+const LazySceneContent = dynamic(() => import("./LazySceneContent"), { ssr: false });
 
 interface LazySceneProps {
   color?: string;
@@ -114,26 +185,21 @@ interface LazySceneProps {
 }
 
 export default function LazyScene({ className, color = "#67e8f9", opacity = 0.35, geometry = "icosahedron" }: LazySceneProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "200px" });
+  const isDesktop = useIsDesktop();
 
   return (
-    <View ref={ref} className={className}>
-      {inView && (
-        <>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <AnimatedShape color={color} opacity={opacity} geometry={geometry} />
-        </>
-      )}
-    </View>
+    <div ref={ref} className={className}>
+      {inView && isDesktop && <LazySceneContent color={color} opacity={opacity} geometry={geometry} />}
+    </div>
   );
 }
 ```
 
-`View` (used outside of a `<Canvas>`, which is the case here — `LazyScene` is rendered from regular section components) renders its own tracked `<div>` under the hood using the `className`/`style` you pass it, and tunnels its children into the shared canvas created in Step 3. You don't need to manage a `track` ref yourself — passing `ref` here just gives `useInView` something to observe (same job the old wrapper `<div ref={ref}>` did).
+`import type { ShapeGeometry } from "./Scene"` is erased at compile time — it does **not** pull `Scene.tsx`'s runtime `@react-three/fiber`/`@react-three/drei`/`three` imports into `LazyScene.tsx`'s own bundle. The wrapper `<div ref={ref} className={className}>` is the same DOM node `useInView` observes and the same one `LazySceneContent`'s inner `<View className="absolute inset-0 w-full h-full ...">` (Step 3) visually fills — every caller already passes an `absolute` className to `LazyScene`, so this outer div is itself a valid CSS containing block for the inner absolutely-positioned `View` div. Gating on `inView && isDesktop` together means: mobile never triggers the `LazySceneContent` dynamic import at all (matching the Global Constraint), and desktop still only fetches it once the section is actually about to scroll into view.
 
-- [ ] **Step 3: Create `SceneCanvas.tsx`**
+- [ ] **Step 5: Create `SceneCanvas.tsx`**
 
 ```tsx
 "use client";
@@ -154,37 +220,28 @@ export default function SceneCanvas() {
 }
 ```
 
-This is the **only** `<Canvas>`/WebGL context for the entire site. `<View.Port />` is where every section's `<View>` content (from Step 2) actually gets drawn, each into its own scissored viewport region matching that section's on-screen position.
+This is the **only** `<Canvas>`/WebGL context for the entire site. `<View.Port />` is where every section's `<View>` content (from Step 3) actually gets drawn, each into its own scissored viewport region matching that section's on-screen position.
 
-- [ ] **Step 4: Create `SceneCanvasGate.tsx`**
+- [ ] **Step 6: Create `SceneCanvasGate.tsx`**
 
 ```tsx
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const SceneCanvas = dynamic(() => import("./SceneCanvas"), { ssr: false });
 
 export default function SceneCanvasGate() {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    setEnabled(mq.matches);
-    const handleChange = (e: MediaQueryListEvent) => setEnabled(e.matches);
-    mq.addEventListener("change", handleChange);
-    return () => mq.removeEventListener("change", handleChange);
-  }, []);
-
-  if (!enabled) return null;
+  const isDesktop = useIsDesktop();
+  if (!isDesktop) return null;
   return <SceneCanvas />;
 }
 ```
 
-The `dynamic(() => import("./SceneCanvas"), { ssr: false })` call only actually fetches that JS chunk when `<SceneCanvas />` is rendered — since `enabled` starts `false` (both on the server, which never runs this component's body meaningfully, and on the client before the effect runs), mobile visitors (`< 1024px`) never trigger the download of the Three.js/drei bundle at all, not just a CSS-hidden one.
+Uses the same `useIsDesktop` hook from Step 2 as `LazyScene.tsx` — one shared source of truth for the desktop breakpoint, instead of duplicating the `matchMedia` subscription logic in both places. The `dynamic(() => import("./SceneCanvas"), { ssr: false })` call only actually fetches that JS chunk when `<SceneCanvas />` is rendered — since `isDesktop` starts `false` (both on the server and on the client before the effect runs), mobile visitors (`< 1024px`) never trigger the download of the Three.js/drei bundle at all, not just a CSS-hidden one.
 
-- [ ] **Step 5: Mount the gate in `layout.tsx`**
+- [ ] **Step 7: Mount the gate in `layout.tsx`**
 
 In `src/app/layout.tsx`, replace the import block:
 
@@ -222,31 +279,35 @@ with:
         <SmoothScroll>
 ```
 
-- [ ] **Step 6: Typecheck and lint**
+- [ ] **Step 8: Typecheck and lint**
 
 Run: `npx tsc --noEmit`
 Expected: no output (clean — same as baseline).
 
-Run: `npx eslint src/components/Scene.tsx src/components/LazyScene.tsx src/components/SceneCanvas.tsx src/components/SceneCanvasGate.tsx src/app/layout.tsx`
+Run: `npx eslint src/hooks/useIsDesktop.ts src/components/Scene.tsx src/components/LazyScene.tsx src/components/LazySceneContent.tsx src/components/SceneCanvas.tsx src/components/SceneCanvasGate.tsx src/app/layout.tsx`
 Expected: no output.
 
-- [ ] **Step 7: Build check**
+- [ ] **Step 9: Build check**
 
 Run: `npm run build`
 Expected: `✓ Compiled successfully`, all routes prerendered as static content, no errors.
 
-- [ ] **Step 8: Dev server compile + SSR smoke check**
+- [ ] **Step 10: Verify the mobile bundle split**
+
+After the build, confirm the Three.js/drei/fiber chunk (large, ~800KB+ minified — you can identify it by grepping `.next/static/chunks/*.js` for a distinctive symbol like `WebGLRenderer` or `IcosahedronGeometry`) is **not** referenced in `.next/server/app/index.html`'s eager `<script src>`/`<link rel="modulepreload">` list — only small loader/manifest chunks tied to the `dynamic()` calls should appear there. This is the concrete check for "mobile never triggers the download," not just an assertion.
+
+- [ ] **Step 11: Dev server compile + SSR smoke check**
 
 Run: `npm run dev` (leave it running for the rest of this plan — note the port it picks, e.g. `3000`).
 In a separate terminal: `curl -s http://localhost:3000/ -w "HTTP %{http_code}\n" -o /dev/null`
-Expected: `HTTP 200`, and the dev server's own terminal output shows `GET / 200` with no compile errors (Turbopack would report a module resolution error here if the `AnimatedShape`/`ShapeGeometry`/`View`/`View.Port` imports were wrong).
+Expected: `HTTP 200`, and the dev server's own terminal output shows `GET / 200` with no compile errors.
 
 This confirms SSR doesn't crash and the module graph resolves. It does **not** confirm the WebGL rendering actually looks right — that needs a real browser (see Global Constraints). Note in your task report that this step was browser-unverified if you're in this same constrained environment; if you have a real browser, additionally confirm: open `http://localhost:3000` at ≥1024px width, the hero's wireframe icosahedron still rotates as before, and the browser console shows no WebGL/Three.js errors.
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 12: Commit**
 
 ```bash
-git add src/components/Scene.tsx src/components/LazyScene.tsx src/components/SceneCanvas.tsx src/components/SceneCanvasGate.tsx src/app/layout.tsx
+git add src/hooks/useIsDesktop.ts src/components/Scene.tsx src/components/LazyScene.tsx src/components/LazySceneContent.tsx src/components/SceneCanvas.tsx src/components/SceneCanvasGate.tsx src/app/layout.tsx
 git commit -m "perf: move 3D from per-section Canvas to one shared canvas via drei View"
 ```
 
@@ -537,12 +598,21 @@ git commit -m "feat: add 3D backdrop shapes to About, Process, Skills, Projects"
 
 ### Task 4: 3D objects react to scroll position, not just time
 
+> **Note:** Task 1 was amended after review — `LazyScene.tsx` no longer renders
+> `<View>`/`AnimatedShape` directly, it delegates to a dynamically-imported
+> `LazySceneContent.tsx` (see Task 1's amendment note). The steps below
+> account for that: `LazyScene.tsx` still owns the scroll-tracking `ref` and
+> computes `scrollProgress`, but now passes it down one extra level through
+> `LazySceneContent`.
+
 **Files:**
 - Modify: `src/components/Scene.tsx`
 - Modify: `src/components/LazyScene.tsx`
+- Modify: `src/components/LazySceneContent.tsx`
 
 **Interfaces:**
 - Produces: `AnimatedShape` now also accepts an optional `scrollProgress?: MotionValue<number>` prop (in addition to the Task 1 props).
+- Produces: `LazySceneContent` now also accepts and forwards the same optional `scrollProgress?: MotionValue<number>` prop.
 - Consumes: `MotionValue` type from `framer-motion`.
 
 - [ ] **Step 1: `AnimatedShape` reads scroll progress inside its own render loop**
@@ -609,7 +679,36 @@ export function AnimatedShape({ color, opacity, geometry, scrollProgress }: Anim
 
 (Rest of the file — the `<Float>`/`<mesh>` JSX — is unchanged.) `scrollProgress.get()` reads a framer-motion `MotionValue` synchronously, which is safe to call inside r3f's `useFrame` (it runs once per rendered frame, same as any other per-frame read). The continuous time-based rotation (`rotation.x`/`rotation.y`) is untouched — this adds `rotation.z` and `scale` on top, both driven purely by scroll position.
 
-- [ ] **Step 2: `LazyScene` computes scroll progress and passes it down**
+- [ ] **Step 2: `LazySceneContent` accepts and forwards `scrollProgress`**
+
+Replace the full contents of `src/components/LazySceneContent.tsx`:
+
+```tsx
+"use client";
+
+import type { MotionValue } from "framer-motion";
+import { View } from "@react-three/drei";
+import { AnimatedShape, type ShapeGeometry } from "./Scene";
+
+interface LazySceneContentProps {
+  color: string;
+  opacity: number;
+  geometry: ShapeGeometry;
+  scrollProgress?: MotionValue<number>;
+}
+
+export default function LazySceneContent({ color, opacity, geometry, scrollProgress }: LazySceneContentProps) {
+  return (
+    <View className="absolute inset-0 w-full h-full pointer-events-none">
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+      <AnimatedShape color={color} opacity={opacity} geometry={geometry} scrollProgress={scrollProgress} />
+    </View>
+  );
+}
+```
+
+- [ ] **Step 3: `LazyScene` computes scroll progress and passes it down**
 
 Replace the full contents of `src/components/LazyScene.tsx`:
 
@@ -618,8 +717,11 @@ Replace the full contents of `src/components/LazyScene.tsx`:
 
 import { useRef } from "react";
 import { useInView, useScroll, useTransform } from "framer-motion";
-import { View } from "@react-three/drei";
-import { AnimatedShape, type ShapeGeometry } from "./Scene";
+import dynamic from "next/dynamic";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import type { ShapeGeometry } from "./Scene";
+
+const LazySceneContent = dynamic(() => import("./LazySceneContent"), { ssr: false });
 
 interface LazySceneProps {
   color?: string;
@@ -629,48 +731,45 @@ interface LazySceneProps {
 }
 
 export default function LazyScene({ className, color = "#67e8f9", opacity = 0.35, geometry = "icosahedron" }: LazySceneProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "200px" });
+  const isDesktop = useIsDesktop();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const scrollProgress = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
 
   return (
-    <View ref={ref} className={className}>
-      {inView && (
-        <>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <AnimatedShape color={color} opacity={opacity} geometry={geometry} scrollProgress={scrollProgress} />
-        </>
+    <div ref={ref} className={className}>
+      {inView && isDesktop && (
+        <LazySceneContent color={color} opacity={opacity} geometry={geometry} scrollProgress={scrollProgress} />
       )}
-    </View>
+    </div>
   );
 }
 ```
 
-`scrollProgress` is `0` when the section is fully off-screen (either edge), rising to `1` right when it's centered in the viewport, back to `0` as it leaves — so each object grows/tilts a bit more as its section is front-and-center, and settles back down as you scroll past. This reuses the same `ref` already used for `useInView`, so no extra DOM element or prop is needed.
+`scrollProgress` is `0` when the section is fully off-screen (either edge), rising to `1` right when it's centered in the viewport, back to `0` as it leaves — so each object grows/tilts a bit more as its section is front-and-center, and settles back down as you scroll past. This reuses the same `ref` already used for `useInView` (the wrapper `<div>`, per Task 1's amendment) — no extra DOM element or prop is needed. `useScroll`/`useTransform` run unconditionally (they're cheap framer-motion hooks, not Three.js), so computing `scrollProgress` doesn't undermine the mobile bundle-size fix — only the `LazySceneContent` dynamic import (gated on `inView && isDesktop`) carries the Three.js weight.
 
-- [ ] **Step 3: Lint and typecheck**
+- [ ] **Step 4: Lint and typecheck**
 
-Run: `npx eslint src/components/Scene.tsx src/components/LazyScene.tsx`
+Run: `npx eslint src/components/Scene.tsx src/components/LazyScene.tsx src/components/LazySceneContent.tsx`
 Expected: no output.
 
 Run: `npx tsc --noEmit`
 Expected: no output.
 
-- [ ] **Step 4: Build check**
+- [ ] **Step 5: Build check**
 
 Run: `npm run build`
 Expected: clean build, same as Task 1.
 
-- [ ] **Step 5: Manual visual check** (needs a real browser)
+- [ ] **Step 6: Manual visual check** (needs a real browser)
 
 At ≥1024px width, scroll slowly through any section with a 3D object (Hero, About, Process, Skills, Laboratory, Projects, Contact): each shape should visibly grow slightly and tilt on its Z axis as its section approaches the center of the viewport, then shrink back down as it scrolls away — on top of (not instead of) the constant looping rotation it already had.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add src/components/Scene.tsx src/components/LazyScene.tsx
+git add src/components/Scene.tsx src/components/LazyScene.tsx src/components/LazySceneContent.tsx
 git commit -m "feat: link 3D object rotation/scale to scroll position per section"
 ```
 

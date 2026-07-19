@@ -41,29 +41,30 @@ export default function Hero() {
     btnY.set(0);
   };
 
+  const sceneX = useMotionValue(0);
+  const sceneY = useMotionValue(0);
+  const sceneSpringX = useSpring(sceneX, { damping: 25, stiffness: 60, mass: 1 });
+  const sceneSpringY = useSpring(sceneY, { damping: 25, stiffness: 60, mass: 1 });
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const { innerWidth, innerHeight } = window;
+    sceneX.set((e.clientX - innerWidth / 2) * 0.02);
+    sceneY.set((e.clientY - innerHeight / 2) * 0.02);
+  };
+
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Vídeo Background Full-Screen inspirado no Gustavo Campelo */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover mix-blend-screen opacity-20"
-        >
-          <source src="https://cdn.pixabay.com/video/2021/08/18/85420-590059530_large.mp4" type="video/mp4" />
-        </video>
-        {/* Máscara escura para garantir leitura absoluta do texto */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0814]/40 via-[#0a0814]/70 to-[var(--background)]" />
-      </div>
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden" onMouseMove={handleHeroMouseMove}>
+      {/* Máscara escura para garantir leitura do texto — antes ficava sobre o vídeo, agora é o próprio fundo */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0a0814]/40 via-[#0a0814]/70 to-[var(--background)]" />
 
       <div className="absolute inset-0 z-[1]">
         <Starfield />
       </div>
 
-      {/* Objeto 3D em loop, estilo Thor, combinado com o vídeo de fundo */}
-      <LazyScene className="absolute inset-0 z-[1] opacity-60 pointer-events-none" />
+      {/* Objeto 3D em loop, ocupa o espaço do vídeo removido, reage à posição do mouse */}
+      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
+        <LazyScene className="absolute inset-0 opacity-75 pointer-events-none" />
+      </motion.div>
 
       <FloatingTechCards />
 

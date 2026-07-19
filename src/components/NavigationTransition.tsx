@@ -26,7 +26,7 @@ export default function NavigationTransition() {
         section.scrollIntoView({ behavior: "smooth", block: "start" });
         window.history.replaceState(null, "", href);
         setIsTransitioning(false);
-      }, 520);
+      }, 580);
     }
 
     document.addEventListener("click", navigate);
@@ -35,6 +35,8 @@ export default function NavigationTransition() {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
+
+  const particleAngles = Array.from({ length: 6 }, (_, i) => (i / 6) * Math.PI * 2);
 
   return (
     <AnimatePresence>
@@ -56,15 +58,26 @@ export default function NavigationTransition() {
             initial={{ clipPath: "polygon(0 0, 0 0, -20% 100%, -20% 100%)" }}
             animate={{ clipPath: "polygon(0 0, 120% 0, 100% 100%, -20% 100%)" }}
             exit={{ clipPath: "polygon(120% 0, 120% 0, 120% 100%, 100% 100%)" }}
-            transition={{ duration: 0.36, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.4, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
           />
           <motion.div
             className="absolute inset-0 bg-[#0a0814]"
             initial={{ clipPath: "polygon(0 0, 0 0, -20% 100%, -20% 100%)" }}
             animate={{ clipPath: "polygon(0 0, 120% 0, 100% 100%, -20% 100%)" }}
             exit={{ clipPath: "polygon(120% 0, 120% 0, 120% 100%, 100% 100%)" }}
-            transition={{ duration: 0.36, delay: 0.15, ease: [0.76, 0, 0.24, 1] }}
+            transition={{ duration: 0.4, delay: 0.15, ease: [0.76, 0, 0.24, 1] }}
           />
+          {particleAngles.map((angle, i) => (
+            <motion.span
+              key={i}
+              className="absolute w-1.5 h-1.5 rounded-full bg-[var(--color-cyan)]"
+              style={{ left: origin.x, top: origin.y }}
+              initial={{ opacity: 0, x: 0, y: 0, scale: 0.5 }}
+              animate={{ opacity: [0, 1, 0], x: Math.cos(angle) * 140, y: Math.sin(angle) * 140, scale: [0.5, 1, 0.4] }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.05, ease: "easeOut" }}
+            />
+          ))}
         </motion.div>
       )}
     </AnimatePresence>

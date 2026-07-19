@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 type SectionRevealVariant = "up" | "left" | "right" | "scale";
 
@@ -11,7 +12,7 @@ interface SectionRevealProps {
 }
 
 export default function SectionReveal({ children, variant = "up" }: SectionRevealProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const x = variant === "left" ? -56 : variant === "right" ? 56 : 0;
   const y = variant === "scale" ? 32 : variant === "up" ? 64 : 0;
   const [forceReveal, setForceReveal] = useState(false);

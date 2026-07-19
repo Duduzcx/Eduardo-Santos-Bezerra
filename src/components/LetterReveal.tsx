@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useForceReveal } from "@/hooks/useForceReveal";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 interface LetterRevealProps {
   text: string;
@@ -12,7 +13,7 @@ const NBSP = " ";
 
 export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
   const forceReveal = useForceReveal();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const container: Variants = {
     hidden: {},

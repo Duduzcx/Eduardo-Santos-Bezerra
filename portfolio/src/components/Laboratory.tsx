@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import LetterReveal from "./LetterReveal";
-import Scene from "./Scene";
+import LazyScene from "./LazyScene";
 import { Activity, Box, Variable, Cpu } from "lucide-react";
 
 // Um Card do Bento Grid com efeitos físicos insanos no Hover
@@ -66,16 +66,16 @@ function BentoCard({
     >
       {/* Background Image / Noise com Parallax no Mouse */}
       {image && (
-        <motion.div 
-          className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700"
-          style={{ 
+        <motion.div
+          className="absolute inset-0 z-0 opacity-75 group-hover:opacity-95 transition-opacity duration-700"
+          style={{
             scale: imageScale,
             x: imageX,
             y: imageY
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
-          <img src={image} alt={title} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/30 to-transparent z-10" />
+          <img src={image} alt={title} className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-100 transition-all duration-700" />
         </motion.div>
       )}
 
@@ -102,9 +102,7 @@ export default function Laboratory() {
   return (
     <section className="relative w-full py-40 z-20 bg-neutral-950 overflow-hidden">
       {/* Objeto 3D em loop, estilo Thor, bem sutil no fundo da seção */}
-      <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
-        <Scene color="#7c3aed" opacity={0.4} />
-      </div>
+      <LazyScene className="absolute inset-0 opacity-[0.15] pointer-events-none" color="#7c3aed" opacity={0.4} />
 
       <div className="px-6 md:px-12 lg:px-24 mb-20 max-w-[1600px] mx-auto text-center md:text-left relative z-10">
         <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>

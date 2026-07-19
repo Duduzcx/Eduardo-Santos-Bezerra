@@ -29,8 +29,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
         <div className={`grid h-full ${featured ? "md:grid-cols-[1.15fr_0.85fr]" : "grid-cols-1"}`}>
           <motion.div initial={{ clipPath: "inset(0 100% 0 0)" }} whileInView={{ clipPath: "inset(0 0% 0 0)" }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, delay: 0.1 }} className={`relative overflow-hidden ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
-            <img src={project.image} alt="" className="h-full w-full object-cover opacity-75 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/30 via-transparent to-[var(--color-cyan)]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <img src={project.image} alt="" className="h-full w-full object-cover opacity-95 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08070d] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/20 via-transparent to-[var(--color-cyan)]/15 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.18 } } }} className="relative z-10 flex flex-col items-start p-6 md:p-8">
             <motion.span variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400">{project.category}</motion.span>

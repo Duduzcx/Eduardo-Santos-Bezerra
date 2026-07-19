@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
-import Scene from "./Scene";
+import LazyScene from "./LazyScene";
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 
@@ -25,9 +25,7 @@ export default function Contact() {
   return (
     <section id="contact" className="relative w-full py-24 md:py-32 px-6 bg-neutral-950 border-t border-white/[0.06] overflow-hidden">
       {/* Objeto 3D em loop, estilo Thor, atrás do formulário */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <Scene color="#67e8f9" opacity={0.3} />
-      </div>
+      <LazyScene className="absolute inset-0 opacity-20 pointer-events-none" color="#67e8f9" opacity={0.3} />
 
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
         <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>

@@ -1,0 +1,54 @@
+"use client";
+
+import { useMemo } from "react";
+
+interface Layer {
+  shadow: string;
+  size: number;
+  duration: number;
+}
+
+function buildLayer(count: number, spread: number, size: number, seed: number): string {
+  let value = "";
+  let s = seed;
+  const rand = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  for (let i = 0; i < count; i++) {
+    const x = Math.floor(rand() * spread);
+    const y = Math.floor(rand() * spread);
+    value += `${i === 0 ? "" : ", "}${x}px ${y}px #fff`;
+  }
+  return value;
+}
+
+export default function Starfield() {
+  const layers = useMemo<Layer[]>(
+    () => [
+      { shadow: buildLayer(140, 2000, 1, 11), size: 1, duration: 6 },
+      { shadow: buildLayer(70, 2000, 2, 47), size: 2, duration: 4.5 },
+      { shadow: buildLayer(30, 2000, 3, 91), size: 3, duration: 8 },
+    ],
+    []
+  );
+
+  return (
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
+      {layers.map((layer, i) => (
+        <div
+          key={i}
+          className="absolute left-0 top-0 rounded-full animate-twinkle"
+          style={{
+            width: layer.size,
+            height: layer.size,
+            background: "transparent",
+            boxShadow: layer.shadow,
+            animationDuration: `${layer.duration}s`,
+            animationDelay: `${i * 0.6}s`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}

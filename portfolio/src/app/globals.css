@@ -69,3 +69,14 @@ html {
   background-size: 200% 200%;
   animation: gradient-x 4s ease infinite;
 }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+.animate-twinkle {
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}

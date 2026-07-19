@@ -4,9 +4,10 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
-import Scene from "./Scene";
+import LazyScene from "./LazyScene";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
+import Starfield from "./Starfield";
 
 export default function Hero() {
   const container: Variants = {
@@ -44,11 +45,11 @@ export default function Hero() {
     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       {/* Vídeo Background Full-Screen inspirado no Gustavo Campelo */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover mix-blend-screen opacity-20"
         >
           <source src="https://cdn.pixabay.com/video/2021/08/18/85420-590059530_large.mp4" type="video/mp4" />
@@ -57,10 +58,12 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0814]/40 via-[#0a0814]/70 to-[var(--background)]" />
       </div>
 
-      {/* Objeto 3D em loop, estilo Thor, combinado com o vídeo de fundo */}
-      <div className="absolute inset-0 z-[1] opacity-60 pointer-events-none">
-        <Scene />
+      <div className="absolute inset-0 z-[1]">
+        <Starfield />
       </div>
+
+      {/* Objeto 3D em loop, estilo Thor, combinado com o vídeo de fundo */}
+      <LazyScene className="absolute inset-0 z-[1] opacity-60 pointer-events-none" />
 
       <FloatingTechCards />
 

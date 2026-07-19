@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useForceReveal } from "@/hooks/useForceReveal";
 
 interface LetterRevealProps {
@@ -8,28 +8,27 @@ interface LetterRevealProps {
   className?: string;
 }
 
-const container: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.02 },
-  },
-};
-
-const letterVariant: Variants = {
-  hidden: { opacity: 0, y: 16, rotateX: -70, filter: "blur(8px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.45, ease: "easeOut" },
-  },
-};
-
-const NBSP = " ";
+const NBSP = " ";
 
 export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
   const forceReveal = useForceReveal();
+  const prefersReducedMotion = useReducedMotion();
+
+  const container: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: prefersReducedMotion ? 0 : 0.02 } },
+  };
+
+  const letterVariant: Variants = {
+    hidden: prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 16, rotateX: -70, filter: "blur(8px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      filter: "blur(0px)",
+      transition: { duration: prefersReducedMotion ? 0.01 : 0.45, ease: "easeOut" },
+    },
+  };
 
   return (
     <motion.span

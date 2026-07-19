@@ -1,126 +1,67 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { GithubIcon } from "./Icons";
-import LetterReveal from "./LetterReveal";
-import { ExternalLink } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
 const PROJECTS = [
-  { 
-    name: "Plataforma Compromisso", 
-    desc: "Plataforma educacional EdTech de alta performance. Sistema de gestão com dashboard analítico.",
-    img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
-    tags: ["React", "Next.js", "TypeScript"],
-    repo: "https://github.com",
-    live: "https://example.com",
-    highlight: "Desenvolvido por mim"
-  },
-  { 
-    name: "ZcxPages", 
-    desc: "Portfólio moderno focado em exibir projetos com design de ponta e altíssima performance.",
-    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop",
-    tags: ["Next.js", "Framer Motion"],
-    repo: "https://github.com",
-    live: "https://example.com"
-  }
+  { name: "Plataforma Compromisso", category: "EdTech · Plataforma", desc: "Ambiente educacional com gestão de jornadas, indicadores e uma experiência simples para equipes e alunos.", tags: ["Next.js", "TypeScript", "Dashboard"], image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop", status: "Projeto desenvolvido" },
+  { name: "ZcxPages", category: "Portfólio · Web", desc: "Portfólio editorial de alta performance, estruturado para apresentar trabalhos e gerar novas oportunidades.", tags: ["Next.js", "Motion", "UX"], image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop", status: "Projeto desenvolvido" },
+  { name: "Orbe Finance", category: "Fintech · Conceito", desc: "Painel de controle financeiro para pequenas empresas, com visão de caixa, metas e decisões do dia a dia.", tags: ["React", "Data viz", "UI System"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
+  { name: "Verde Campo", category: "Agro · Conceito", desc: "Central de acompanhamento de operações agrícolas com alertas claros e dados de campo em tempo real.", tags: ["IoT", "Node.js", "Analytics"], image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
+  { name: "Nexo Saúde", category: "Healthtech · Conceito", desc: "Portal de acompanhamento para clínicas e pacientes, desenhado para reduzir atrito em cada etapa do cuidado.", tags: ["Next.js", "Acessibilidade", "UX"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
 ];
 
-export default function Projects() {
+type Project = (typeof PROJECTS)[number];
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const cardRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start end", "center center"] });
+  const y = useTransform(scrollYProgress, [0, 1], [84, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [10, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.65], [0, 1]);
+  const featured = index === 0;
+
   return (
-    <section id="projects" className="w-full py-32 bg-[#050505] relative overflow-hidden">
-      
-      {/* Objeto de Fundo Flutuante (Texto gigante transparente, estilo Thor) */}
-      <motion.div 
-        initial={{ x: "100%" }}
-        whileInView={{ x: "-100%" }}
-        transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-        className="absolute top-10 left-0 text-[20vw] font-black text-white/5 whitespace-nowrap pointer-events-none select-none"
-      >
-        LATEST WORK &bull; LATEST WORK &bull; LATEST WORK
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.5 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
-          className="text-center mb-24"
-        >
-          <h2 className="text-4xl md:text-7xl font-black text-white mb-4">
-            <LetterReveal text="Projetos " />
-            <LetterReveal text="Destaque" className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] to-[var(--color-pink)]" />
-          </h2>
-        </motion.div>
-
-        <div className="flex flex-col gap-32">
-          {PROJECTS.map((project, idx) => {
-            const isReverse = idx % 2 !== 0;
-            return (
-              <div key={idx} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 md:gap-16 items-center relative`}>
-                
-                {/* Imagem vem de um lado rasgando a tela */}
-                <motion.div 
-                  initial={{ opacity: 0, x: isReverse ? 150 : -150, rotateY: isReverse ? -20 : 20 }}
-                  whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  style={{ perspective: "1000px" }}
-                  className="w-full md:w-1/2 relative group"
-                >
-                  <div className="relative rounded-3xl overflow-hidden border border-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-                    <img src={project.img} alt={project.name} className="w-full aspect-video object-cover group-hover:scale-110 group-hover:rotate-2 transition-all duration-700" />
-                  </div>
-                  
-                  {/* Círculo giratório atrás da imagem */}
-                  <div className="absolute -inset-4 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-cyan)] opacity-20 blur-2xl rounded-full animate-[spin_10s_linear_infinite] z-0" />
-                </motion.div>
-
-                {/* Texto vem do lado oposto */}
-                <motion.div 
-                  initial={{ opacity: 0, x: isReverse ? -100 : 100, filter: "blur(10px)" }}
-                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className={`w-full md:w-1/2 flex flex-col ${isReverse ? 'md:items-end md:text-right' : 'md:items-start md:text-left'} z-30`}
-                >
-                  {project.highlight && (
-                    <span className="px-4 py-1 rounded-full border border-[var(--color-cyan)] text-[var(--color-cyan)] text-xs font-mono mb-4 uppercase tracking-wider font-bold">
-                      {project.highlight}
-                    </span>
-                  )}
-                  
-                  <h3 className="text-4xl md:text-5xl font-black text-white mb-6">
-                    {project.name}
-                  </h3>
-                  
-                  <p className="text-xl text-neutral-400 mb-8 leading-relaxed">
-                    {project.desc}
-                  </p>
-
-                  <div className={`flex flex-wrap gap-4 mb-10 ${isReverse ? 'justify-end' : 'justify-start'}`}>
-                    {project.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="text-sm font-mono text-white bg-white/10 px-4 py-2 rounded-lg border border-white/5">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className={`flex items-center gap-6 ${isReverse ? 'justify-end' : 'justify-start'}`}>
-                    <a href={project.repo} target="_blank" className="p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
-                      <GithubIcon className="w-6 h-6" />
-                    </a>
-                    <a href={project.live} target="_blank" className="p-4 rounded-full bg-[var(--color-accent)] text-white hover:scale-110 transition-transform shadow-[0_0_20px_rgba(168,85,247,0.5)]">
-                      <ExternalLink className="w-6 h-6" />
-                    </a>
-                  </div>
-                </motion.div>
-
-              </div>
-            )
-          })}
+    <motion.article ref={cardRef} style={{ y, scale, rotateX, opacity, transformPerspective: 1200 }} className={featured ? "md:col-span-2" : ""}>
+      <motion.div whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-white/30">
+        <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+        <div className={`grid h-full ${featured ? "md:grid-cols-[1.15fr_0.85fr]" : "grid-cols-1"}`}>
+          <motion.div initial={{ clipPath: "inset(0 100% 0 0)" }} whileInView={{ clipPath: "inset(0 0% 0 0)" }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, delay: 0.1 }} className={`relative overflow-hidden ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
+            <img src={project.image} alt="" className="h-full w-full object-cover opacity-75 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/30 via-transparent to-[var(--color-cyan)]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          </motion.div>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07, delayChildren: 0.18 } } }} className="relative z-10 flex flex-col items-start p-6 md:p-8">
+            <motion.span variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400">{project.category}</motion.span>
+            <motion.h3 variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-3 text-2xl font-semibold tracking-tight text-white md:text-3xl">{project.name}</motion.h3>
+            <motion.p variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-3 text-sm leading-relaxed text-neutral-400 md:text-base">{project.desc}</motion.p>
+            <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span key={tag} className="rounded-full border border-white/10 px-3 py-1 text-xs text-neutral-300 transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">{tag}</span>)}</motion.div>
+            <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }} className="mt-7 flex items-center gap-2 text-sm font-medium text-white"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></motion.div>
+          </motion.div>
         </div>
+      </motion.div>
+    </motion.article>
+  );
+}
+
+export default function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const sceneY = useTransform(scrollYProgress, [0, 1], [160, -180]);
+  const sceneRotate = useTransform(scrollYProgress, [0, 1], [-18, 24]);
+
+  return (
+    <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden border-y border-white/[0.06] bg-[#08070d] py-28 md:py-40">
+      <motion.div aria-hidden="true" style={{ y: sceneY, rotate: sceneRotate }} className="pointer-events-none absolute right-[-16vw] top-[16%] h-[48vw] w-[48vw] rounded-full border border-[var(--color-cyan)]/20 shadow-[0_0_100px_rgba(103,232,249,0.07)]" />
+      <motion.div aria-hidden="true" style={{ y: sceneY }} className="pointer-events-none absolute left-[-18vw] top-[42%] h-[38vw] w-[38vw] rounded-[3rem] border border-[var(--color-pink)]/10" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-16 max-w-2xl md:mb-20">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Projetos selecionados</p>
+          <h2 className="text-3xl font-semibold tracking-tight text-white md:text-5xl">Produtos digitais que resolvem problemas reais.</h2>
+          <p className="mt-5 text-base leading-relaxed text-neutral-400 md:text-lg">Role para explorar: cada projeto se aproxima e ganha profundidade conforme entra em cena.</p>
+        </motion.div>
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">{PROJECTS.map((project, index) => <ProjectCard key={project.name} project={project} index={index} />)}</div>
       </div>
     </section>
   );

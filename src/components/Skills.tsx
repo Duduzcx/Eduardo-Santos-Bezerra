@@ -48,7 +48,7 @@ export default function Skills() {
           transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
+          <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">
             <LetterReveal text="Stack " />
             <LetterReveal text="Principal" className="text-[var(--color-cyan)]" />
           </h2>
@@ -63,13 +63,15 @@ export default function Skills() {
               whileInView={{ opacity: 1, rotateX: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
-              whileHover={{ scale: 1.1, y: -10 }}
+              whileHover={{ scale: 1.1, y: -10, rotateZ: index % 2 === 0 ? 2 : -2 }}
+              whileTap={{ scale: 0.96 }}
               className={`group flex flex-col items-center justify-center p-8 bg-[var(--color-surface)] border border-neutral-800 rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
             >
               {/* Overlay com a cor original da tech no fundo quando dá hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${skill.bg}`} />
               
-              <div className={`text-neutral-500 transition-colors duration-300 mb-4 group-hover:${skill.color} relative z-10`}>
+              <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-white/10 blur-2xl opacity-0 transition-all duration-500 group-hover:scale-150 group-hover:opacity-100" />
+              <div className={`text-neutral-500 transition-all duration-500 mb-4 group-hover:${skill.color} group-hover:rotate-[12deg] group-hover:scale-110 relative z-10`}>
                 {skill.icon}
               </div>
               <span className={`text-neutral-400 font-medium group-hover:${skill.color} transition-colors relative z-10`}>

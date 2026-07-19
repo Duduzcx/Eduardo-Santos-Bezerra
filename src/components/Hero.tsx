@@ -1,15 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
 import Scene from "./Scene";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
 
 export default function Hero() {
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -17,7 +17,7 @@ export default function Hero() {
     }
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 50 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
   };
@@ -70,17 +70,17 @@ export default function Hero() {
         animate="show"
         className="w-full max-w-5xl mx-auto px-6 flex flex-col items-center text-center relative z-10 pt-20"
       >
-        <motion.div variants={item} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-accent)]/50 mb-8 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+        <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-accent)]/50 mb-8 -mt-20 md:-mt-32 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
           <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
           <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
         </motion.div>
         
-        <motion.h1 variants={item} className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6 leading-none">
+        <motion.h1 variants={item} className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
           Eduardo<br />
           Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
         </motion.h1>
         
-        <motion.h2 variants={item} className="text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-black mb-8 tracking-wide animate-gradient-x">
+        <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
           <LetterReveal text="DESENVOLVEDOR FULL STACK" />
         </motion.h2>
         
@@ -91,18 +91,22 @@ export default function Hero() {
           />
         </div>
         
-        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-4">
+        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2">
           <motion.a
             ref={btnRef}
             href="#projects"
             onMouseMove={handleBtnMouseMove}
             onMouseLeave={handleBtnMouseLeave}
             style={{ x: springX, y: springY }}
-            className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-pink)] text-white font-bold text-lg hover:scale-105 transition-all shadow-[0_0_40px_rgba(232,121,249,0.4)] flex items-center gap-3"
+            className="group relative px-7 py-4 rounded-xl bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors shadow-[0_12px_32px_rgba(255,255,255,0.16)] flex items-center gap-3"
           >
-            Explorar Projetos
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            Ver projetos selecionados
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </motion.a>
+          <a href="#contact" className="group px-7 py-4 rounded-xl border border-white/20 bg-white/5 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-3">
+            <MessageCircle className="w-4 h-4 text-[var(--color-cyan)]" />
+            Falar sobre um projeto
+          </a>
         </motion.div>
       </motion.div>
     </section>

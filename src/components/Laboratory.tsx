@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import LetterReveal from "./LetterReveal";
+import Scene from "./Scene";
 import { Activity, Box, Variable, Cpu } from "lucide-react";
 
 // Um Card do Bento Grid com efeitos físicos insanos no Hover
@@ -30,6 +31,8 @@ function BentoCard({
   const rotateX = useTransform(mouseY, [-0.5, 0.5], ["10deg", "-10deg"]);
   const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-10deg", "10deg"]);
   const imageScale = useTransform(mouseX, [-0.5, 0.5], [1.1, 1.2]); // Zoom dinâmico
+  const imageX = useTransform(mouseX, [-0.5, 0.5], ["-5%", "5%"]);
+  const imageY = useTransform(mouseY, [-0.5, 0.5], ["-5%", "5%"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -50,6 +53,7 @@ function BentoCard({
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.015, zIndex: 10 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       style={{
@@ -66,8 +70,8 @@ function BentoCard({
           className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700"
           style={{ 
             scale: imageScale,
-            x: useTransform(mouseX, [-0.5, 0.5], ["-5%", "5%"]),
-            y: useTransform(mouseY, [-0.5, 0.5], ["-5%", "5%"])
+            x: imageX,
+            y: imageY
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
@@ -80,10 +84,10 @@ function BentoCard({
         style={{ transform: "translateZ(60px)" }} 
         className="relative z-20 flex flex-col gap-4 mt-32"
       >
-        <div className="text-white bg-white/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 mb-2 group-hover:scale-110 transition-transform duration-500">
+        <div className="text-white bg-white/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 mb-2 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
           {icon}
         </div>
-        <h3 className="text-3xl md:text-5xl font-medium tracking-tight text-white leading-tight">
+        <h3 className="text-2xl md:text-4xl font-medium tracking-tight text-white leading-tight">
           {title}
         </h3>
         <p className="text-neutral-400 font-light text-base md:text-lg max-w-sm">
@@ -96,8 +100,13 @@ function BentoCard({
 
 export default function Laboratory() {
   return (
-    <section className="relative w-full py-40 z-20 bg-neutral-950">
-      <div className="px-6 md:px-12 lg:px-24 mb-20 max-w-[1600px] mx-auto text-center md:text-left">
+    <section className="relative w-full py-40 z-20 bg-neutral-950 overflow-hidden">
+      {/* Objeto 3D em loop, estilo Thor, bem sutil no fundo da seção */}
+      <div className="absolute inset-0 opacity-[0.15] pointer-events-none">
+        <Scene color="#7c3aed" opacity={0.4} />
+      </div>
+
+      <div className="px-6 md:px-12 lg:px-24 mb-20 max-w-[1600px] mx-auto text-center md:text-left relative z-10">
         <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
           <LetterReveal text="Laboratório & Explorações" />
         </h2>
@@ -106,14 +115,14 @@ export default function Laboratory() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight"
+          className="mt-4 text-3xl md:text-4xl font-light text-neutral-300 tracking-tight"
         >
           Onde a engenharia vira arte.
         </motion.p>
       </div>
 
       {/* O Bento Grid Distorcido */}
-      <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[450px] gap-6 md:gap-8 px-6 md:px-12 lg:px-24 max-w-[1600px] mx-auto" style={{ perspective: "2000px" }}>
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 auto-rows-[450px] gap-6 md:gap-8 px-6 md:px-12 lg:px-24 max-w-[1600px] mx-auto" style={{ perspective: "2000px" }}>
         
         {/* Card 1: 3D Modeling (Gigante) */}
         <BentoCard 
@@ -148,6 +157,7 @@ export default function Laboratory() {
           title="Engenharia de Dados"
           desc="Processamento de Big Data e pipelines escaláveis para arquiteturas orientadas a eventos e tomada de decisão em tempo real."
           icon={<Variable className="w-8 h-8" />}
+          image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070&auto=format&fit=crop"
         />
         
       </div>

@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Code2, Monitor, Database } from "lucide-react";
 import TextReveal from "./TextReveal";
-import CircleReveal from "./CircleReveal";
 import LetterReveal from "./LetterReveal";
 
 export default function About() {
@@ -71,7 +70,7 @@ export default function About() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1, type: "spring" }}
               >
-                <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
                   <LetterReveal text="Sobre mim" />
                 </h2>
               </motion.div>
@@ -80,13 +79,15 @@ export default function About() {
             <div className="space-y-6 text-neutral-300 text-xl leading-relaxed">
               <TextReveal text="Sou um Desenvolvedor Full Stack apaixonado por transformar problemas complexos em interfaces elegantes e sistemas de alta performance." />
               <TextReveal text="Com sólida formação em Engenharia de Software, meu foco é sempre a entrega de valor real. Já atuei no desenvolvimento de plataformas EdTech, automação IoT e análise de dados massivos." />
+              <TextReveal text="Recentemente, fui o arquiteto-chefe de uma startup de IA focada no agronegócio, liderando o design de uma infraestrutura em nuvem capaz de processar dados em tempo real e impactar milhares de agricultores." />
+              <TextReveal text="Fora do código, também sou um entusiasta por design generativo, onde cruzo matemática e arte para criar experiências visuais que desafiam o comum." />
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6 }}
               >
-                Chega de sistemas <CircleReveal word="obsoletos" className="text-white font-semibold" /> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
+                Chega de sistemas <span className="text-white font-semibold">obsoletos</span> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
               </motion.p>
             </div>
           </div>

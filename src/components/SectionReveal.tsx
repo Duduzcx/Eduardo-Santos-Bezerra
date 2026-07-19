@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 type SectionRevealVariant = "up" | "left" | "right" | "scale";
 
@@ -11,38 +10,26 @@ interface SectionRevealProps {
 }
 
 export default function SectionReveal({ children, variant = "up" }: SectionRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center center"]
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  // "up": sobe, ganha escala e perde o rotateX, sensação 3D de "desdobramento".
-  const yUp = useTransform(scrollYProgress, [0, 1], ["20%", "0%"]);
-  const rotateXUp = useTransform(scrollYProgress, [0, 1], ["15deg", "0deg"]);
-  const scaleUp = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
-
-  // "left" / "right": entra deslizando lateralmente, sem 3D.
-  const xLeft = useTransform(scrollYProgress, [0, 1], ["-6%", "0%"]);
-  const xRight = useTransform(scrollYProgress, [0, 1], ["6%", "0%"]);
-
-  // "scale": só cresce e some o desfoque, sem deslocamento.
-  const scaleOnly = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
-
-  const variantStyle =
-    variant === "left" ? { opacity, x: xLeft } :
-    variant === "right" ? { opacity, x: xRight } :
-    variant === "scale" ? { opacity, scale: scaleOnly } :
-    { opacity, y: yUp, rotateX: rotateXUp, scale: scaleUp };
+  const x = variant === "left" ? -28 : variant === "right" ? 28 : 0;
+  const y = variant === "scale" ? 18 : variant === "up" ? 32 : 0;
 
   return (
-    <div ref={ref} className="w-full relative" style={{ perspective: "1200px" }}>
-      <motion.div style={{ ...variantStyle, transformStyle: "preserve-3d" }}>
-        {children}
-      </motion.div>
-    </div>
+    <motion.div
+      className="w-full relative"
+      initial={{ opacity: 0, x, y, scale: 0.985, clipPath: "inset(0 0 6% 0 round 1.5rem)" }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1, clipPath: "inset(0 0 0% 0 round 0rem)" }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        aria-hidden="true"
+        className="absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-[var(--color-cyan)] to-transparent pointer-events-none z-30"
+        initial={{ scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: [0, 0.9, 0] }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      />
+      {children}
+    </motion.div>
   );
 }

@@ -1,106 +1,45 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import LetterReveal from "./LetterReveal";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 const PROCESS_STEPS = [
-  {
-    num: "01",
-    title: "Arquitetura de Banco de Dados",
-    desc: "Estruturação escalável, normalização e modelagem relacional rigorosa focada em queries de alta performance.",
-  },
-  {
-    num: "02",
-    title: "Lógica de Back-end",
-    desc: "Desenvolvimento de microsserviços robustos, segurança de endpoints e regras de negócio complexas processadas em milissegundos.",
-  },
-  {
-    num: "03",
-    title: "Integração de APIs Físicas",
-    desc: "Conectando o código à realidade: telemetria, sensores IoT e sincronização de dados bi-direcional em tempo real.",
-  },
-  {
-    num: "04",
-    title: "UI/UX de Alta Conversão",
-    desc: "A camada final onde a engenharia encontra a arte. Animações de GPU, design responsivo de ponta e retenção visceral.",
-  }
+  ["01", "Arquitetura de Banco de Dados", "Estruturação escalável, normalização e modelagem relacional voltadas a consultas de alta performance."],
+  ["02", "Lógica de Back-end", "Serviços robustos, endpoints seguros e regras de negócio confiáveis para produtos que crescem."],
+  ["03", "Integração de APIs e IoT", "Conexão entre software, telemetria e dados em tempo real, com uma arquitetura preparada para evoluir."],
+  ["04", "UI/UX de Alta Conversão", "Interfaces rápidas, responsivas e acessíveis, projetadas para tornar cada jornada mais clara."],
+];
+
+const STEP_IMAGES = [
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=900&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=900&auto=format&fit=crop",
 ];
 
 export default function Process() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 80%", "end 20%"]
-  });
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start 80%", "end 30%"] });
+  const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 24, restDelta: 0.001 });
 
   return (
-    <section ref={containerRef} className="relative w-full py-40 z-20 bg-neutral-950/60 backdrop-blur-md border-t border-neutral-900/50">
-      <div className="px-6 md:px-12 lg:px-24 mb-32 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end">
-        <div>
-          <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
-            <LetterReveal text="O Processo" />
-          </h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight"
-          >
-            Engenharia de Ponta a Ponta
-          </motion.p>
-        </div>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-6 md:mt-0 text-neutral-500 max-w-sm text-sm font-light leading-relaxed"
-        >
-          Nenhuma etapa é subestimada. Do bit armazenado no banco à física do cursor na tela, o controle arquitetural é absoluto.
-        </motion.p>
-      </div>
-
-      <div className="flex flex-col w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-24">
-        {PROCESS_STEPS.map((step, index) => {
-          // Cada etapa aparece um pouco depois, dependendo do scroll global
-          const opacity = useTransform(
-            scrollYProgress, 
-            [0 + (index * 0.15), 0.3 + (index * 0.15)], 
-            [0, 1]
-          );
-          
-          const y = useTransform(
-            scrollYProgress,
-            [0 + (index * 0.15), 0.3 + (index * 0.15)],
-            [40, 0]
-          );
-
-          return (
-            <motion.div 
-              key={index}
-              style={{ opacity, y }}
-              className="group flex flex-col md:flex-row border-b border-neutral-800 py-12 md:py-16 items-start md:items-center relative"
-            >
-              {/* Linha de preenchimento (Glow no Hover) */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-
-              <div className="text-5xl md:text-7xl font-bold text-neutral-800 group-hover:text-neutral-600 transition-colors duration-700 md:w-1/4 mb-6 md:mb-0">
-                {step.num}
-              </div>
-              
-              <div className="flex-1">
-                <h3 className="text-2xl md:text-4xl font-medium text-neutral-200 group-hover:text-white transition-colors duration-500 tracking-tight mb-4">
-                  {step.title}
-                </h3>
-                <p className="text-neutral-500 group-hover:text-neutral-400 font-light text-sm md:text-base max-w-2xl leading-relaxed transition-colors duration-500">
-                  {step.desc}
-                </p>
-              </div>
+    <section ref={sectionRef} id="process" className="relative w-full overflow-hidden border-y border-white/[0.06] bg-neutral-950/70 py-28 md:py-36">
+      <motion.div aria-hidden="true" animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-28 top-24 h-72 w-72 rounded-full border border-[var(--color-accent)]/15" />
+      <div className="relative mx-auto max-w-6xl px-6">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-14 max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Como eu trabalho</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">Uma jornada que evolui a cada etapa.</h2>
+        </motion.div>
+        <div className="relative">
+          <div aria-hidden="true" className="absolute bottom-0 left-[7px] top-0 hidden w-px bg-white/10 md:block" />
+          <motion.div aria-hidden="true" className="absolute bottom-auto left-[7px] top-0 hidden h-full w-px origin-top bg-gradient-to-b from-[var(--color-cyan)] via-[var(--color-accent-light)] to-[var(--color-pink)] md:block" style={{ scaleY: lineScale }} />
+          {PROCESS_STEPS.map(([number, title, description], index) => (
+            <motion.div key={number} initial={{ opacity: 0, x: index % 2 === 0 ? -34 : 34, y: 24 }} whileInView={{ opacity: 1, x: 0, y: 0 }} whileHover={{ x: 12 }} viewport={{ once: true, amount: 0.45 }} transition={{ duration: 0.62, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }} className="group relative grid gap-4 border-t border-white/[0.09] py-9 pl-0 md:grid-cols-[120px_1fr] md:gap-8 md:pl-12">
+              <span className="relative text-sm font-medium text-[var(--color-cyan)]"><span className="absolute -left-[42px] top-1 hidden h-[14px] w-[14px] rounded-full border-2 border-[var(--color-cyan)] bg-neutral-950 shadow-[0_0_16px_rgba(103,232,249,0.8)] md:block" />{number}</span>
+              <div className="grid gap-5 md:grid-cols-[1fr_170px] md:items-center"><div><h3 className="text-xl font-medium text-white md:text-2xl">{title}</h3><p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-400 md:text-base">{description}</p></div><div className="relative hidden aspect-[16/10] overflow-hidden rounded-xl border border-white/10 md:block"><img src={STEP_IMAGES[index]} alt="" className="h-full w-full object-cover opacity-45 transition-all duration-700 group-hover:scale-110 group-hover:opacity-90" /><div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/50 to-transparent mix-blend-color" /></div></div>
             </motion.div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );

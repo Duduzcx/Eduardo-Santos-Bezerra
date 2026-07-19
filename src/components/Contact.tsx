@@ -1,97 +1,59 @@
 "use client";
 
+import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
-import LetterReveal from "./LetterReveal";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
+import Scene from "./Scene";
 
-// SVGs customizados para substituir os ícones removidos pelo Lucide
-function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="-2 -2 28 28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.62-.4 7.5-1.81 7.5-8.18a5.4 5.4 0 0 0-1.54-4 5.4 5.4 0 0 0-.15-3.93s-1.25-.4-4 1.44a12.9 12.9 0 0 0-7 0C6.25 1.5 5 1.9 5 1.9a5.4 5.4 0 0 0-.15 3.93 5.4 5.4 0 0 0-1.54 4c0 6.36 3.87 7.78 7.5 8.18a4.8 4.8 0 0 0-1 3.02v4" />
-      <path d="M9 20a5.5 5.5 0 0 1-5-3" />
-    </svg>
-  );
-}
-
-function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect width="4" height="12" x="2" y="9" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [notice, setNotice] = useState("");
+
+  function openWhatsApp(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!WHATSAPP_NUMBER) {
+      setNotice("O número do WhatsApp ainda precisa ser configurado.");
+      return;
+    }
+    const text = `Olá, Eduardo! Meu nome é ${name || ""}. ${message || "Gostaria de conversar sobre um projeto."}`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+  }
+
   return (
-    <section className="w-full min-h-screen bg-neutral-950 flex flex-col justify-between pt-32 pb-12 px-6 md:px-24 border-t border-neutral-900 relative z-20">
-      
-      <div className="flex-1 flex flex-col justify-center">
-        <h2 className="text-neutral-500 uppercase tracking-widest text-sm mb-12" data-magnetic>
-          <LetterReveal text="Contato" />
-        </h2>
-        
-        <div className="overflow-hidden">
-          <motion.h1 
-            initial={{ y: 100, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[0.9] text-white max-w-5xl"
-          >
-            Vamos construir o futuro juntos.
-          </motion.h1>
-        </div>
+    <section id="contact" className="relative w-full py-24 md:py-32 px-6 bg-neutral-950 border-t border-white/[0.06] overflow-hidden">
+      {/* Objeto 3D em loop, estilo Thor, atrás do formulário */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <Scene color="#67e8f9" opacity={0.3} />
+      </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-          className="mt-20 flex flex-col md:flex-row gap-12 md:gap-24"
-        >
-          <motion.a
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            href="mailto:seu-email@exemplo.com"
-            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
-            data-magnetic
-          >
-            <Mail className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
-            <span>E-mail</span>
-          </motion.a>
-
-          <motion.a
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            href="https://linkedin.com/in/seulinkedin"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
-            data-magnetic
-          >
-            <LinkedinIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
-            <span>LinkedIn</span>
-          </motion.a>
-
-          <motion.a
-            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-            href="https://github.com/seugithub"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
-            data-magnetic
-          >
-            <GithubIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
-            <span>GitHub</span>
-          </motion.a>
+      <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
+        <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
+          <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-cyan)] font-semibold">Vamos conversar</p>
+          <h2 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.02] text-white">Tem um projeto em mente?</h2>
+          <p className="mt-6 max-w-md text-base md:text-lg leading-relaxed text-neutral-400">Conte um pouco sobre o desafio. A conversa continua diretamente no WhatsApp, de forma rápida e sem compromisso.</p>
+          <div className="mt-9 flex items-center gap-3 text-sm text-neutral-300"><MessageCircle className="w-5 h-5 text-[#25D366]" /> Atendimento pelo WhatsApp</div>
         </motion.div>
-      </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-end md:items-center mt-24 text-neutral-600 text-sm font-light">
-        <p>© {new Date().getFullYear()} Eduardo Santos Bezerra.</p>
-        <p>Projetado para inércia e fluidez.</p>
+        <motion.form initial={{ opacity: 0, x: 28, scale: 0.98 }} whileInView={{ opacity: 1, x: 0, scale: 1 }} whileHover={{ y: -4 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} onSubmit={openWhatsApp} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+          <div className="grid sm:grid-cols-2 gap-5">
+            <label className="block text-sm text-neutral-300">Seu nome
+              <input value={name} onChange={(event) => setName(event.target.value)} required placeholder="Como podemos te chamar?" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white placeholder:text-neutral-600 outline-none focus:border-[var(--color-cyan)] transition-colors" />
+            </label>
+            <label className="block text-sm text-neutral-300">Empresa <span className="text-neutral-600">(opcional)</span>
+              <input placeholder="Nome da empresa" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white placeholder:text-neutral-600 outline-none focus:border-[var(--color-cyan)] transition-colors" />
+            </label>
+          </div>
+          <label className="block mt-5 text-sm text-neutral-300">Sobre o projeto
+            <textarea value={message} onChange={(event) => setMessage(event.target.value)} required rows={5} placeholder="O que você precisa construir ou melhorar?" className="mt-2 w-full resize-none rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white placeholder:text-neutral-600 outline-none focus:border-[var(--color-cyan)] transition-colors" />
+          </label>
+          <button type="submit" className="mt-6 w-full rounded-xl bg-[#25D366] px-5 py-4 text-sm font-semibold text-[#07130b] hover:bg-[#37e477] transition-colors flex items-center justify-center gap-2">Iniciar conversa no WhatsApp <ArrowUpRight className="w-4 h-4" /></button>
+          {notice && <p role="status" className="mt-3 text-sm text-amber-300">{notice}</p>}
+        </motion.form>
       </div>
+      <footer className="relative z-10 max-w-6xl mx-auto mt-20 pt-6 border-t border-white/[0.06] text-sm text-neutral-600">© {new Date().getFullYear()} Eduardo Santos Bezerra. Todos os direitos reservados.</footer>
     </section>
   );
 }

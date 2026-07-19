@@ -21,6 +21,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.94, 1]);
   const rotateX = useTransform(scrollYProgress, [0, 1], [6, 0]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [24, -24]);
   const [imageFailed, setImageFailed] = useState(false);
   const [forceReveal, setForceReveal] = useState(false);
   const featured = index === 0;
@@ -51,9 +52,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 <span className="text-xs">{project.name}</span>
               </div>
             ) : (
-              <img
+              <motion.img
                 src={project.image}
                 alt=""
+                style={{ y: imageY }}
                 onError={() => setImageFailed(true)}
                 className="h-full w-full object-cover opacity-95 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
               />

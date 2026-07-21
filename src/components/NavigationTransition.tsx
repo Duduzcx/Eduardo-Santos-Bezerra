@@ -2,10 +2,12 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 export default function NavigationTransition() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [origin, setOrigin] = useState({ x: "50%", y: "50%" });
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
@@ -37,6 +39,8 @@ export default function NavigationTransition() {
   }, []);
 
   const particleAngles = Array.from({ length: 6 }, (_, i) => (i / 6) * Math.PI * 2);
+
+  if (prefersReducedMotion) return null;
 
   return (
     <AnimatePresence>

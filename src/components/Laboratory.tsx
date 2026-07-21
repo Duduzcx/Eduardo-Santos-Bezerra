@@ -160,7 +160,7 @@ export default function Laboratory() {
   return (
     <section className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
       {/* Objeto 3D em loop, estilo Thor, bem sutil no fundo da seção */}
-      <LazyScene className="absolute inset-0 opacity-[0.15] pointer-events-none" color="#7c3aed" opacity={0.4} />
+      <LazyScene className="absolute inset-0 pointer-events-none" color="#7c3aed" opacity={0.4} />
 
       <div className="px-6 md:px-12 lg:px-24 mb-16 max-w-[1600px] mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-10 relative z-10">
         <div className="text-center md:text-left">

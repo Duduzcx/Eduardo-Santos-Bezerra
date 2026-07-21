@@ -86,7 +86,7 @@ export default function Projects() {
     <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-[var(--background-alt)] py-28 md:py-40 transition-colors duration-500">
       <motion.div aria-hidden="true" style={{ y: sceneY, rotate: sceneRotate }} className="pointer-events-none absolute right-[-16vw] top-[16%] h-[48vw] w-[48vw] rounded-full border border-[var(--color-cyan)]/20 shadow-[0_0_100px_rgba(103,232,249,0.07)]" />
       <motion.div aria-hidden="true" style={{ y: sceneY }} className="pointer-events-none absolute left-[-18vw] top-[42%] h-[38vw] w-[38vw] rounded-[3rem] border border-[var(--color-pink)]/10" />
-      <LazyScene className="absolute inset-0 opacity-20 pointer-events-none" geometry="torus" color="#67e8f9" opacity={0.35} />
+      <LazyScene className="absolute inset-0 pointer-events-none" geometry="torus" color="#67e8f9" opacity={0.35} />
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-16 max-w-2xl md:mb-20">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Projetos selecionados</p>

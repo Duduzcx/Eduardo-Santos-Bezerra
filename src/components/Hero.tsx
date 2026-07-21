@@ -63,7 +63,7 @@ export default function Hero() {
 
       {/* Objeto 3D em loop, ocupa o espaço do vídeo removido, reage à posição do mouse */}
       <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
-        <LazyScene className="absolute inset-0 opacity-75 pointer-events-none" />
+        <LazyScene className="absolute inset-0 pointer-events-none" opacity={0.75} />
       </motion.div>
 
       <FloatingTechCards />

@@ -51,7 +51,7 @@ export default function About() {
         </svg>
       </motion.div>
 
-      <LazyScene className="absolute inset-0 opacity-20 pointer-events-none" geometry="dodecahedron" color="#67e8f9" opacity={0.35} />
+      <LazyScene className="absolute inset-0 pointer-events-none" geometry="dodecahedron" color="#67e8f9" opacity={0.35} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-20 items-center">

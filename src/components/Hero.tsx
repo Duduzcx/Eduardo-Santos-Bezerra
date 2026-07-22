@@ -1,14 +1,22 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
+import dynamic from "next/dynamic";
+import { motion, useMotionValue, useSpring, useScroll, type Variants } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
 import Starfield from "./Starfield";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+
+const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktop();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+
   const container: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -52,7 +60,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden" onMouseMove={handleHeroMouseMove}>
+    <section ref={sectionRef} className="relative w-full min-h-screen flex items-center justify-center overflow-hidden" onMouseMove={handleHeroMouseMove}>
       {/* Máscara escura para garantir leitura do texto — antes ficava sobre o vídeo, agora é o próprio fundo */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[var(--background)]/40 via-[var(--background)]/70 to-[var(--background)]" />
 
@@ -60,8 +68,10 @@ export default function Hero() {
         <Starfield />
       </div>
 
-      {/* Objeto 3D real entra na Task 5 (HeroScene) — wrapper de parallax de mouse já fica pronto aqui */}
-      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none" />
+      {/* Capacete 3D real (CC0), gira com o scroll da seção e reage à posição do mouse */}
+      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
+        {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
+      </motion.div>
 
       <FloatingTechCards />
 

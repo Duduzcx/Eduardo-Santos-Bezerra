@@ -26,7 +26,7 @@ export default function IntroLoader() {
     const timer = setTimeout(() => {
       setExited(true);
       document.body.style.overflow = "";
-    }, 1700);
+    }, 600);
 
     return () => {
       clearTimeout(timer);
@@ -55,7 +55,7 @@ export default function IntroLoader() {
               className="h-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-cyan)] to-[var(--color-pink)]"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 1.3, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
             />
           </div>
         </motion.div>

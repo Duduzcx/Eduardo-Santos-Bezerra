@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { GithubIcon, LinkedinIcon } from "./Icons";
-import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -37,7 +36,6 @@ export default function Navbar() {
           <a href="https://linkedin.com" target="_blank" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-400 hover:text-[var(--color-cyan)] hover:border-[var(--color-cyan)] transition-all">
             <LinkedinIcon className="w-4 h-4" />
           </a>
-          <ThemeToggle />
         </div>
       </div>
     </motion.nav>

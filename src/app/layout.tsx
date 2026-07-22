@@ -25,14 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="scroll-smooth" data-theme="dark">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("theme");if(t==="light")document.documentElement.dataset.theme="light";}catch(e){}`,
-          }}
-        />
-      </head>
+    <html lang="pt-BR" className="scroll-smooth">
+      <head />
       <body
         className={`${inter.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
       >

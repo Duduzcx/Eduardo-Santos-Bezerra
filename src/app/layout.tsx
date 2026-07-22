@@ -11,7 +11,6 @@ import ScrollProgress from "@/components/ScrollProgress";
 import NavigationTransition from "@/components/NavigationTransition";
 import CustomCursor from "@/components/CustomCursor";
 import IntroLoader from "@/components/IntroLoader";
-import SceneCanvasGate from "@/components/SceneCanvasGate";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -44,7 +43,6 @@ export default function RootLayout({
         <NavigationTransition />
         <ColorfulBackground />
         <FloatingObjects />
-        <SceneCanvasGate />
 
         <SmoothScroll>
           <TransitionWrapper>

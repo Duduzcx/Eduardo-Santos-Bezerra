@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
-import LazyScene from "./LazyScene";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
 import Starfield from "./Starfield";
@@ -61,10 +60,8 @@ export default function Hero() {
         <Starfield />
       </div>
 
-      {/* Objeto 3D em loop, ocupa o espaço do vídeo removido, reage à posição do mouse */}
-      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
-        <LazyScene className="absolute inset-0 pointer-events-none" opacity={0.75} />
-      </motion.div>
+      {/* Objeto 3D real entra na Task 5 (HeroScene) — wrapper de parallax de mouse já fica pronto aqui */}
+      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none" />
 
       <FloatingTechCards />
 

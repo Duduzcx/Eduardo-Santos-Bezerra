@@ -68,58 +68,60 @@ export default function Hero() {
         <Starfield />
       </div>
 
-      {/* Capacete 3D real (CC0), gira com o scroll da seção e reage à posição do mouse */}
-      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
-        {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
-      </motion.div>
-
       <FloatingTechCards />
 
-      <motion.div 
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="w-full max-w-5xl mx-auto px-6 flex flex-col items-center text-center relative z-10 pt-20"
-      >
-        <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-accent)]/50 mb-8 -mt-20 md:-mt-32 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
-          <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
-          <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+      <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left"
+        >
+          <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-accent)]/50 mb-8 shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+            <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
+            <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+          </motion.div>
+
+          <motion.h1 variants={item} className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
+            Eduardo<br />
+            Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
+          </motion.h1>
+
+          <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
+            <LetterReveal text="DESENVOLVEDOR FULL STACK" />
+          </motion.h2>
+
+          <div className="max-w-2xl mb-12">
+            <TextReveal
+              text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
+              className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center lg:justify-start"
+            />
+          </div>
+
+          <motion.div variants={item} className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+            <motion.a
+              ref={btnRef}
+              href="#projects"
+              onMouseMove={handleBtnMouseMove}
+              onMouseLeave={handleBtnMouseLeave}
+              style={{ x: springX, y: springY }}
+              className="group relative px-7 py-4 rounded-xl bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors shadow-[0_12px_32px_rgba(255,255,255,0.16)] flex items-center gap-3"
+            >
+              Ver projetos selecionados
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </motion.a>
+            <a href="#contact" className="group px-7 py-4 rounded-xl border border-white/20 bg-white/5 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-3">
+              <MessageCircle className="w-4 h-4 text-[var(--color-cyan)]" />
+              Falar sobre um projeto
+            </a>
+          </motion.div>
         </motion.div>
-        
-        <motion.h1 variants={item} className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
-          Eduardo<br />
-          Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
-        </motion.h1>
-        
-        <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
-          <LetterReveal text="DESENVOLVEDOR FULL STACK" />
-        </motion.h2>
-        
-        <div className="max-w-2xl mx-auto mb-12">
-          <TextReveal 
-            text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
-            className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center"
-          />
-        </div>
-        
-        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2">
-          <motion.a
-            ref={btnRef}
-            href="#projects"
-            onMouseMove={handleBtnMouseMove}
-            onMouseLeave={handleBtnMouseLeave}
-            style={{ x: springX, y: springY }}
-            className="group relative px-7 py-4 rounded-xl bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors shadow-[0_12px_32px_rgba(255,255,255,0.16)] flex items-center gap-3"
-          >
-            Ver projetos selecionados
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </motion.a>
-          <a href="#contact" className="group px-7 py-4 rounded-xl border border-white/20 bg-white/5 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-3">
-            <MessageCircle className="w-4 h-4 text-[var(--color-cyan)]" />
-            Falar sobre um projeto
-          </a>
+
+        {/* Coluna do objeto 3D — astronauta + planetas (Task 4), à direita no desktop */}
+        <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="relative w-full h-[400px] lg:h-[560px] lg:flex-1 pointer-events-none">
+          {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -47,7 +47,10 @@ export default function Contact() {
           {notice && <p role="status" className="mt-3 text-sm text-amber-300">{notice}</p>}
         </motion.form>
       </div>
-      <footer className="relative z-10 max-w-6xl mx-auto mt-20 pt-6 border-t border-[var(--border-subtle)] text-sm text-[var(--text-tertiary)]">© {new Date().getFullYear()} Eduardo Santos Bezerra. Todos os direitos reservados.</footer>
+      <footer className="relative z-10 max-w-6xl mx-auto mt-20 pt-6 border-t border-[var(--border-subtle)] text-sm text-[var(--text-tertiary)]">
+        © {new Date().getFullYear()} Eduardo Santos Bezerra. Todos os direitos reservados.
+        <span className="block mt-1 text-xs opacity-70">Modelo 3D &quot;SciFi Helmet&quot; por Michael Pavlovic e Norbert Nopper (Khronos Group), licença CC0 1.0.</span>
+      </footer>
     </section>
   );
 }

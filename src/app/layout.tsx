@@ -35,7 +35,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} font-sans bg-transparent text-neutral-50 antialiased overflow-x-hidden selection:bg-white selection:text-black`}
+        className={`${inter.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
       >
         <IntroLoader />
         <CustomCursor />

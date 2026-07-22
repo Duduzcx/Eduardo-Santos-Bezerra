@@ -41,7 +41,7 @@ export default function IntroLoader() {
       {!exited && (
         <motion.div
           aria-hidden="true"
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-[#0a0814]"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 bg-[var(--background)]"
           initial={{ clipPath: "circle(150% at 50% 50%)" }}
           animate={{ clipPath: "circle(150% at 50% 50%)" }}
           exit={{ clipPath: "circle(0% at 50% 50%)" }}

@@ -65,7 +65,7 @@ export default function NavigationTransition() {
             transition={{ duration: 0.4, delay: 0.08, ease: [0.76, 0, 0.24, 1] }}
           />
           <motion.div
-            className="absolute inset-0 bg-[#0a0814]"
+            className="absolute inset-0 bg-[var(--background)]"
             initial={{ clipPath: "polygon(0 0, 0 0, -20% 100%, -20% 100%)" }}
             animate={{ clipPath: "polygon(0 0, 120% 0, 100% 100%, -20% 100%)" }}
             exit={{ clipPath: "polygon(120% 0, 120% 0, 120% 100%, 100% 100%)" }}

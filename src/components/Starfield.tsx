@@ -27,9 +27,9 @@ function buildLayer(count: number, spread: number, size: number, seed: number): 
 export default function Starfield() {
   const layers = useMemo<Layer[]>(
     () => [
-      { shadow: buildLayer(140, 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
-      { shadow: buildLayer(70, 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
-      { shadow: buildLayer(30, 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
+      { shadow: buildLayer(190, 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
+      { shadow: buildLayer(95, 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
+      { shadow: buildLayer(45, 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
     ],
     []
   );

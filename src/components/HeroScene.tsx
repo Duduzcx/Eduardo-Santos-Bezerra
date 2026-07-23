@@ -2,18 +2,18 @@
 
 import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Float } from "@react-three/drei";
 import { useReducedMotion, type MotionValue } from "framer-motion";
 import * as THREE from "three";
 
-interface HelmetProps {
+interface AstronautProps {
   scrollProgress: MotionValue<number>;
 }
 
-function Helmet({ scrollProgress }: HelmetProps) {
+function Astronaut({ scrollProgress }: AstronautProps) {
   const groupRef = useRef<THREE.Group>(null);
   const prefersReducedMotion = useReducedMotion();
-  const { scene } = useGLTF("/models/hero-helmet.glb", "/draco/");
+  const { scene } = useGLTF("/models/hero-astronaut.glb", "/draco/");
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
@@ -24,9 +24,26 @@ function Helmet({ scrollProgress }: HelmetProps) {
   });
 
   return (
-    <group ref={groupRef} scale={1.6}>
+    <group ref={groupRef} scale={1.4}>
       <primitive object={scene} />
     </group>
+  );
+}
+
+interface PlanetProps {
+  position: [number, number, number];
+  radius: number;
+  color: string;
+}
+
+function Planet({ position, radius, color }: PlanetProps) {
+  return (
+    <Float speed={1.5} rotationIntensity={0.4} floatIntensity={1.2}>
+      <mesh position={position}>
+        <sphereGeometry args={[radius, 24, 24]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.4} roughness={0.5} />
+      </mesh>
+    </Float>
   );
 }
 
@@ -45,10 +62,12 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       <directionalLight position={[4, 4, 4]} intensity={2.2} color="#67e8f9" />
       <directionalLight position={[-4, -2, -3]} intensity={1.2} color="#e879f9" />
       <Suspense fallback={null}>
-        <Helmet scrollProgress={scrollProgress} />
+        <Astronaut scrollProgress={scrollProgress} />
+        <Planet position={[-2.1, 1.1, -1.4]} radius={0.35} color="#67e8f9" />
+        <Planet position={[2.2, -0.9, -1.8]} radius={0.22} color="#e879f9" />
       </Suspense>
     </Canvas>
   );
 }
 
-useGLTF.preload("/models/hero-helmet.glb", "/draco/");
+useGLTF.preload("/models/hero-astronaut.glb", "/draco/");

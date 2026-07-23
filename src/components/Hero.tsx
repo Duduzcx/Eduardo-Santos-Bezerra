@@ -118,7 +118,7 @@ export default function Hero() {
         </motion.div>
 
         {/* Coluna do objeto 3D — astronauta + planetas (Task 4), à direita no desktop */}
-        <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="relative w-full h-[400px] lg:h-[560px] lg:flex-1 pointer-events-none">
+        <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="relative w-full h-0 lg:h-[560px] lg:flex-1 pointer-events-none">
           {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
         </motion.div>
       </div>

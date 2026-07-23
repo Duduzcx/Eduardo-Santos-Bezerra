@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import dynamic from "next/dynamic";
-import { motion, useMotionValue, useSpring, useScroll, type Variants } from "framer-motion";
+import { motion, useMotionValue, useSpring, useScroll, useTransform, type Variants } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
 import FloatingTechCards from "./FloatingTechCards";
@@ -16,6 +16,9 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const isDesktop = useIsDesktop();
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  // Texto principal recua e some logo nos primeiros pixels de scroll (0-35% do scroll da Hero), câmera "descendo pelo portfólio"
+  const textExitOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0, 0.35], [0, -100]);
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -71,11 +74,11 @@ export default function Hero() {
       <FloatingTechCards />
 
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
+        <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left"
         >
           <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
             <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
@@ -115,6 +118,7 @@ export default function Hero() {
               Falar sobre um projeto
             </a>
           </motion.div>
+        </motion.div>
         </motion.div>
 
         {/* Coluna do objeto 3D — astronauta + planetas (Task 4), à direita no desktop */}

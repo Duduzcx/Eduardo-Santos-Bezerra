@@ -9,7 +9,7 @@ interface LetterRevealProps {
   className?: string;
 }
 
-const NBSP = " ";
+const NBSP = " ";
 
 export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
   const forceReveal = useForceReveal();

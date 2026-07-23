@@ -19,11 +19,15 @@ function Astronaut({ scrollProgress }: AstronautProps) {
   useFrame((state, delta) => {
     if (!groupRef.current) return;
     const t = state.clock.elapsedTime;
+    // Modelo tem o pivô nos pés (bbox Y de 0 a ~2), não no centro — offset fixo recentraliza o astronauta no meio do frame da câmera
+    const centerOffset = -1.4;
     if (!prefersReducedMotion) {
       // Flutuação orgânica em gravidade zero + "respiração" — física procedural via seno, sem depender de rig/animação do modelo
       groupRef.current.rotation.y += delta * 0.25;
-      groupRef.current.position.y = Math.sin(t * 0.6) * 0.12;
+      groupRef.current.position.y = centerOffset + Math.sin(t * 0.6) * 0.12;
       groupRef.current.rotation.z = Math.sin(t * 0.4) * 0.05;
+    } else {
+      groupRef.current.position.y = centerOffset;
     }
     groupRef.current.rotation.x = scrollProgress.get() * Math.PI * 0.15;
   });

@@ -5,6 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Float } from "@react-three/drei";
 import { useReducedMotion, type MotionValue } from "framer-motion";
 import * as THREE from "three";
+import StarParticles from "./StarParticles";
 
 interface AstronautProps {
   scrollProgress: MotionValue<number>;
@@ -17,8 +18,12 @@ function Astronaut({ scrollProgress }: AstronautProps) {
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
+    const t = state.clock.elapsedTime;
     if (!prefersReducedMotion) {
+      // Flutuação orgânica em gravidade zero + "respiração" — física procedural via seno, sem depender de rig/animação do modelo
       groupRef.current.rotation.y += delta * 0.25;
+      groupRef.current.position.y = Math.sin(t * 0.6) * 0.12;
+      groupRef.current.rotation.z = Math.sin(t * 0.4) * 0.05;
     }
     groupRef.current.rotation.x = scrollProgress.get() * Math.PI * 0.15;
   });
@@ -61,6 +66,7 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       <ambientLight intensity={0.6} />
       <directionalLight position={[4, 4, 4]} intensity={2.2} color="#67e8f9" />
       <directionalLight position={[-4, -2, -3]} intensity={1.2} color="#e879f9" />
+      <StarParticles />
       <Suspense fallback={null}>
         <Astronaut scrollProgress={scrollProgress} />
         <Planet position={[-2.1, 1.1, -1.4]} radius={0.35} color="#67e8f9" />

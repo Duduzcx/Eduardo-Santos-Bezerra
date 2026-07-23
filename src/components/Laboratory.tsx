@@ -108,54 +108,7 @@ function BentoCard({
   );
 }
 
-function CircleDragReveal({ progress, onProgress }: { progress: number; onProgress: (v: number) => void }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const ballY = useMotionValue(0);
-  const TRACK = 64;
-
-  function handleDrag() {
-    const clamped = Math.min(TRACK, Math.max(0, ballY.get()));
-    onProgress(clamped / TRACK);
-  }
-
-  return (
-    <div className="relative mx-auto mb-4 flex h-[168px] w-[168px] items-center justify-center md:mx-0">
-      <svg viewBox="0 0 168 168" className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none">
-        <circle cx="84" cy="84" r="76" fill="none" stroke="var(--border-subtle)" strokeWidth="2" />
-        <motion.circle
-          cx="84"
-          cy="84"
-          r="76"
-          fill="none"
-          stroke="var(--color-cyan)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          style={{ pathLength: progress, opacity: 0.9 }}
-        />
-      </svg>
-      <div ref={trackRef} className="relative h-[64px] w-px bg-[var(--border-subtle)]">
-        <motion.div
-          drag="y"
-          dragConstraints={trackRef}
-          dragElastic={0.05}
-          dragMomentum={false}
-          onDrag={handleDrag}
-          style={{ y: ballY, marginLeft: -11 }}
-          whileDrag={{ scale: 1.2 }}
-          className="absolute top-0 z-10 flex h-[22px] w-[22px] cursor-grab items-center justify-center rounded-full border-2 border-[var(--color-cyan)] bg-[var(--background)] shadow-[0_0_20px_rgba(103,232,249,0.8)] active:cursor-grabbing"
-        >
-          <div className="h-2 w-2 rounded-full bg-[var(--color-cyan)]" />
-        </motion.div>
-      </div>
-      <span className="absolute -bottom-6 text-[10px] uppercase tracking-widest text-[var(--text-tertiary)]">Arraste</span>
-    </div>
-  );
-}
-
 export default function Laboratory() {
-  const [dragProgress, setDragProgress] = useState(0);
-  const thresholds = [0.15, 0.4, 0.65, 0.9];
-
   return (
     <section className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
       <div className="px-6 md:px-12 lg:px-24 mb-16 max-w-[1600px] mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-10 relative z-10">
@@ -173,7 +126,6 @@ export default function Laboratory() {
             Onde a engenharia vira arte.
           </motion.p>
         </div>
-        <CircleDragReveal progress={dragProgress} onProgress={setDragProgress} />
       </div>
 
       {/* O Bento Grid Distorcido */}
@@ -186,7 +138,6 @@ export default function Laboratory() {
           desc="Criação de ambientes virtuais e peças funcionais para impressão 3D (Autodesk Maya, Cults 3D). Elevando o design físico e digital."
           icon={<Box className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop"
-          boosted={dragProgress >= thresholds[0]}
         />
 
         {/* Card 2: Algorithms (Pequeno/Alto) */}
@@ -196,7 +147,6 @@ export default function Laboratory() {
           desc="Estruturação de algoritmos, cálculos de probabilidade e avaliação de odds complexos para análise massiva de dados esportivos."
           icon={<Activity className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
-          boosted={dragProgress >= thresholds[1]}
         />
 
         {/* Card 3: Experimentos Físicos */}
@@ -206,7 +156,6 @@ export default function Laboratory() {
           desc="Integração de hardware e software através de ESP32 e C++, unindo o plano físico aos serviços cloud."
           icon={<Cpu className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop"
-          boosted={dragProgress >= thresholds[2]}
         />
 
         {/* Card 4: Abstract Mathematics */}
@@ -216,7 +165,6 @@ export default function Laboratory() {
           desc="Processamento de Big Data e pipelines escaláveis para arquiteturas orientadas a eventos e tomada de decisão em tempo real."
           icon={<Variable className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070&auto=format&fit=crop"
-          boosted={dragProgress >= thresholds[3]}
         />
 
       </div>

@@ -8,6 +8,8 @@ import TextReveal from "./TextReveal";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
 import Starfield from "./Starfield";
+import MagneticButton from "./MagneticButton";
+import MoonPreloader from "./MoonPreloader";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
@@ -33,24 +35,6 @@ export default function Hero() {
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
   };
 
-  const btnRef = useRef<HTMLAnchorElement>(null);
-  const btnX = useMotionValue(0);
-  const btnY = useMotionValue(0);
-  const springX = useSpring(btnX, { damping: 15, stiffness: 150, mass: 0.5 });
-  const springY = useSpring(btnY, { damping: 15, stiffness: 150, mass: 0.5 });
-
-  const handleBtnMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!btnRef.current) return;
-    const rect = btnRef.current.getBoundingClientRect();
-    btnX.set((e.clientX - (rect.left + rect.width / 2)) * 0.35);
-    btnY.set((e.clientY - (rect.top + rect.height / 2)) * 0.35);
-  };
-
-  const handleBtnMouseLeave = () => {
-    btnX.set(0);
-    btnY.set(0);
-  };
-
   const sceneX = useMotionValue(0);
   const sceneY = useMotionValue(0);
   const sceneSpringX = useSpring(sceneX, { damping: 25, stiffness: 60, mass: 1 });
@@ -73,8 +57,9 @@ export default function Hero() {
 
       {/* Canvas 3D ocupa a Hero inteira — evita corte por câmera/aspecto apertado de coluna estreita */}
       <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
-        {isDesktop && <HeroScene />}
+        {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
       </motion.div>
+      {isDesktop && <MoonPreloader />}
 
       <FloatingTechCards />
 
@@ -107,21 +92,21 @@ export default function Hero() {
           </div>
 
           <motion.div variants={item} className="flex flex-col sm:flex-row items-center gap-4 mt-2">
-            <motion.a
-              ref={btnRef}
+            <MagneticButton
               href="#projects"
-              onMouseMove={handleBtnMouseMove}
-              onMouseLeave={handleBtnMouseLeave}
-              style={{ x: springX, y: springY }}
               className="group relative px-6 py-3.5 rounded-full bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors flex items-center gap-2.5"
             >
               Ver projetos selecionados
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </motion.a>
-            <a href="#contact" className="group flex items-center gap-2 px-2 py-3.5 text-white/70 hover:text-white font-medium transition-colors">
+            </MagneticButton>
+            <MagneticButton
+              href="#contact"
+              strength={0.25}
+              className="group flex items-center gap-2 px-2 py-3.5 text-white/70 hover:text-white font-medium transition-colors"
+            >
               <MessageCircle className="w-4 h-4" />
               Falar sobre um projeto
-            </a>
+            </MagneticButton>
           </motion.div>
         </motion.div>
         </motion.div>

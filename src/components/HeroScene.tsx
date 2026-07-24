@@ -2,21 +2,10 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Html, useProgress } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
+import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
-
-function Loader() {
-  const { progress } = useProgress();
-  return (
-    <Html center>
-      <div className="flex flex-col items-center gap-2 whitespace-nowrap font-mono text-xs uppercase tracking-widest text-white/60">
-        <span>Iniciando ecossistema...</span>
-        <span className="text-white">{Math.round(progress)}%</span>
-      </div>
-    </Html>
-  );
-}
 
 function Moon() {
   const groupRef = useRef<THREE.Group>(null);
@@ -56,7 +45,29 @@ function Moon() {
   );
 }
 
-export default function HeroScene() {
+interface SceneLightProps {
+  scrollProgress: MotionValue<number>;
+}
+
+function SceneLight({ scrollProgress }: SceneLightProps) {
+  const lightRef = useRef<THREE.DirectionalLight>(null);
+
+  useFrame(() => {
+    if (!lightRef.current) return;
+    const p = scrollProgress.get();
+    // Luz desliza suavemente conforme rola — sombras das crateras mudam de lado progressivamente
+    lightRef.current.position.x = THREE.MathUtils.lerp(8, -6, p);
+    lightRef.current.position.y = THREE.MathUtils.lerp(1, 5, p);
+  });
+
+  return <directionalLight ref={lightRef} position={[8, 1, 2]} intensity={2.2} color="#ffffff" />;
+}
+
+interface HeroSceneProps {
+  scrollProgress: MotionValue<number>;
+}
+
+export default function HeroScene({ scrollProgress }: HeroSceneProps) {
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 45 }}
@@ -68,9 +79,9 @@ export default function HeroScene() {
     >
       {/* Fosco e dramático: luz lateral rasante (crateras com sombra), sem luz frontal que estoura o material */}
       <ambientLight intensity={0.06} />
-      <directionalLight position={[8, 1, 2]} intensity={2.2} color="#ffffff" />
+      <SceneLight scrollProgress={scrollProgress} />
       <StarParticles />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <Moon />
       </Suspense>
     </Canvas>

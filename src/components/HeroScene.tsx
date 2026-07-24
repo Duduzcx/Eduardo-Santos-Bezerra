@@ -2,9 +2,21 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Html, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
+
+function Loader() {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <div className="flex flex-col items-center gap-2 whitespace-nowrap font-mono text-xs uppercase tracking-widest text-white/60">
+        <span>Iniciando ecossistema...</span>
+        <span className="text-white">{Math.round(progress)}%</span>
+      </div>
+    </Html>
+  );
+}
 
 function Moon() {
   const groupRef = useRef<THREE.Group>(null);
@@ -48,6 +60,9 @@ export default function HeroScene() {
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 45 }}
+      dpr={[1, 1.5]}
+      shadows={false}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
       className="!absolute !inset-0 !w-full !h-full"
       style={{ pointerEvents: "none" }}
     >
@@ -55,7 +70,7 @@ export default function HeroScene() {
       <ambientLight intensity={0.06} />
       <directionalLight position={[8, 1, 2]} intensity={2.2} color="#ffffff" />
       <StarParticles />
-      <Suspense fallback={null}>
+      <Suspense fallback={<Loader />}>
         <Moon />
       </Suspense>
     </Canvas>

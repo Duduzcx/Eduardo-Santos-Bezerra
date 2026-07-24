@@ -71,6 +71,11 @@ export default function Hero() {
         <Starfield />
       </div>
 
+      {/* Canvas 3D ocupa a Hero inteira — evita corte por câmera/aspecto apertado de coluna estreita */}
+      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
+        {isDesktop && <HeroScene />}
+      </motion.div>
+
       <FloatingTechCards />
 
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
@@ -121,10 +126,7 @@ export default function Hero() {
         </motion.div>
         </motion.div>
 
-        {/* Coluna do objeto 3D — astronauta + planetas (Task 4), à direita no desktop */}
-        <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="relative w-full h-0 lg:h-[560px] lg:flex-1 pointer-events-none">
-          {isDesktop && <HeroScene />}
-        </motion.div>
+        <div className="hidden lg:block lg:flex-1" aria-hidden="true" />
       </div>
     </section>
   );

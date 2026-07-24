@@ -1,0 +1,727 @@
+# Review package: 6d79fa480767ff17c7e412a659f1a3ce0fdd31e9..HEAD
+
+## Commits
+d981eb4 feat: letter-by-letter reveal on all section titles
+
+## Files changed
+ src/components/About.tsx        |   3 +-
+ src/components/Contact.tsx      |  88 ++++++++++++++++++++++++
+ src/components/Hero.tsx         |   3 +-
+ src/components/Laboratory.tsx   | 146 ++++++++++++++++++++++++++++++++++++++++
+ src/components/LetterReveal.tsx |  43 ++++++++++++
+ src/components/Process.tsx      |  95 ++++++++++++++++++++++++++
+ src/components/Projects.tsx     | 127 ++++++++++++++++++++++++++++++++++
+ src/components/Skills.tsx       |  84 +++++++++++++++++++++++
+ 8 files changed, 587 insertions(+), 2 deletions(-)
+
+## Diff
+diff --git a/src/components/About.tsx b/src/components/About.tsx
+index 99e0006..634edcf 100644
+--- a/src/components/About.tsx
++++ b/src/components/About.tsx
+@@ -1,16 +1,17 @@
+ "use client";
+ 
+ import { motion } from "framer-motion";
+ import { Code2, Monitor, Database } from "lucide-react";
+ import TextReveal from "./TextReveal";
+ import CircleReveal from "./CircleReveal";
++import LetterReveal from "./LetterReveal";
+ 
+ export default function About() {
+   const cards = [
+     {
+       icon: <Monitor className="w-8 h-8 text-[var(--color-cyan)]" />,
+       title: "Front-end",
+       desc: "Experiências ricas e responsivas usando React, Next.js e animações avançadas.",
+       x: -50, y: 0
+     },
+     {
+@@ -46,21 +47,21 @@ export default function About() {
+         <div className="flex flex-col lg:flex-row gap-20 items-center">
+           
+           <div className="flex-1 space-y-8">
+             <motion.div 
+               initial={{ opacity: 0, scale: 1.2, rotateX: -45 }}
+               whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 1, type: "spring" }}
+             >
+               <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
+-                Sobre mim
++                <LetterReveal text="Sobre mim" />
+               </h2>
+             </motion.div>
+             
+             <div className="space-y-6 text-neutral-300 text-xl leading-relaxed">
+               <TextReveal text="Sou um Desenvolvedor Full Stack apaixonado por transformar problemas complexos em interfaces elegantes e sistemas de alta performance." />
+               <TextReveal text="Com sólida formação em Engenharia de Software, meu foco é sempre a entrega de valor real. Já atuei no desenvolvimento de plataformas EdTech, automação IoT e análise de dados massivos." />
+               <motion.p
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true, margin: "-100px" }}
+diff --git a/src/components/Contact.tsx b/src/components/Contact.tsx
+new file mode 100644
+index 0000000..bd089e5
+--- /dev/null
++++ b/src/components/Contact.tsx
+@@ -0,0 +1,88 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { Mail } from "lucide-react";
++import LetterReveal from "./LetterReveal";
++
++// SVGs customizados para substituir os ícones removidos pelo Lucide
++function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
++  return (
++    <svg viewBox="-2 -2 28 28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
++      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.02c3.62-.4 7.5-1.81 7.5-8.18a5.4 5.4 0 0 0-1.54-4 5.4 5.4 0 0 0-.15-3.93s-1.25-.4-4 1.44a12.9 12.9 0 0 0-7 0C6.25 1.5 5 1.9 5 1.9a5.4 5.4 0 0 0-.15 3.93 5.4 5.4 0 0 0-1.54 4c0 6.36 3.87 7.78 7.5 8.18a4.8 4.8 0 0 0-1 3.02v4" />
++      <path d="M9 20a5.5 5.5 0 0 1-5-3" />
++    </svg>
++  );
++}
++
++function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
++  return (
++    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
++      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
++      <rect width="4" height="12" x="2" y="9" />
++      <circle cx="4" cy="4" r="2" />
++    </svg>
++  );
++}
++
++export default function Contact() {
++  return (
++    <section className="w-full min-h-screen bg-neutral-950 flex flex-col justify-between pt-32 pb-12 px-6 md:px-24 border-t border-neutral-900 relative z-20">
++      
++      <div className="flex-1 flex flex-col justify-center">
++        <h2 className="text-neutral-500 uppercase tracking-widest text-sm mb-12" data-magnetic>
++          <LetterReveal text="Contato" />
++        </h2>
++        
++        <div className="overflow-hidden">
++          <motion.h1 
++            initial={{ y: 100, opacity: 0 }}
++            whileInView={{ y: 0, opacity: 1 }}
++            viewport={{ once: true }}
++            transition={{ duration: 0.8, ease: "easeOut" }}
++            className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[0.9] text-white max-w-5xl"
++          >
++            Vamos construir o futuro juntos.
++          </motion.h1>
++        </div>
++
++        <div className="mt-20 flex flex-col md:flex-row gap-12 md:gap-24">
++          <a 
++            href="mailto:seu-email@exemplo.com" 
++            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
++            data-magnetic
++          >
++            <Mail className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
++            <span>E-mail</span>
++          </a>
++          
++          <a 
++            href="https://linkedin.com/in/seulinkedin" 
++            target="_blank"
++            rel="noopener noreferrer"
++            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
++            data-magnetic
++          >
++            <LinkedinIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
++            <span>LinkedIn</span>
++          </a>
++          
++          <a 
++            href="https://github.com/seugithub" 
++            target="_blank"
++            rel="noopener noreferrer"
++            className="group flex items-center gap-4 text-2xl md:text-4xl text-neutral-400 hover:text-white transition-colors duration-300"
++            data-magnetic
++          >
++            <GithubIcon className="w-8 h-8 md:w-12 md:h-12 group-hover:scale-110 transition-transform duration-300" />
++            <span>GitHub</span>
++          </a>
++        </div>
++      </div>
++
++      <div className="flex flex-col md:flex-row justify-between items-end md:items-center mt-24 text-neutral-600 text-sm font-light">
++        <p>© {new Date().getFullYear()} Eduardo Santos Bezerra.</p>
++        <p>Projetado para inércia e fluidez.</p>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/components/Hero.tsx b/src/components/Hero.tsx
+index e623fec..61a2308 100644
+--- a/src/components/Hero.tsx
++++ b/src/components/Hero.tsx
+@@ -1,17 +1,18 @@
+ "use client";
+ 
+ import { motion } from "framer-motion";
+ import { ArrowRight } from "lucide-react";
+ import TextReveal from "./TextReveal";
+ import Scene from "./Scene";
+ import FloatingTechCards from "./FloatingTechCards";
++import LetterReveal from "./LetterReveal";
+ 
+ export default function Hero() {
+   const container = {
+     hidden: { opacity: 0 },
+     show: {
+       opacity: 1,
+       transition: { staggerChildren: 0.2, delayChildren: 0.1 }
+     }
+   };
+ 
+@@ -54,21 +55,21 @@ export default function Hero() {
+           <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
+           <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+         </motion.div>
+         
+         <motion.h1 variants={item} className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6 leading-none">
+           Eduardo<br />
+           Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
+         </motion.h1>
+         
+         <motion.h2 variants={item} className="text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-black mb-8 tracking-wide animate-gradient-x">
+-          DESENVOLVEDOR FULL STACK
++          <LetterReveal text="DESENVOLVEDOR FULL STACK" />
+         </motion.h2>
+         
+         <div className="max-w-2xl mx-auto mb-12">
+           <TextReveal 
+             text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
+             className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center"
+           />
+         </div>
+         
+         <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-4">
+diff --git a/src/components/Laboratory.tsx b/src/components/Laboratory.tsx
+new file mode 100644
+index 0000000..ed699be
+--- /dev/null
++++ b/src/components/Laboratory.tsx
+@@ -0,0 +1,146 @@
++"use client";
++
++import { useRef } from "react";
++import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
++import LetterReveal from "./LetterReveal";
++import { Activity, Box, Variable, Cpu } from "lucide-react";
++
++// Um Card do Bento Grid com efeitos físicos insanos no Hover
++function BentoCard({ 
++  title, 
++  desc, 
++  icon, 
++  className, 
++  image 
++}: { 
++  title: string, 
++  desc: string, 
++  icon: React.ReactNode, 
++  className: string, 
++  image?: string 
++}) {
++  const ref = useRef<HTMLDivElement>(null);
++  const x = useMotionValue(0);
++  const y = useMotionValue(0);
++  
++  const springConfig = { damping: 20, stiffness: 100 };
++  const mouseX = useSpring(x, springConfig);
++  const mouseY = useSpring(y, springConfig);
++
++  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["10deg", "-10deg"]);
++  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-10deg", "10deg"]);
++  const imageScale = useTransform(mouseX, [-0.5, 0.5], [1.1, 1.2]); // Zoom dinâmico
++
++  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
++    if (!ref.current) return;
++    const rect = ref.current.getBoundingClientRect();
++    x.set((e.clientX - rect.left) / rect.width - 0.5);
++    y.set((e.clientY - rect.top) / rect.height - 0.5);
++  };
++
++  const handleMouseLeave = () => {
++    x.set(0);
++    y.set(0);
++  };
++
++  return (
++    <motion.div
++      ref={ref}
++      onMouseMove={handleMouseMove}
++      onMouseLeave={handleMouseLeave}
++      style={{
++        rotateX,
++        rotateY,
++        transformStyle: "preserve-3d"
++      }}
++      className={`relative group overflow-hidden rounded-3xl bg-neutral-900 border border-white/[0.05] p-8 md:p-12 flex flex-col justify-end cursor-pointer shadow-2xl ${className}`}
++      data-magnetic
++    >
++      {/* Background Image / Noise com Parallax no Mouse */}
++      {image && (
++        <motion.div 
++          className="absolute inset-0 z-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700"
++          style={{ 
++            scale: imageScale,
++            x: useTransform(mouseX, [-0.5, 0.5], ["-5%", "5%"]),
++            y: useTransform(mouseY, [-0.5, 0.5], ["-5%", "5%"])
++          }}
++        >
++          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/60 to-transparent z-10" />
++          <img src={image} alt={title} className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700" />
++        </motion.div>
++      )}
++
++      {/* Conteúdo levantado em 3D */}
++      <motion.div 
++        style={{ transform: "translateZ(60px)" }} 
++        className="relative z-20 flex flex-col gap-4 mt-32"
++      >
++        <div className="text-white bg-white/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 mb-2 group-hover:scale-110 transition-transform duration-500">
++          {icon}
++        </div>
++        <h3 className="text-3xl md:text-5xl font-medium tracking-tight text-white leading-tight">
++          {title}
++        </h3>
++        <p className="text-neutral-400 font-light text-base md:text-lg max-w-sm">
++          {desc}
++        </p>
++      </motion.div>
++    </motion.div>
++  );
++}
++
++export default function Laboratory() {
++  return (
++    <section className="relative w-full py-40 z-20 bg-neutral-950">
++      <div className="px-6 md:px-12 lg:px-24 mb-20 max-w-[1600px] mx-auto text-center md:text-left">
++        <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
++          <LetterReveal text="Laboratório & Explorações" />
++        </h2>
++        <p className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight">
++          Onde a engenharia vira arte.
++        </p>
++      </div>
++
++      {/* O Bento Grid Distorcido */}
++      <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-[450px] gap-6 md:gap-8 px-6 md:px-12 lg:px-24 max-w-[1600px] mx-auto" style={{ perspective: "2000px" }}>
++        
++        {/* Card 1: 3D Modeling (Gigante) */}
++        <BentoCard 
++          className="md:col-span-8"
++          title="Modelagem e Renderização 3D"
++          desc="Criação de ambientes virtuais e peças funcionais para impressão 3D (Autodesk Maya, Cults 3D). Elevando o design físico e digital."
++          icon={<Box className="w-8 h-8" />}
++          image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop"
++        />
++
++        {/* Card 2: Algorithms (Pequeno/Alto) */}
++        <BentoCard 
++          className="md:col-span-4"
++          title="Modelos Preditivos"
++          desc="Estruturação de algoritmos, cálculos de probabilidade e avaliação de odds complexos para análise massiva de dados esportivos."
++          icon={<Activity className="w-8 h-8" />}
++          image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
++        />
++
++        {/* Card 3: Experimentos Físicos */}
++        <BentoCard 
++          className="md:col-span-5"
++          title="Microcontroladores & IoT"
++          desc="Integração de hardware e software através de ESP32 e C++, unindo o plano físico aos serviços cloud."
++          icon={<Cpu className="w-8 h-8" />}
++          image="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop"
++        />
++
++        {/* Card 4: Abstract Mathematics */}
++        <BentoCard 
++          className="md:col-span-7 bg-gradient-to-br from-neutral-900 to-neutral-950"
++          title="Engenharia de Dados"
++          desc="Processamento de Big Data e pipelines escaláveis para arquiteturas orientadas a eventos e tomada de decisão em tempo real."
++          icon={<Variable className="w-8 h-8" />}
++        />
++        
++      </div>
++    </section>
++  );
++}
+diff --git a/src/components/LetterReveal.tsx b/src/components/LetterReveal.tsx
+new file mode 100644
+index 0000000..e7bfc17
+--- /dev/null
++++ b/src/components/LetterReveal.tsx
+@@ -0,0 +1,43 @@
++"use client";
++
++import { motion } from "framer-motion";
++
++interface LetterRevealProps {
++  text: string;
++  className?: string;
++}
++
++const container = {
++  hidden: {},
++  visible: {
++    transition: { staggerChildren: 0.02 },
++  },
++};
++
++const letterVariant = {
++  hidden: { opacity: 0, y: 16, filter: "blur(8px)" },
++  visible: {
++    opacity: 1,
++    y: 0,
++    filter: "blur(0px)",
++    transition: { duration: 0.4, ease: "easeOut" },
++  },
++};
++
++export default function LetterReveal({ text, className = "" }: LetterRevealProps) {
++  return (
++    <motion.span
++      className={`inline-block ${className}`}
++      variants={container}
++      initial="hidden"
++      whileInView="visible"
++      viewport={{ once: true, margin: "-80px" }}
++    >
++      {text.split("").map((char, i) => (
++        <motion.span key={i} variants={letterVariant} className="inline-block">
++          {char === " " ? " " : char}
++        </motion.span>
++      ))}
++    </motion.span>
++  );
++}
+diff --git a/src/components/Process.tsx b/src/components/Process.tsx
+new file mode 100644
+index 0000000..c450339
+--- /dev/null
++++ b/src/components/Process.tsx
+@@ -0,0 +1,95 @@
++"use client";
++
++import { useRef } from "react";
++import { motion, useScroll, useTransform } from "framer-motion";
++import LetterReveal from "./LetterReveal";
++
++const PROCESS_STEPS = [
++  {
++    num: "01",
++    title: "Arquitetura de Banco de Dados",
++    desc: "Estruturação escalável, normalização e modelagem relacional rigorosa focada em queries de alta performance.",
++  },
++  {
++    num: "02",
++    title: "Lógica de Back-end",
++    desc: "Desenvolvimento de microsserviços robustos, segurança de endpoints e regras de negócio complexas processadas em milissegundos.",
++  },
++  {
++    num: "03",
++    title: "Integração de APIs Físicas",
++    desc: "Conectando o código à realidade: telemetria, sensores IoT e sincronização de dados bi-direcional em tempo real.",
++  },
++  {
++    num: "04",
++    title: "UI/UX de Alta Conversão",
++    desc: "A camada final onde a engenharia encontra a arte. Animações de GPU, design responsivo de ponta e retenção visceral.",
++  }
++];
++
++export default function Process() {
++  const containerRef = useRef<HTMLDivElement>(null);
++  const { scrollYProgress } = useScroll({
++    target: containerRef,
++    offset: ["start 80%", "end 20%"]
++  });
++
++  return (
++    <section ref={containerRef} className="relative w-full py-40 z-20 bg-neutral-950/60 backdrop-blur-md border-t border-neutral-900/50">
++      <div className="px-6 md:px-12 lg:px-24 mb-32 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end">
++        <div>
++          <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>
++            <LetterReveal text="O Processo" />
++          </h2>
++          <p className="mt-4 text-3xl md:text-5xl font-light text-neutral-300 tracking-tight">
++            Engenharia de Ponta a Ponta
++          </p>
++        </div>
++        <p className="mt-6 md:mt-0 text-neutral-500 max-w-sm text-sm font-light leading-relaxed">
++          Nenhuma etapa é subestimada. Do bit armazenado no banco à física do cursor na tela, o controle arquitetural é absoluto.
++        </p>
++      </div>
++
++      <div className="flex flex-col w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-24">
++        {PROCESS_STEPS.map((step, index) => {
++          // Cada etapa aparece um pouco depois, dependendo do scroll global
++          const opacity = useTransform(
++            scrollYProgress, 
++            [0 + (index * 0.15), 0.3 + (index * 0.15)], 
++            [0, 1]
++          );
++          
++          const y = useTransform(
++            scrollYProgress,
++            [0 + (index * 0.15), 0.3 + (index * 0.15)],
++            [40, 0]
++          );
++
++          return (
++            <motion.div 
++              key={index}
++              style={{ opacity, y }}
++              className="group flex flex-col md:flex-row border-b border-neutral-800 py-12 md:py-16 items-start md:items-center relative"
++            >
++              {/* Linha de preenchimento (Glow no Hover) */}
++              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
++
++              <div className="text-5xl md:text-7xl font-bold text-neutral-800 group-hover:text-neutral-600 transition-colors duration-700 md:w-1/4 mb-6 md:mb-0">
++                {step.num}
++              </div>
++              
++              <div className="flex-1">
++                <h3 className="text-2xl md:text-4xl font-medium text-neutral-200 group-hover:text-white transition-colors duration-500 tracking-tight mb-4">
++                  {step.title}
++                </h3>
++                <p className="text-neutral-500 group-hover:text-neutral-400 font-light text-sm md:text-base max-w-2xl leading-relaxed transition-colors duration-500">
++                  {step.desc}
++                </p>
++              </div>
++            </motion.div>
++          );
++        })}
++      </div>
++    </section>
++  );
++}
+diff --git a/src/components/Projects.tsx b/src/components/Projects.tsx
+new file mode 100644
+index 0000000..258ce9e
+--- /dev/null
++++ b/src/components/Projects.tsx
+@@ -0,0 +1,127 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { GithubIcon } from "./Icons";
++import LetterReveal from "./LetterReveal";
++import { ExternalLink } from "lucide-react";
++
++const PROJECTS = [
++  { 
++    name: "Plataforma Compromisso", 
++    desc: "Plataforma educacional EdTech de alta performance. Sistema de gestão com dashboard analítico.",
++    img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop",
++    tags: ["React", "Next.js", "TypeScript"],
++    repo: "https://github.com",
++    live: "https://example.com",
++    highlight: "Desenvolvido por mim"
++  },
++  { 
++    name: "ZcxPages", 
++    desc: "Portfólio moderno focado em exibir projetos com design de ponta e altíssima performance.",
++    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop",
++    tags: ["Next.js", "Framer Motion"],
++    repo: "https://github.com",
++    live: "https://example.com"
++  }
++];
++
++export default function Projects() {
++  return (
++    <section id="projects" className="w-full py-32 bg-[#050505] relative overflow-hidden">
++      
++      {/* Objeto de Fundo Flutuante (Texto gigante transparente, estilo Thor) */}
++      <motion.div 
++        initial={{ x: "100%" }}
++        whileInView={{ x: "-100%" }}
++        transition={{ duration: 20, ease: "linear", repeat: Infinity }}
++        className="absolute top-10 left-0 text-[20vw] font-black text-white/5 whitespace-nowrap pointer-events-none select-none"
++      >
++        LATEST WORK &bull; LATEST WORK &bull; LATEST WORK
++      </motion.div>
++
++      <div className="max-w-7xl mx-auto px-6 relative z-10">
++        <motion.div 
++          initial={{ opacity: 0, scale: 0.5 }}
++          whileInView={{ opacity: 1, scale: 1 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
++          className="text-center mb-24"
++        >
++          <h2 className="text-4xl md:text-7xl font-black text-white mb-4">
++            <LetterReveal text="Projetos " />
++            <LetterReveal text="Destaque" className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] to-[var(--color-pink)]" />
++          </h2>
++        </motion.div>
++
++        <div className="flex flex-col gap-32">
++          {PROJECTS.map((project, idx) => {
++            const isReverse = idx % 2 !== 0;
++            return (
++              <div key={idx} className={`flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 md:gap-16 items-center relative`}>
++                
++                {/* Imagem vem de um lado rasgando a tela */}
++                <motion.div 
++                  initial={{ opacity: 0, x: isReverse ? 150 : -150, rotateY: isReverse ? -20 : 20 }}
++                  whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
++                  viewport={{ once: true, margin: "-100px" }}
++                  transition={{ duration: 1, ease: "easeOut" }}
++                  style={{ perspective: "1000px" }}
++                  className="w-full md:w-1/2 relative group"
++                >
++                  <div className="relative rounded-3xl overflow-hidden border border-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-20">
++                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
++                    <img src={project.img} alt={project.name} className="w-full aspect-video object-cover group-hover:scale-110 group-hover:rotate-2 transition-all duration-700" />
++                  </div>
++                  
++                  {/* Círculo giratório atrás da imagem */}
++                  <div className="absolute -inset-4 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-cyan)] opacity-20 blur-2xl rounded-full animate-[spin_10s_linear_infinite] z-0" />
++                </motion.div>
++
++                {/* Texto vem do lado oposto */}
++                <motion.div 
++                  initial={{ opacity: 0, x: isReverse ? -100 : 100, filter: "blur(10px)" }}
++                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
++                  viewport={{ once: true, margin: "-100px" }}
++                  transition={{ duration: 0.8, delay: 0.2 }}
++                  className={`w-full md:w-1/2 flex flex-col ${isReverse ? 'md:items-end md:text-right' : 'md:items-start md:text-left'} z-30`}
++                >
++                  {project.highlight && (
++                    <span className="px-4 py-1 rounded-full border border-[var(--color-cyan)] text-[var(--color-cyan)] text-xs font-mono mb-4 uppercase tracking-wider font-bold">
++                      {project.highlight}
++                    </span>
++                  )}
++                  
++                  <h3 className="text-4xl md:text-5xl font-black text-white mb-6">
++                    {project.name}
++                  </h3>
++                  
++                  <p className="text-xl text-neutral-400 mb-8 leading-relaxed">
++                    {project.desc}
++                  </p>
++
++                  <div className={`flex flex-wrap gap-4 mb-10 ${isReverse ? 'justify-end' : 'justify-start'}`}>
++                    {project.tags.map((tag, tIdx) => (
++                      <span key={tIdx} className="text-sm font-mono text-white bg-white/10 px-4 py-2 rounded-lg border border-white/5">
++                        {tag}
++                      </span>
++                    ))}
++                  </div>
++
++                  <div className={`flex items-center gap-6 ${isReverse ? 'justify-end' : 'justify-start'}`}>
++                    <a href={project.repo} target="_blank" className="p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black transition-all">
++                      <GithubIcon className="w-6 h-6" />
++                    </a>
++                    <a href={project.live} target="_blank" className="p-4 rounded-full bg-[var(--color-accent)] text-white hover:scale-110 transition-transform shadow-[0_0_20px_rgba(168,85,247,0.5)]">
++                      <ExternalLink className="w-6 h-6" />
++                    </a>
++                  </div>
++                </motion.div>
++
++              </div>
++            )
++          })}
++        </div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/components/Skills.tsx b/src/components/Skills.tsx
+new file mode 100644
+index 0000000..4acb2e7
+--- /dev/null
++++ b/src/components/Skills.tsx
+@@ -0,0 +1,84 @@
++"use client";
++
++import { motion } from "framer-motion";
++import LetterReveal from "./LetterReveal";
++import { 
++  FileCode2, 
++  Database, 
++  Smartphone, 
++  Terminal, 
++  Server, 
++  Layout, 
++  Code,
++  Layers
++} from "lucide-react";
++
++const SKILLS = [
++  { name: "Next.js", icon: <Layout strokeWidth={1.5} className="w-8 h-8" />, color: "text-white", bg: "bg-white/10 border-white/20" },
++  { name: "React", icon: <Code strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#61DAFB]", bg: "bg-[#61DAFB]/10 border-[#61DAFB]/20" },
++  { name: "TypeScript", icon: <FileCode2 strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#3178C6]", bg: "bg-[#3178C6]/10 border-[#3178C6]/20" },
++  { name: "Node.js", icon: <Server strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#339933]", bg: "bg-[#339933]/10 border-[#339933]/20" },
++  { name: "Python", icon: <Terminal strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#3776AB]", bg: "bg-[#3776AB]/10 border-[#3776AB]/20" },
++  { name: "PostgreSQL", icon: <Database strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#4169E1]", bg: "bg-[#4169E1]/10 border-[#4169E1]/20" },
++  { name: "Tailwind CSS", icon: <Layers strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#06B6D4]", bg: "bg-[#06B6D4]/10 border-[#06B6D4]/20" },
++  { name: "React Native", icon: <Smartphone strokeWidth={1.5} className="w-8 h-8" />, color: "text-[#61DAFB]", bg: "bg-[#61DAFB]/10 border-[#61DAFB]/20" },
++];
++
++export default function Skills() {
++  return (
++    <section id="skills" className="w-full py-32 bg-[#0a0814] relative overflow-hidden">
++      
++      {/* Objeto 3D "Fake" Flutuante girando loucamente no fundo */}
++      <motion.div 
++        animate={{ rotateZ: 360, rotateX: 360, rotateY: 360 }}
++        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
++        className="absolute right-[-10%] top-[30%] w-[50vw] h-[50vw] border border-[var(--color-pink)]/10 rounded-3xl pointer-events-none"
++      />
++      <motion.div 
++        animate={{ rotateZ: -360, rotateX: -360, rotateY: 180 }}
++        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
++        className="absolute right-[-5%] top-[20%] w-[40vw] h-[40vw] border border-[var(--color-cyan)]/10 rounded-full pointer-events-none"
++      />
++
++      <div className="max-w-7xl mx-auto px-6 relative z-10">
++        <motion.div 
++          initial={{ opacity: 0, y: -50 }}
++          whileInView={{ opacity: 1, y: 0 }}
++          viewport={{ once: true, margin: "-100px" }}
++          transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
++          className="text-center mb-20"
++        >
++          <h2 className="text-4xl md:text-6xl font-black text-white mb-6">
++            <LetterReveal text="Stack " />
++            <LetterReveal text="Principal" className="text-[var(--color-cyan)]" />
++          </h2>
++        </motion.div>
++
++        {/* Animação nova: Cada card não vem de baixo, mas gira em X (estilo moeda caindo) */}
++        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
++          {SKILLS.map((skill, index) => (
++            <motion.div
++              key={index}
++              initial={{ opacity: 0, rotateX: 90, scale: 0.8 }}
++              whileInView={{ opacity: 1, rotateX: 0, scale: 1 }}
++              viewport={{ once: true, margin: "-50px" }}
++              transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
++              whileHover={{ scale: 1.1, y: -10 }}
++              className={`group flex flex-col items-center justify-center p-8 bg-[var(--color-surface)] border border-neutral-800 rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
++            >
++              {/* Overlay com a cor original da tech no fundo quando dá hover */}
++              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${skill.bg}`} />
++              
++              <div className={`text-neutral-500 transition-colors duration-300 mb-4 group-hover:${skill.color} relative z-10`}>
++                {skill.icon}
++              </div>
++              <span className={`text-neutral-400 font-medium group-hover:${skill.color} transition-colors relative z-10`}>
++                {skill.name}
++              </span>
++            </motion.div>
++          ))}
++        </div>
++      </div>
++    </section>
++  );
++}

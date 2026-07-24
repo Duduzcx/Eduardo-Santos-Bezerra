@@ -1,0 +1,160 @@
+# Review package: 4f47e285a90572fb6f1c9d0a4381b916332d34fe..HEAD
+
+## Commits
+6d79fa4 feat: add scroll-scrubbed circle reveal around 'obsoletos' in About
+
+## Files changed
+ src/components/About.tsx        | 100 ++++++++++++++++++++++++++++++++++++++++
+ src/components/CircleReveal.tsx |  37 +++++++++++++++
+ 2 files changed, 137 insertions(+)
+
+## Diff
+diff --git a/src/components/About.tsx b/src/components/About.tsx
+new file mode 100644
+index 0000000..99e0006
+--- /dev/null
++++ b/src/components/About.tsx
+@@ -0,0 +1,100 @@
++"use client";
++
++import { motion } from "framer-motion";
++import { Code2, Monitor, Database } from "lucide-react";
++import TextReveal from "./TextReveal";
++import CircleReveal from "./CircleReveal";
++
++export default function About() {
++  const cards = [
++    {
++      icon: <Monitor className="w-8 h-8 text-[var(--color-cyan)]" />,
++      title: "Front-end",
++      desc: "Experiências ricas e responsivas usando React, Next.js e animações avançadas.",
++      x: -50, y: 0
++    },
++    {
++      icon: <Database className="w-8 h-8 text-[var(--color-accent)]" />,
++      title: "Back-end",
++      desc: "APIs robustas e escaláveis usando Node.js, Python e PostgreSQL.",
++      x: 50, y: 0
++    },
++    {
++      icon: <Code2 className="w-8 h-8 text-[var(--color-pink)]" />,
++      title: "Engenharia",
++      desc: "Arquitetura limpa, TDD e integração contínua (CI/CD).",
++      x: 0, y: 50
++    }
++  ];
++
++  return (
++    <section id="about" className="w-full py-32 relative z-20 bg-[var(--background)] overflow-hidden">
++      
++      {/* Objeto abstrato giratório na esquerda, estilo Thor */}
++      <motion.div 
++        animate={{ rotate: 360 }}
++        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
++        className="absolute -left-[10%] top-[20%] w-[40vw] h-[40vw] opacity-10 pointer-events-none"
++      >
++        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-[var(--color-cyan)]" stroke="currentColor" strokeWidth="0.5">
++          <circle cx="50" cy="50" r="48" strokeDasharray="4 4" />
++          <polygon points="50,10 90,90 10,90" strokeDasharray="2 6" />
++        </svg>
++      </motion.div>
++
++      <div className="max-w-7xl mx-auto px-6 relative z-10">
++        <div className="flex flex-col lg:flex-row gap-20 items-center">
++          
++          <div className="flex-1 space-y-8">
++            <motion.div 
++              initial={{ opacity: 0, scale: 1.2, rotateX: -45 }}
++              whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
++              viewport={{ once: true, margin: "-100px" }}
++              transition={{ duration: 1, type: "spring" }}
++            >
++              <h2 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
++                Sobre mim
++              </h2>
++            </motion.div>
++            
++            <div className="space-y-6 text-neutral-300 text-xl leading-relaxed">
++              <TextReveal text="Sou um Desenvolvedor Full Stack apaixonado por transformar problemas complexos em interfaces elegantes e sistemas de alta performance." />
++              <TextReveal text="Com sólida formação em Engenharia de Software, meu foco é sempre a entrega de valor real. Já atuei no desenvolvimento de plataformas EdTech, automação IoT e análise de dados massivos." />
++              <motion.p
++                initial={{ opacity: 0, y: 20 }}
++                whileInView={{ opacity: 1, y: 0 }}
++                viewport={{ once: true, margin: "-100px" }}
++                transition={{ duration: 0.6 }}
++              >
++                Chega de sistemas <CircleReveal word="obsoletos" className="text-white font-semibold" /> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
++              </motion.p>
++            </div>
++          </div>
++
++          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
++            {cards.map((card, idx) => (
++              <motion.div 
++                key={idx}
++                initial={{ opacity: 0, x: card.x, y: card.y }}
++                whileInView={{ opacity: 1, x: 0, y: 0 }}
++                viewport={{ once: true, margin: "-100px" }}
++                transition={{ duration: 0.7, type: "spring", bounce: 0.4 }}
++                whileHover={{ scale: 1.05, rotate: idx % 2 === 0 ? 2 : -2 }}
++                className={`group p-8 rounded-3xl bg-[#111111] border border-neutral-800 hover:border-[var(--color-cyan)] transition-colors duration-500 cursor-pointer ${idx === 2 ? 'sm:col-span-2' : ''} shadow-2xl relative overflow-hidden`}
++              >
++                {/* Efeito de brilho de fundo no hover */}
++                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[var(--color-accent)]/5 to-[var(--color-cyan)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
++                
++                <div className="mb-6 bg-black w-16 h-16 rounded-2xl flex items-center justify-center border border-neutral-800 relative z-10">
++                  {card.icon}
++                </div>
++                <h3 className="text-2xl font-bold text-white mb-3 relative z-10">{card.title}</h3>
++                <p className="text-neutral-400 leading-relaxed font-light relative z-10">{card.desc}</p>
++              </motion.div>
++            ))}
++          </div>
++        </div>
++      </div>
++    </section>
++  );
++}
+diff --git a/src/components/CircleReveal.tsx b/src/components/CircleReveal.tsx
+new file mode 100644
+index 0000000..b717525
+--- /dev/null
++++ b/src/components/CircleReveal.tsx
+@@ -0,0 +1,37 @@
++"use client";
++
++import { useRef } from "react";
++import { motion, useScroll, useTransform } from "framer-motion";
++
++const CIRCLE_PATH = "M4,32 C2,18 14,4 32,3 C52,2 64,14 63,30 C64,48 50,61 30,62 C12,63 3,50 4,32 Z";
++const PATH_LENGTH = 220;
++
++interface CircleRevealProps {
++  word: string;
++  className?: string;
++}
++
++export default function CircleReveal({ word, className = "" }: CircleRevealProps) {
++  const ref = useRef<HTMLSpanElement>(null);
++  const { scrollYProgress } = useScroll({
++    target: ref,
++    offset: ["start 85%", "start 40%"],
++  });
++
++  const dashoffset = useTransform(scrollYProgress, [0, 1], [PATH_LENGTH, 0]);
++
++  return (
++    <span ref={ref} className={`relative inline-block px-2 ${className}`}>
++      {word}
++      <svg viewBox="0 0 66 66" className="absolute -inset-3 w-[calc(100%+1.5rem)] h-[calc(100%+1.5rem)] pointer-events-none" fill="none">
++        <motion.path
++          d={CIRCLE_PATH}
++          stroke="#ef4444"
++          strokeWidth="3"
++          strokeLinecap="round"
++          style={{ strokeDasharray: PATH_LENGTH, strokeDashoffset: dashoffset }}
++        />
++      </svg>
++    </span>
++  );
++}

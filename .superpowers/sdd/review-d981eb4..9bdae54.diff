@@ -1,0 +1,97 @@
+# Review package: d981eb4408f1af59499a512055eac650d35bf7b8..HEAD
+
+## Commits
+9bdae54 feat: add magnetic hover effect to hero CTA
+
+## Files changed
+ src/components/Hero.tsx | 32 +++++++++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
+
+## Diff
+diff --git a/src/components/Hero.tsx b/src/components/Hero.tsx
+index 61a2308..7b1df2a 100644
+--- a/src/components/Hero.tsx
++++ b/src/components/Hero.tsx
+@@ -1,33 +1,52 @@
+ "use client";
+ 
+-import { motion } from "framer-motion";
++import { useRef } from "react";
++import { motion, useMotionValue, useSpring } from "framer-motion";
+ import { ArrowRight } from "lucide-react";
+ import TextReveal from "./TextReveal";
+ import Scene from "./Scene";
+ import FloatingTechCards from "./FloatingTechCards";
+ import LetterReveal from "./LetterReveal";
+ 
+ export default function Hero() {
+   const container = {
+     hidden: { opacity: 0 },
+     show: {
+       opacity: 1,
+       transition: { staggerChildren: 0.2, delayChildren: 0.1 }
+     }
+   };
+ 
+   const item = {
+     hidden: { opacity: 0, y: 50 },
+     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+   };
+ 
++  const btnRef = useRef<HTMLAnchorElement>(null);
++  const btnX = useMotionValue(0);
++  const btnY = useMotionValue(0);
++  const springX = useSpring(btnX, { damping: 15, stiffness: 150, mass: 0.5 });
++  const springY = useSpring(btnY, { damping: 15, stiffness: 150, mass: 0.5 });
++
++  const handleBtnMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
++    if (!btnRef.current) return;
++    const rect = btnRef.current.getBoundingClientRect();
++    btnX.set((e.clientX - (rect.left + rect.width / 2)) * 0.35);
++    btnY.set((e.clientY - (rect.top + rect.height / 2)) * 0.35);
++  };
++
++  const handleBtnMouseLeave = () => {
++    btnX.set(0);
++    btnY.set(0);
++  };
++
+   return (
+     <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+       {/* Vídeo Background Full-Screen inspirado no Gustavo Campelo */}
+       <div className="absolute inset-0 z-0 pointer-events-none">
+         <video 
+           autoPlay 
+           loop 
+           muted 
+           playsInline 
+           className="w-full h-full object-cover mix-blend-screen opacity-20"
+@@ -66,19 +85,26 @@ export default function Hero() {
+         </motion.h2>
+         
+         <div className="max-w-2xl mx-auto mb-12">
+           <TextReveal 
+             text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
+             className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center"
+           />
+         </div>
+         
+         <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-4">
+-          <a href="#projects" className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-pink)] text-white font-bold text-lg hover:scale-105 transition-all shadow-[0_0_40px_rgba(232,121,249,0.4)] flex items-center gap-3">
++          <motion.a
++            ref={btnRef}
++            href="#projects"
++            onMouseMove={handleBtnMouseMove}
++            onMouseLeave={handleBtnMouseLeave}
++            style={{ x: springX, y: springY }}
++            className="group relative px-10 py-5 rounded-2xl bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-pink)] text-white font-bold text-lg hover:scale-105 transition-all shadow-[0_0_40px_rgba(232,121,249,0.4)] flex items-center gap-3"
++          >
+             Explorar Projetos
+             <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+-          </a>
++          </motion.a>
+         </motion.div>
+       </motion.div>
+     </section>
+   );
+ }

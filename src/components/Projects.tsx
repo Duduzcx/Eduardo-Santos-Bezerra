@@ -25,12 +25,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [forceReveal, setForceReveal] = useState(false);
   const featured = index === 0;
 
+  // Saída "sink 3D": quando o card passa pelo topo, cai pra trás no fundo escuro (rotateX + encolhe + some) — scroll separado da entrada
+  const { scrollYProgress: exitProgress } = useScroll({ target: cardRef, offset: ["start start", "end start"] });
+  const exitRotateX = useTransform(exitProgress, [0.5, 1], [0, 15]);
+  const exitScale = useTransform(exitProgress, [0.5, 1], [1, 0.8]);
+  const exitOpacity = useTransform(exitProgress, [0.5, 1], [1, 0]);
+
   useEffect(() => {
     const timer = setTimeout(() => setForceReveal(true), 900 + index * 100);
     return () => clearTimeout(timer);
   }, [index]);
 
   return (
+    <motion.div style={{ opacity: exitOpacity, scale: exitScale, rotateX: exitRotateX, transformPerspective: 1000 }} className={featured ? "md:col-span-2" : ""}>
     <motion.article
       ref={cardRef}
       style={{ y, scale, rotateX, transformPerspective: 1200 }}
@@ -39,7 +46,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       animate={forceReveal ? { opacity: 1 } : undefined}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.6 }}
-      className={featured ? "md:col-span-2" : ""}
     >
       <motion.div whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
         <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
@@ -72,6 +78,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
       </motion.div>
     </motion.article>
+    </motion.div>
   );
 }
 

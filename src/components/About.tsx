@@ -7,12 +7,20 @@ import TextReveal from "./TextReveal";
 import LetterReveal from "./LetterReveal";
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: titleProgress } = useScroll({
     target: titleRef,
     offset: ["start 90%", "start 30%"],
   });
   const bgTextClip = useTransform(titleProgress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
+
+  // Saída "névoa": desfoque + encolhe + some na segunda metade do trânsito da seção pelo topo da tela
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const exitOpacity = useTransform(exitProgress, [0.55, 1], [1, 0]);
+  const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.95]);
+  const exitBlurPx = useTransform(exitProgress, [0.55, 1], [0, 10]);
+  const exitFilter = useTransform(exitBlurPx, (v) => `blur(${v}px)`);
 
   const cards = [
     {
@@ -36,7 +44,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="w-full py-32 relative z-20 bg-[var(--background)] overflow-hidden">
+    <section ref={sectionRef} id="about" className="w-full py-32 relative z-20 bg-[var(--background)] overflow-hidden">
       
       {/* Objeto abstrato giratório na esquerda, estilo Thor */}
       <motion.div 
@@ -53,7 +61,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-20 items-center">
           
-          <div className="flex-1 space-y-8">
+          <motion.div style={{ opacity: exitOpacity, scale: exitScale, filter: exitFilter }} className="flex-1 space-y-8">
             <div ref={titleRef} className="relative">
               {/* Texto de fundo gigante, revela progressivamente conforme o scroll passa pela seção */}
               <motion.div
@@ -90,7 +98,7 @@ export default function About() {
                 Chega de sistemas <span className="text-[var(--foreground)] font-semibold">obsoletos</span> — eu construo o que sua empresa vai precisar nos próximos 10 anos.
               </motion.p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
             {cards.map((card, idx) => (

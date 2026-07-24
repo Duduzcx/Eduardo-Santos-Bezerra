@@ -32,12 +32,23 @@ function SkillFillBar({ scrollYProgress, index, total }: { scrollYProgress: Moti
   return <motion.div style={{ scaleX }} className="absolute bottom-0 left-0 h-[3px] w-full origin-left bg-[var(--color-cyan)]" />;
 }
 
+// Saída "perda de gravidade": cada card flutua pra cima em velocidade diferente e gira levemente fora de eixo, sumindo aos poucos
+function SkillExitWrapper({ scrollYProgress, index, children }: { scrollYProgress: MotionValue<number>; index: number; children: React.ReactNode }) {
+  const floatDistance = 60 + (index % 4) * 25;
+  const y = useTransform(scrollYProgress, [0.5, 1], [0, -floatDistance]);
+  const rotateZ = useTransform(scrollYProgress, [0.5, 1], [0, index % 2 === 0 ? 10 : -10]);
+  const opacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
+  return <motion.div style={{ y, rotateZ, opacity }}>{children}</motion.div>;
+}
+
 export default function Skills() {
+  const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: gridRef, offset: ["start 85%", "end 60%"] });
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
 
   return (
-    <section id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
       
       {/* Objeto 3D "Fake" Flutuante girando loucamente no fundo */}
       <motion.div 
@@ -68,8 +79,8 @@ export default function Skills() {
         {/* Animação nova: Cada card não vem de baixo, mas gira em X (estilo moeda caindo) */}
         <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {SKILLS.map((skill, index) => (
+            <SkillExitWrapper key={index} scrollYProgress={exitProgress} index={index}>
             <motion.div
-              key={index}
               initial={{ opacity: 0, rotateX: 90, scale: 0.8 }}
               whileInView={{ opacity: 1, rotateX: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
@@ -90,6 +101,7 @@ export default function Skills() {
               </span>
               <SkillFillBar scrollYProgress={scrollYProgress} index={index} total={SKILLS.length} />
             </motion.div>
+            </SkillExitWrapper>
           ))}
         </div>
       </div>

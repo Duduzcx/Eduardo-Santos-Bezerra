@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import LetterReveal from "./LetterReveal";
 import { Activity, Box, Variable, Cpu } from "lucide-react";
 
@@ -109,8 +109,33 @@ function BentoCard({
 }
 
 export default function Laboratory() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const exitOpacity = useTransform(exitProgress, [0.55, 1], [1, 0]);
+  const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.95]);
+
   return (
-    <section className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
+      {/* Galáxia Espiral / Buraco Negro Rotativo no Fundo */}
+      <motion.div 
+        style={{ opacity: exitOpacity, scale: exitScale }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 0.22, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1.8, ease: "easeOut" }}
+        className="absolute left-[5%] top-[15%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] pointer-events-none z-0"
+      >
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+          className="w-full h-full rounded-full opacity-60"
+          style={{
+            background: "conic-gradient(from 0deg at 50% 50%, transparent 0%, rgba(103,232,249,0.18) 25%, transparent 40%, rgba(232,121,249,0.18) 60%, transparent 80%, rgba(124,58,237,0.25) 90%, transparent 100%)",
+            filter: "blur(80px)",
+          }}
+        />
+      </motion.div>
+
       <div className="px-6 md:px-12 lg:px-24 mb-16 max-w-[1600px] mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-10 relative z-10">
         <div className="text-center md:text-left">
           <h2 className="text-neutral-500 uppercase tracking-widest text-xs font-medium" data-magnetic>

@@ -46,21 +46,56 @@ export default function Skills() {
   const gridRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: gridRef, offset: ["start 85%", "end 60%"] });
   const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const exitOpacity = useTransform(exitProgress, [0.55, 1], [1, 0]);
+  const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.9]);
 
   return (
     <section ref={sectionRef} id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
       
-      {/* Objeto 3D "Fake" Flutuante girando loucamente no fundo */}
-      <motion.div 
-        animate={{ rotateZ: 360, rotateX: 360, rotateY: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute right-[-10%] top-[30%] w-[50vw] h-[50vw] border border-[var(--color-pink)]/10 rounded-3xl pointer-events-none"
-      />
+      {/* Sistema de Órbitas e Nebulosa de Fundo (Astronomia) */}
       <motion.div
-        animate={{ rotateZ: -360, rotateX: -360, rotateY: 180 }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="absolute right-[-5%] top-[20%] w-[40vw] h-[40vw] border border-[var(--color-cyan)]/10 rounded-full pointer-events-none"
-      />
+        style={{ opacity: exitOpacity, scale: exitScale }}
+        className="absolute right-[-15%] top-[10%] w-[55vw] h-[55vw] max-w-[650px] max-h-[650px] pointer-events-none"
+      >
+        {/* Nebulosa brilhante pulsante */}
+        <motion.div 
+          animate={{ scale: [1, 1.08, 1], opacity: [0.15, 0.28, 0.15] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 rounded-full bg-gradient-to-tr from-[var(--color-pink)]/10 via-[var(--color-accent)]/8 to-[var(--color-cyan)]/10 blur-[80px]"
+        />
+
+        {/* Órbitas Inclinadas 3D */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="w-full h-full"
+          style={{ transformStyle: "preserve-3d", perspective: 800 }}
+        >
+          <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-[var(--color-cyan)]" stroke="currentColor" strokeWidth="0.5">
+            {/* Órbita Externa com Planeta */}
+            <circle cx="50" cy="50" r="45" strokeDasharray="3 5" opacity="0.4" />
+            <motion.circle 
+              cx="50" cy="50" r="45" 
+              stroke="var(--color-pink)" strokeWidth="1.5"
+              strokeDasharray="0.1 90" strokeLinecap="round"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              style={{ originX: "50px", originY: "50px" }}
+            />
+
+            {/* Órbita Interna com Planeta */}
+            <circle cx="50" cy="50" r="30" strokeDasharray="2 3" opacity="0.5" />
+            <motion.circle 
+              cx="50" cy="50" r="30" 
+              stroke="var(--color-cyan)" strokeWidth="2"
+              strokeDasharray="0.1 60" strokeLinecap="round"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+              style={{ originX: "50px", originY: "50px" }}
+            />
+          </svg>
+        </motion.div>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div 

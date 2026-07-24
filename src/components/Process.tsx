@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useScroll, useSpring, animate } from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform, animate } from "framer-motion";
 
 const PROCESS_STEPS = [
   ["01", "Arquitetura de Banco de Dados", "Estruturação escalável, normalização e modelagem relacional voltadas a consultas de alta performance."],
@@ -21,6 +21,9 @@ export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start 80%", "end 30%"] });
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const exitOpacity = useTransform(exitProgress, [0.55, 1], [1, 0]);
+
   const lineScale = useSpring(scrollYProgress, { stiffness: 90, damping: 24, restDelta: 0.001 });
 
   const ballY = useMotionValue(0);
@@ -57,7 +60,24 @@ export default function Process() {
 
   return (
     <section ref={sectionRef} id="process" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-[var(--background)] py-28 md:py-36 transition-colors duration-500">
-      <motion.div aria-hidden="true" animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-28 top-24 h-72 w-72 rounded-full border border-[var(--color-accent)]/15" />
+      {/* Estrelas Cadentes (Cometas) no fundo */}
+      <motion.div style={{ opacity: exitOpacity }} className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+        <div 
+          className="absolute top-0 right-0 h-[2px] w-[100px] bg-gradient-to-r from-transparent via-[var(--color-cyan)] to-white opacity-0"
+          style={{
+            animation: "shooting-star 12s infinite ease-in-out",
+          }}
+        />
+        <div 
+          className="absolute top-[10vh] right-[25vw] h-[1.5px] w-[80px] bg-gradient-to-r from-transparent via-[var(--color-pink)] to-white opacity-0"
+          style={{
+            animation: "shooting-star-fast 8s infinite ease-in-out",
+            animationDelay: "4s",
+          }}
+        />
+      </motion.div>
+
+      <motion.div aria-hidden="true" style={{ opacity: exitOpacity }} animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-28 top-24 h-72 w-72 rounded-full border border-[var(--color-accent)]/15" />
       <div className="relative z-10 mx-auto max-w-6xl px-6">
         <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-14 max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Como eu trabalho</p>

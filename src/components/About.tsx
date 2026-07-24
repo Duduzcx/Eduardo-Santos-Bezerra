@@ -46,15 +46,61 @@ export default function About() {
   return (
     <section ref={sectionRef} id="about" className="w-full py-32 relative z-20 bg-[var(--background)] overflow-hidden">
       
-      {/* Objeto abstrato giratório na esquerda, estilo Thor */}
-      <motion.div 
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        className="absolute -left-[10%] top-[20%] w-[40vw] h-[40vw] opacity-10 pointer-events-none"
+      {/* Orrery Cósmico (Planetário de órbitas) */}
+      <motion.div
+        style={{ opacity: exitOpacity, scale: exitScale }}
+        initial={{ opacity: 0, scale: 0.7, rotate: -45 }}
+        whileInView={{ opacity: 0.12, scale: 1, rotate: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute -left-[10%] top-[20%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] pointer-events-none"
       >
-        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-[var(--color-cyan)]" stroke="currentColor" strokeWidth="0.5">
-          <circle cx="50" cy="50" r="48" strokeDasharray="4 4" />
-          <polygon points="50,10 90,90 10,90" strokeDasharray="2 6" />
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full text-[var(--color-cyan)]" stroke="currentColor" strokeWidth="0.75">
+          {/* Sol Central */}
+          <circle cx="50" cy="50" r="4" fill="currentColor" className="animate-pulse" />
+          
+          {/* Órbita 1 e Planeta 1 */}
+          <circle cx="50" cy="50" r="16" strokeDasharray="3 3" opacity="0.5" />
+          <motion.circle 
+            cx="50" cy="50" r="16" 
+            stroke="var(--color-accent)" strokeWidth="1.5"
+            strokeDasharray="0.1 32" strokeLinecap="round"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+            style={{ originX: "50px", originY: "50px" }}
+          />
+
+          {/* Órbita 2 e Planeta 2 */}
+          <circle cx="50" cy="50" r="30" strokeDasharray="4 4" opacity="0.6" />
+          <motion.circle 
+            cx="50" cy="50" r="30" 
+            stroke="var(--color-cyan)" strokeWidth="2"
+            strokeDasharray="0.1 60" strokeLinecap="round"
+            animate={{ rotate: -360 }}
+            transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+            style={{ originX: "50px", originY: "50px" }}
+          />
+
+          {/* Órbita 3 e Planeta 3 com Lua orbitando ele */}
+          <circle cx="50" cy="50" r="44" strokeDasharray="6 4" opacity="0.4" />
+          <motion.g
+            animate={{ rotate: 360 }}
+            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+            style={{ originX: "50px", originY: "50px" }}
+          >
+            {/* Planeta 3 */}
+            <circle cx="94" cy="50" r="2.5" fill="var(--color-pink)" />
+            {/* Órbita da lua do Planeta 3 */}
+            <circle cx="94" cy="50" r="5" stroke="currentColor" strokeWidth="0.25" strokeDasharray="1 1" opacity="0.5" />
+            <motion.circle
+              cx="94" cy="50" r="5"
+              stroke="white" strokeWidth="0.75"
+              strokeDasharray="0.1 10"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              style={{ originX: "94px", originY: "50px" }}
+            />
+          </motion.g>
         </svg>
       </motion.div>
 

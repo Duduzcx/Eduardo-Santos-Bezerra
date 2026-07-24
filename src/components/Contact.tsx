@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { motion } from "framer-motion";
+import { FormEvent, useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
@@ -10,6 +10,10 @@ export default function Contact() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [notice, setNotice] = useState("");
+  
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: exitProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const exitOpacity = useTransform(exitProgress, [0.75, 1], [1, 0]);
 
   function openWhatsApp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +26,59 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative w-full py-24 md:py-32 px-6 bg-[var(--background)] border-t border-[var(--border-subtle)] overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} id="contact" className="relative w-full py-24 md:py-32 px-6 bg-[var(--background)] border-t border-[var(--border-subtle)] overflow-hidden transition-colors duration-500">
+      {/* Constelação de fundo que se desenha ao entrar em cena */}
+      <motion.div
+        style={{ opacity: exitOpacity }}
+        className="absolute right-[5vw] bottom-[5vh] w-[350px] h-[350px] pointer-events-none z-0 text-[var(--color-cyan)]/20 hidden md:block"
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="w-full h-full" stroke="currentColor" strokeWidth="0.5">
+          {/* Linhas da constelação */}
+          <motion.path
+            d="M 10,20 L 30,40 L 50,30 L 70,55 L 90,45 M 50,30 L 60,80 L 80,70"
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 2.2, ease: "easeInOut" }}
+          />
+          {/* Estrela 1 */}
+          <motion.circle cx="10" cy="20" r="1.5" fill="currentColor"
+            animate={{ scale: [1, 1.6, 1], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 2 */}
+          <motion.circle cx="30" cy="40" r="1.5" fill="currentColor"
+            animate={{ scale: [1.5, 1, 1.5], opacity: [0.9, 0.3, 0.9] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 3 */}
+          <motion.circle cx="50" cy="30" r="2" fill="currentColor"
+            animate={{ scale: [1, 1.8, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 4 */}
+          <motion.circle cx="70" cy="55" r="1.5" fill="currentColor"
+            animate={{ scale: [1.3, 0.8, 1.3], opacity: [0.8, 0.2, 0.8] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 5 */}
+          <motion.circle cx="90" cy="45" r="2.5" fill="white"
+            animate={{ scale: [1, 1.5, 1], opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 6 */}
+          <motion.circle cx="60" cy="80" r="1.5" fill="currentColor"
+            animate={{ scale: [1.5, 1, 1.5], opacity: [0.9, 0.3, 0.9] }}
+            transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Estrela 7 */}
+          <motion.circle cx="80" cy="70" r="2" fill="currentColor"
+            animate={{ scale: [1, 1.6, 1], opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </svg>
+      </motion.div>
+
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
         <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-cyan)] font-semibold">Vamos conversar</p>

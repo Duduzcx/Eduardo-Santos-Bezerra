@@ -38,7 +38,7 @@ function Moon() {
   });
 
   return (
-    <group ref={groupRef} scale={4} position={[1.8, 0, 0]}>
+    <group ref={groupRef} scale={0.22} position={[1.8, 0, 0]}>
       <primitive object={scene} />
     </group>
   );

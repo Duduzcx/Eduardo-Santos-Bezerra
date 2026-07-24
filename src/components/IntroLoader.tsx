@@ -1,40 +1,25 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LetterReveal from "./LetterReveal";
 
-function subscribe() {
-  return () => {};
-}
-function getSeenSnapshot() {
-  return sessionStorage.getItem("intro-seen") === "1";
-}
-function getServerSeenSnapshot() {
-  return false;
-}
-
 export default function IntroLoader() {
-  const alreadySeen = useSyncExternalStore(subscribe, getSeenSnapshot, getServerSeenSnapshot);
   const [exited, setExited] = useState(false);
 
   useEffect(() => {
-    if (alreadySeen) return;
-    sessionStorage.setItem("intro-seen", "1");
     document.body.style.overflow = "hidden";
 
     const timer = setTimeout(() => {
       setExited(true);
       document.body.style.overflow = "";
-    }, 600);
+    }, 1700);
 
     return () => {
       clearTimeout(timer);
       document.body.style.overflow = "";
     };
-  }, [alreadySeen]);
-
-  if (alreadySeen) return null;
+  }, []);
 
   return (
     <AnimatePresence>
@@ -55,7 +40,7 @@ export default function IntroLoader() {
               className="h-full bg-gradient-to-r from-[var(--color-accent)] via-[var(--color-cyan)] to-[var(--color-pink)]"
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ duration: 1.3, ease: [0.76, 0, 0.24, 1] }}
             />
           </div>
         </motion.div>

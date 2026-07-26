@@ -78,6 +78,15 @@ html {
   animation: gradient-x 4s ease infinite;
 }
 
+@keyframes name-glow {
+  0%, 100% { text-shadow: 0 0 24px rgba(103, 232, 249, 0.25), 0 0 2px rgba(255, 255, 255, 0.2); }
+  50% { text-shadow: 0 0 42px rgba(103, 232, 249, 0.5), 0 0 6px rgba(255, 255, 255, 0.35); }
+}
+
+.animate-name-glow {
+  animation: name-glow 5s ease-in-out infinite;
+}
+
 @keyframes twinkle {
   0%, 100% { opacity: 0.35; }
   50% { opacity: 1; }

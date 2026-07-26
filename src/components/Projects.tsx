@@ -5,14 +5,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageOff } from "lucide-react";
 
 const REAL_PROJECTS = [
-  { name: "Plataforma Compromisso", url: "https://compromissose.com", category: "Ecossistema · Produção", desc: "Projeto de maior escala estrutural: arquitetura de banco de dados, gerenciamento de dados e lógica de negócio real por trás de cada tela.", tags: ["Next.js", "TypeScript", "Dados"], image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop", status: "compromissose.com" },
-  { name: "Estética Automotiva", url: "https://esteticaau.netlify.app", category: "Ecossistema · Nicho de mercado", desc: "Responsividade e entrega de valor real para um nicho específico — do agendamento à apresentação do serviço.", tags: ["React", "Responsivo", "UX"], image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop", status: "esteticaau.netlify.app" },
+  { name: "Plataforma Compromisso", url: "https://compromissose.com", category: "Ecossistema · Produção", desc: "Projeto de maior escala estrutural: arquitetura de banco de dados, gerenciamento de dados e lógica de negócio real por trás de cada tela.", tags: ["Next.js", "TypeScript", "Dados"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "compromissose.com" },
+  { name: "Estética Automotiva", url: "https://esteticaau.netlify.app", category: "Ecossistema · Nicho de mercado", desc: "Responsividade e entrega de valor real para um nicho específico — do agendamento à apresentação do serviço.", tags: ["React", "Responsivo", "UX"], image: "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=1200&auto=format&fit=crop", status: "esteticaau.netlify.app" },
 ];
 
 const CONCEPT_PROJECTS = [
-  { name: "Concept: Sabor Nordestino", url: "https://sabornordestino.netlify.app", category: "UI/UX · Estudo de caso", desc: "Layout moderno e responsivo pensado pro setor gastronômico regional.", tags: ["UI/UX", "Responsivo"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "sabornordestino.netlify.app" },
-  { name: "Concept: Advocacia S.A", url: "https://advocaciasa.netlify.app", category: "UI/UX · Estudo de caso", desc: "Interface institucional, sóbria e responsiva, pra um escritório de advocacia.", tags: ["UI/UX", "Institucional"], image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1200&auto=format&fit=crop", status: "advocaciasa.netlify.app" },
-  { name: "Concept: Dar Semijoias", url: "https://darsemijoias.netlify.app", category: "UI/UX · Estudo de caso", desc: "E-commerce visual pra semijoias, com foco em apresentação de produto.", tags: ["UI/UX", "E-commerce"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "darsemijoias.netlify.app" },
+  { name: "Sabor Nordestino", url: "https://sabornordestino.netlify.app", category: "UI/UX · Estudo de caso", desc: "Layout moderno e responsivo pensado pro setor gastronômico regional.", tags: ["UI/UX", "Responsivo"], image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop", status: "sabornordestino.netlify.app" },
+  { name: "Advocacia S.A", url: "https://advocaciasa.netlify.app", category: "UI/UX · Estudo de caso", desc: "Interface institucional, sóbria e responsiva, pra um escritório de advocacia.", tags: ["UI/UX", "Institucional"], image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop", status: "advocaciasa.netlify.app" },
+  { name: "Dar Semijoias", url: "https://darsemijoias.netlify.app", category: "UI/UX · Estudo de caso", desc: "E-commerce visual pra semijoias, com foco em apresentação de produto.", tags: ["UI/UX", "E-commerce"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "darsemijoias.netlify.app" },
 ];
 
 type Project = (typeof REAL_PROJECTS)[number];
@@ -26,7 +26,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const imageY = useTransform(scrollYProgress, [0, 1], [24, -24]);
   const [imageFailed, setImageFailed] = useState(false);
   const [forceReveal, setForceReveal] = useState(false);
-  const featured = index === 0;
 
   // Saída "sink 3D": quando o card passa pelo topo, cai pra trás no fundo escuro (rotateX + encolhe + some) — scroll separado da entrada
   const { scrollYProgress: exitProgress } = useScroll({ target: cardRef, offset: ["start start", "end start"] });
@@ -40,7 +39,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   }, [index]);
 
   return (
-    <motion.div style={{ opacity: exitOpacity, scale: exitScale, rotateX: exitRotateX, transformPerspective: 1000 }} className={featured ? "md:col-span-2" : ""}>
+    <motion.div style={{ opacity: exitOpacity, scale: exitScale, rotateX: exitRotateX, transformPerspective: 1000 }}>
     <motion.article
       ref={cardRef}
       style={{ y, scale, rotateX, transformPerspective: 1200 }}
@@ -50,10 +49,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.6 }}
     >
-      <motion.a href={project.url} target="_blank" rel="noopener noreferrer" whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
+      <motion.a href={project.url} target="_blank" rel="noopener noreferrer" whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
         <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-        <div className={`grid h-full ${featured ? "md:grid-cols-[1.15fr_0.85fr]" : "grid-cols-1"}`}>
-          <div className={`relative overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15 ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
+        <div className="flex h-full flex-col">
+          <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15">
             {imageFailed ? (
               <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-500">
                 <ImageOff className="h-6 w-6" />
@@ -73,12 +72,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-alt)] via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/20 via-transparent to-[var(--color-cyan)]/15 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
           </div>
-          <div className="relative z-10 flex flex-col items-start p-6 md:p-8">
+          <div className="relative z-10 flex flex-1 flex-col items-start p-6 md:p-8">
             <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">{project.category}</span>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">{project.name}</h3>
             <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">{project.desc}</p>
             <div className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span key={tag} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">{tag}</span>)}</div>
-            <div className="mt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
+            <div className="mt-auto pt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
           </div>
         </div>
       </motion.a>

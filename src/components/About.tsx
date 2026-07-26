@@ -112,8 +112,8 @@ export default function About() {
             </div>
 
             <div className="space-y-6 text-[var(--text-secondary)] text-xl leading-relaxed">
-              <TextReveal text="Desenvolvedor focado em arquitetar sistemas web responsivos e experiências digitais de alto impacto. Com uma base técnica sólida e multidisciplinar — cursando Engenharia de Software na Uniasselvi e Ciência de Dados na Fatec —, minha atuação vai muito além da interface visual." />
-              <TextReveal text="Busco unir performance de código, inteligência na estruturação de dados e um design imersivo. Em constante evolução e aprofundamento tecnológico, meu foco é dominar a engenharia de ponta a ponta para construir ecossistemas robustos, escaláveis e inteligentes como Desenvolvedor Full-Stack." />
+              <TextReveal text="Sou desenvolvedor e curso Engenharia de Software na Uniasselvi e Ciência de Dados na Fatec, o que me deu uma base técnica sólida e multidisciplinar para arquitetar sistemas web responsivos e experiências digitais de alto impacto. Minha atuação vai muito além da interface visual." />
+              <TextReveal text="Gosto de unir performance de código, inteligência na estruturação de dados e um design imersivo. Estou sempre evoluindo tecnicamente, e meu foco é dominar a engenharia de ponta a ponta pra construir ecossistemas robustos, escaláveis e inteligentes como Desenvolvedor Full-Stack." />
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

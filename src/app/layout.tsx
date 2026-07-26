@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import StarTrail from "@/components/StarTrail";
@@ -13,6 +13,7 @@ import CustomCursor from "@/components/CustomCursor";
 import IntroLoader from "@/components/IntroLoader";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Eduardo Santos Bezerra | Art Director & Software Engineer",
@@ -28,7 +29,7 @@ export default function RootLayout({
     <html lang="pt-BR" className="scroll-smooth">
       <head />
       <body
-        className={`${inter.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
       >
         <IntroLoader />
         <CustomCursor />

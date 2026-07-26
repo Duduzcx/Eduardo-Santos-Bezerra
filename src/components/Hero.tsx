@@ -78,7 +78,7 @@ export default function Hero() {
               </motion.div>
 
               {/* Mask reveal: nome sobe de trás de uma máscara + encolhe/borra ao rolar (recuo no espaço) */}
-              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
+              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
                 <span className="block overflow-hidden">
                   <motion.span
                     initial={{ clipPath: "inset(100% 0 0 0)" }}

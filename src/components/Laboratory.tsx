@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import LetterReveal from "./LetterReveal";
+import ZeroGravityWrapper from "./ZeroGravityWrapper";
 import { Activity, Box, Variable, Cpu } from "lucide-react";
 
 // Um Card do Bento Grid com efeitos físicos insanos no Hover
@@ -13,6 +14,7 @@ function BentoCard({
   className,
   image,
   boosted = false,
+  delay = 0,
 }: {
   title: string,
   desc: string,
@@ -20,6 +22,7 @@ function BentoCard({
   className: string,
   image?: string,
   boosted?: boolean,
+  delay?: number,
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -94,9 +97,9 @@ function BentoCard({
         style={{ transform: "translateZ(60px)" }} 
         className="relative z-20 flex flex-col gap-4 mt-32"
       >
-        <div className="text-[var(--foreground)] bg-[var(--foreground)]/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-[var(--border-subtle)] mb-2 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+        <ZeroGravityWrapper delay={delay} className="text-[var(--foreground)] bg-[var(--foreground)]/10 w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border border-[var(--border-subtle)] mb-2 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
           {icon}
-        </div>
+        </ZeroGravityWrapper>
         <h3 className="text-2xl md:text-4xl font-medium tracking-tight text-[var(--foreground)] leading-tight">
           {title}
         </h3>
@@ -163,6 +166,7 @@ export default function Laboratory() {
           desc="Criação de ambientes virtuais e peças funcionais para impressão 3D (Autodesk Maya, Cults 3D). Elevando o design físico e digital."
           icon={<Box className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2064&auto=format&fit=crop"
+          delay={0}
         />
 
         {/* Card 2: Algorithms (Pequeno/Alto) */}
@@ -172,6 +176,7 @@ export default function Laboratory() {
           desc="Estruturação de algoritmos, cálculos de probabilidade e avaliação de odds complexos para análise massiva de dados esportivos."
           icon={<Activity className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+          delay={0.3}
         />
 
         {/* Card 3: Experimentos Físicos */}
@@ -181,6 +186,7 @@ export default function Laboratory() {
           desc="Integração de hardware e software através de ESP32 e C++, unindo o plano físico aos serviços cloud."
           icon={<Cpu className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop"
+          delay={0.6}
         />
 
         {/* Card 4: Abstract Mathematics */}
@@ -190,6 +196,7 @@ export default function Laboratory() {
           desc="Processamento de Big Data e pipelines escaláveis para arquiteturas orientadas a eventos e tomada de decisão em tempo real."
           icon={<Variable className="w-8 h-8" />}
           image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2070&auto=format&fit=crop"
+          delay={0.9}
         />
 
       </div>

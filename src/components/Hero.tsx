@@ -21,6 +21,10 @@ export default function Hero() {
   // Texto principal recua e some logo nos primeiros pixels de scroll (0-35% do scroll da Hero), câmera "descendo pelo portfólio"
   const textExitOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const textExitY = useTransform(scrollYProgress, [0, 0.35], [0, -100]);
+  // Nome encolhe + borra levemente ao rolar, como se recuasse no espaço — além do fade+subida do bloco todo
+  const nameScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.8]);
+  const nameBlurPx = useTransform(scrollYProgress, [0, 0.35], [0, 6]);
+  const nameFilter = useTransform(nameBlurPx, (v) => `blur(${v}px)`);
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -73,8 +77,8 @@ export default function Hero() {
                 <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
               </motion.div>
 
-              {/* Mask reveal: nome sobe de trás de uma máscara, em vez do stagger letra a letra simples */}
-              <motion.h1 variants={item} className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
+              {/* Mask reveal: nome sobe de trás de uma máscara + encolhe/borra ao rolar (recuo no espaço) */}
+              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
                 <span className="block overflow-hidden">
                   <motion.span
                     initial={{ clipPath: "inset(100% 0 0 0)" }}

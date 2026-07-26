@@ -38,7 +38,7 @@ function Moon() {
         const materials = Array.isArray(child.material) ? child.material : [child.material];
         materials.forEach((mat) => {
           if (mat instanceof THREE.MeshStandardMaterial) {
-            mat.roughness = 1;
+            mat.roughness = 0.92;
             mat.metalness = 0;
           }
         });
@@ -100,8 +100,10 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       {/* Névoa sutil — profundidade volumétrica, dissolve o fundo em vez de cortar seco */}
       <fog attach="fog" args={["#0a0814", 6, 22]} />
       {/* Fosco e dramático: luz lateral rasante (crateras com sombra), sem luz frontal que estoura o material */}
-      <ambientLight intensity={0.06} />
+      <ambientLight intensity={0.15} />
       <SceneLight scrollProgress={scrollProgress} />
+      {/* Preenchimento suave do lado oposto — evita que o lado escuro da lua suma no breu total */}
+      <directionalLight position={[-6, -2, 4]} intensity={0.4} color="#67e8f9" />
       <StarParticles />
       <Stardust scrollProgress={scrollProgress} />
       <Suspense fallback={null}>

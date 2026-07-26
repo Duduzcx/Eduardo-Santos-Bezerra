@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import LetterReveal from "./LetterReveal";
+import ZeroGravityWrapper from "./ZeroGravityWrapper";
 import { 
   FileCode2, 
   Database, 
@@ -128,9 +129,9 @@ export default function Skills() {
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${skill.bg}`} />
               
               <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-white/10 blur-2xl opacity-0 transition-all duration-500 group-hover:scale-150 group-hover:opacity-100" />
-              <div className={`text-[var(--text-tertiary)] transition-all duration-500 mb-4 group-hover:${skill.color} group-hover:rotate-[12deg] group-hover:scale-110 relative z-10`}>
+              <ZeroGravityWrapper delay={index * 0.3} className={`text-[var(--text-tertiary)] transition-all duration-500 mb-4 group-hover:${skill.color} group-hover:rotate-[12deg] group-hover:scale-110 relative z-10`}>
                 {skill.icon}
-              </div>
+              </ZeroGravityWrapper>
               <span className={`text-[var(--text-secondary)] font-medium group-hover:${skill.color} transition-colors relative z-10`}>
                 {skill.name}
               </span>

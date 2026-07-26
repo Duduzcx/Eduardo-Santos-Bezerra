@@ -1,16 +1,27 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { GithubIcon, LinkedinIcon } from "./Icons";
 import Link from "next/link";
 
 export default function Navbar() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    function onScroll() {
+      setVisible(window.scrollY < 80);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between pointer-events-none"
+      animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="absolute top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between pointer-events-none"
     >
       <div className="w-full max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
         {/* Logo */}
@@ -19,7 +30,7 @@ export default function Navbar() {
           Eduardo
           <span className="text-[var(--color-accent)] group-hover:text-[var(--color-cyan)] transition-colors">/&gt;</span>
         </Link>
-        
+
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8 bg-[var(--color-surface)]/80 backdrop-blur-md px-8 py-3 rounded-full border border-[var(--color-border)] shadow-xl">
           <Link href="#about" className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors">Sobre</Link>

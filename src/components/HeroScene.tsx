@@ -2,10 +2,30 @@
 
 import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Sparkles } from "@react-three/drei";
 import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
+
+interface StardustProps {
+  scrollProgress: MotionValue<number>;
+}
+
+// Poeira estelar procedural (drei Sparkles = instanciada, barata) — reage sutilmente ao scroll
+function Stardust({ scrollProgress }: StardustProps) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (!groupRef.current) return;
+    groupRef.current.position.y = scrollProgress.get() * -1.5;
+  });
+
+  return (
+    <group ref={groupRef}>
+      <Sparkles count={80} scale={[10, 6, 8]} size={2} speed={0.15} opacity={0.35} color="#a855f7" noise={1} />
+    </group>
+  );
+}
 
 function Moon() {
   const groupRef = useRef<THREE.Group>(null);
@@ -77,10 +97,13 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       className="!absolute !inset-0 !w-full !h-full"
       style={{ pointerEvents: "none" }}
     >
+      {/* Névoa sutil — profundidade volumétrica, dissolve o fundo em vez de cortar seco */}
+      <fog attach="fog" args={["#0a0814", 6, 22]} />
       {/* Fosco e dramático: luz lateral rasante (crateras com sombra), sem luz frontal que estoura o material */}
       <ambientLight intensity={0.06} />
       <SceneLight scrollProgress={scrollProgress} />
       <StarParticles />
+      <Stardust scrollProgress={scrollProgress} />
       <Suspense fallback={null}>
         <Moon />
       </Suspense>

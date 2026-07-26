@@ -41,7 +41,7 @@ export default function StarParticles() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color="#ffffff" size={0.02} sizeAttenuation transparent opacity={0.8} />
+      <pointsMaterial color="#ffffff" size={0.02} sizeAttenuation transparent opacity={0.8} depthWrite={false} />
     </points>
   );
 }

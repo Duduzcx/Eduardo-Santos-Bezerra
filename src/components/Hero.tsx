@@ -55,43 +55,63 @@ export default function Hero() {
         <Starfield />
       </div>
 
-      {/* Canvas 3D ocupa a Hero inteira — evita corte por câmera/aspecto apertado de coluna estreita */}
-      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[1] pointer-events-none">
+      {/* Canvas 3D — z acima do texto, abaixo dos badges/botões (True Depth Layering) */}
+      <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[4] pointer-events-none">
         {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
       </motion.div>
       {isDesktop && <MoonPreloader />}
 
       <FloatingTechCards />
 
-      <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
-        <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
-            <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+      <div className="w-full max-w-7xl mx-auto px-6 relative flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
+        {/* Coluna de texto: sem transform/z próprio aqui — os dois blocos abaixo controlam sua própria profundidade */}
+        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+          <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[2] w-full flex flex-col items-center lg:items-start">
+            <motion.div variants={container} initial="hidden" animate="show" className="w-full flex flex-col items-center lg:items-start">
+              <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
+                <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+              </motion.div>
+
+              {/* Mask reveal: nome sobe de trás de uma máscara, em vez do stagger letra a letra simples */}
+              <motion.h1 variants={item} className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
+                <span className="block overflow-hidden">
+                  <motion.span
+                    initial={{ clipPath: "inset(100% 0 0 0)" }}
+                    animate={{ clipPath: "inset(0% 0 0 0)" }}
+                    transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}
+                    className="block"
+                  >
+                    Eduardo
+                  </motion.span>
+                </span>
+                <span className="block overflow-hidden">
+                  <motion.span
+                    initial={{ clipPath: "inset(100% 0 0 0)" }}
+                    animate={{ clipPath: "inset(0% 0 0 0)" }}
+                    transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.4 }}
+                    className="block"
+                  >
+                    Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
+                  </motion.span>
+                </span>
+              </motion.h1>
+
+              <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
+                <LetterReveal text="DESENVOLVEDOR FULL STACK" />
+              </motion.h2>
+
+              <div className="max-w-2xl mb-12">
+                <TextReveal
+                  text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
+                  className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center lg:justify-start"
+                />
+              </div>
+            </motion.div>
           </motion.div>
 
-          <motion.h1 variants={item} className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95]">
-            Eduardo<br />
-            Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
-          </motion.h1>
-
-          <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
-            <LetterReveal text="DESENVOLVEDOR FULL STACK" />
-          </motion.h2>
-
-          <div className="max-w-2xl mb-12">
-            <TextReveal
-              text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
-              className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center lg:justify-start"
-            />
-          </div>
-
-          <motion.div variants={item} className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+          {/* Botões: profundidade própria, acima do Canvas (z-6 > z-4) — não fica preso no stacking context do bloco de texto acima */}
+          <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[6] flex flex-col sm:flex-row items-center gap-4 mt-2">
             <MagneticButton
               href="#projects"
               className="group relative px-6 py-3.5 rounded-full bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors flex items-center gap-2.5"
@@ -108,8 +128,7 @@ export default function Hero() {
               Falar sobre um projeto
             </MagneticButton>
           </motion.div>
-        </motion.div>
-        </motion.div>
+        </div>
 
         <div className="hidden lg:block lg:flex-1" aria-hidden="true" />
       </div>

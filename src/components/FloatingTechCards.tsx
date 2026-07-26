@@ -23,7 +23,7 @@ export default function FloatingTechCards() {
   const parallaxDown = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   return (
-    <div ref={ref} className="absolute inset-0 z-[2] pointer-events-none hidden lg:block">
+    <div ref={ref} className="absolute inset-0 z-[6] pointer-events-none hidden lg:block">
       {TECHS.map((tech) => (
         <motion.div
           key={tech.name}

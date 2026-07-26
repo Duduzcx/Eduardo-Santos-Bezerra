@@ -132,6 +132,8 @@ export default function Process() {
                       <img
                         src={STEP_IMAGES[index]}
                         alt=""
+                        loading="lazy"
+                        decoding="async"
                         onError={() => setFailedImages((prev) => prev.map((v, i) => (i === index ? true : v)))}
                         className={`h-full w-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:opacity-100 ${isActive ? "opacity-100" : "opacity-85"}`}
                       />

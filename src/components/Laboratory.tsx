@@ -85,7 +85,7 @@ function BentoCard({
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/30 to-transparent z-10" />
-          <img src={image} alt={title} onError={() => setImageFailed(true)} className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-100 transition-all duration-700" />
+          <img src={image} alt={title} loading="lazy" decoding="async" onError={() => setImageFailed(true)} className="w-full h-full object-cover saturate-[0.6] group-hover:saturate-100 transition-all duration-700" />
         </motion.div>
       )}
 

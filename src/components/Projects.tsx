@@ -4,15 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageOff } from "lucide-react";
 
-const PROJECTS = [
-  { name: "Plataforma Compromisso", category: "EdTech · Plataforma", desc: "Ambiente educacional com gestão de jornadas, indicadores e uma experiência simples para equipes e alunos.", tags: ["Next.js", "TypeScript", "Dashboard"], image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop", status: "Projeto desenvolvido" },
-  { name: "ZcxPages", category: "Portfólio · Web", desc: "Portfólio editorial de alta performance, estruturado para apresentar trabalhos e gerar novas oportunidades.", tags: ["Next.js", "Motion", "UX"], image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop", status: "Projeto desenvolvido" },
-  { name: "Orbe Finance", category: "Fintech · Conceito", desc: "Painel de controle financeiro para pequenas empresas, com visão de caixa, metas e decisões do dia a dia.", tags: ["React", "Data viz", "UI System"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
-  { name: "Verde Campo", category: "Agro · Conceito", desc: "Central de acompanhamento de operações agrícolas com alertas claros e dados de campo em tempo real.", tags: ["IoT", "Node.js", "Analytics"], image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
-  { name: "Nexo Saúde", category: "Healthtech · Conceito", desc: "Portal de acompanhamento para clínicas e pacientes, desenhado para reduzir atrito em cada etapa do cuidado.", tags: ["Next.js", "Acessibilidade", "UX"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "Projeto conceitual" },
+const REAL_PROJECTS = [
+  { name: "Plataforma Compromisso", url: "https://compromissose.com", category: "Ecossistema · Produção", desc: "Projeto de maior escala estrutural: arquitetura de banco de dados, gerenciamento de dados e lógica de negócio real por trás de cada tela.", tags: ["Next.js", "TypeScript", "Dados"], image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop", status: "compromissose.com" },
+  { name: "Estética Automotiva", url: "https://esteticaau.netlify.app", category: "Ecossistema · Nicho de mercado", desc: "Responsividade e entrega de valor real para um nicho específico — do agendamento à apresentação do serviço.", tags: ["React", "Responsivo", "UX"], image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop", status: "esteticaau.netlify.app" },
 ];
 
-type Project = (typeof PROJECTS)[number];
+const CONCEPT_PROJECTS = [
+  { name: "Concept: Sabor Nordestino", url: "https://sabornordestino.netlify.app", category: "UI/UX · Estudo de caso", desc: "Layout moderno e responsivo pensado pro setor gastronômico regional.", tags: ["UI/UX", "Responsivo"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "sabornordestino.netlify.app" },
+  { name: "Concept: Advocacia S.A", url: "https://advocaciasa.netlify.app", category: "UI/UX · Estudo de caso", desc: "Interface institucional, sóbria e responsiva, pra um escritório de advocacia.", tags: ["UI/UX", "Institucional"], image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1200&auto=format&fit=crop", status: "advocaciasa.netlify.app" },
+  { name: "Concept: Dar Semijoias", url: "https://darsemijoias.netlify.app", category: "UI/UX · Estudo de caso", desc: "E-commerce visual pra semijoias, com foco em apresentação de produto.", tags: ["UI/UX", "E-commerce"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "darsemijoias.netlify.app" },
+];
+
+type Project = (typeof REAL_PROJECTS)[number];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const cardRef = useRef<HTMLElement>(null);
@@ -47,7 +50,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.6 }}
     >
-      <motion.div whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
+      <motion.a href={project.url} target="_blank" rel="noopener noreferrer" whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative block h-full overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
         <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
         <div className={`grid h-full ${featured ? "md:grid-cols-[1.15fr_0.85fr]" : "grid-cols-1"}`}>
           <div className={`relative overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15 ${featured ? "aspect-[16/9] md:aspect-auto" : "aspect-[16/9]"}`}>
@@ -60,6 +63,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               <motion.img
                 src={project.image}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 style={{ y: imageY }}
                 onError={() => setImageFailed(true)}
                 className="h-full w-full object-cover opacity-95 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
@@ -76,7 +81,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <div className="mt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
           </div>
         </div>
-      </motion.div>
+      </motion.a>
     </motion.article>
     </motion.div>
   );
@@ -98,7 +103,11 @@ export default function Projects() {
           <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-5xl">Produtos digitais que resolvem problemas reais.</h2>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">Role para explorar: cada projeto se aproxima e ganha profundidade conforme entra em cena.</p>
         </motion.div>
-        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">{PROJECTS.map((project, index) => <ProjectCard key={project.name} project={project} index={index} />)}</div>
+        <p className="mb-6 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">Ecossistemas e projetos reais</p>
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">{REAL_PROJECTS.map((project, index) => <ProjectCard key={project.name} project={project} index={index} />)}</div>
+
+        <p className="mb-6 mt-20 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">Conceitos de interface e UI/UX</p>
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-2">{CONCEPT_PROJECTS.map((project, index) => <ProjectCard key={project.name} project={project} index={index} />)}</div>
       </div>
     </section>
   );

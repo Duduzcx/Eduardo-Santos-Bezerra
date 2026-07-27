@@ -7,7 +7,6 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
-import ScrollWord from "./ScrollWord";
 import Starfield from "./Starfield";
 import MagneticButton from "./MagneticButton";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
@@ -21,8 +20,10 @@ export default function Hero() {
   // Texto principal recua e some logo nos primeiros pixels de scroll (0-35% do scroll da Hero), câmera "descendo pelo portfólio"
   const textExitOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const textExitY = useTransform(scrollYProgress, [0, 0.35], [0, -100]);
-  // Nome encolhe levemente ao rolar (recuo no espaço) — o desfoque/sumiço já acontece palavra por palavra em ScrollWord
+  // Nome encolhe + borra em bloco ao rolar, como se recuasse no espaço
   const nameScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.85]);
+  const nameBlurPx = useTransform(scrollYProgress, [0, 0.35], [0, 6]);
+  const nameFilter = useTransform(nameBlurPx, (v) => `blur(${v}px)`);
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -74,16 +75,12 @@ export default function Hero() {
                 <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
               </motion.div>
 
-              {/* Nome revela palavra por palavra ao carregar, e some/borra palavra por palavra ao rolar — em vez de sumir em bloco */}
-              <motion.h1 variants={item} style={{ scale: nameScale }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
+              {/* Nome revela letra por letra ao carregar (LetterReveal), encolhe/borra em bloco suave ao rolar */}
+              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
+                <span className="block"><LetterReveal text="Eduardo" /></span>
                 <span className="block">
-                  <ScrollWord scrollProgress={scrollYProgress} index={0} revealDelay={0.25}>Eduardo</ScrollWord>
-                </span>
-                <span className="block">
-                  <ScrollWord scrollProgress={scrollYProgress} index={1} revealDelay={0.4}>Santos</ScrollWord>
-                  <ScrollWord scrollProgress={scrollYProgress} index={2} revealDelay={0.52}>
-                    Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
-                  </ScrollWord>
+                  <LetterReveal text="Santos Bezerra" />
+                  <span className="text-[var(--color-accent)] animate-pulse">_</span>
                 </span>
               </motion.h1>
 

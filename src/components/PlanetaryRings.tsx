@@ -2,13 +2,16 @@
 
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
+import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 
 interface PlanetaryRingsProps {
-  scrollProgress?: any;
+  scrollProgress?: MotionValue<number>;
 }
 
-const PARTICLE_COUNT = 1400;
+// Anéis renderizados só com poeira/detritos (sem disco sólido) — é assim que anéis planetários
+// leem como "reais" em vez de um CD plano: textura granulada, densidade variando por faixa.
+const PARTICLE_COUNT = 2600;
 
 function seededRandom(seed: number) {
   let s = seed;
@@ -20,33 +23,43 @@ function seededRandom(seed: number) {
 
 export default function PlanetaryRings({ scrollProgress }: PlanetaryRingsProps) {
   const groupRef = useRef<THREE.Group>(null);
-  const pointsRef = useRef<THREE.Points>(null);
   const moonRef1 = useRef<THREE.Mesh>(null);
   const moonRef2 = useRef<THREE.Mesh>(null);
 
-  // Gera um anel de poeira estelar realista (partículas organizadas em disco com variação de raio e altura)
+  // Geração de poeira e micro-detritos de gelo com a lacuna da Divisão de Cassini
   const { positions, colors } = useMemo(() => {
-    const rand = seededRandom(88);
+    const rand = seededRandom(99);
     const pos = new Float32Array(PARTICLE_COUNT * 3);
     const col = new Float32Array(PARTICLE_COUNT * 3);
 
-    const colorCyan = new THREE.Color("#67e8f9");
-    const colorGold = new THREE.Color("#fbbf24");
-    const colorPurple = new THREE.Color("#c084fc");
+    const colorIce = new THREE.Color("#f8fafc");
+    const colorIvory = new THREE.Color("#fef3c7");
+    const colorSlate = new THREE.Color("#94a3b8");
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      // Distribuição em disco (raio interno 2.0 até raio externo 3.4)
-      const radius = 2.0 + rand() * 1.4;
+      // Sorteia raio garantindo as lacunas reais: gap C→B e a Divisão de Cassini (2.82 a 2.94)
+      let radius: number;
+      const zone = rand();
+      if (zone < 0.18) {
+        // Anel C interno, tênue e translúcido
+        radius = 1.62 + rand() * 0.5;
+      } else if (zone < 0.75) {
+        // Anel B principal, denso
+        radius = 2.2 + rand() * 0.62;
+      } else {
+        // Anel A externo
+        radius = 2.94 + rand() * 0.46;
+      }
+
       const angle = rand() * Math.PI * 2;
-      const thickness = (rand() - 0.5) * 0.18; // Espessura fina realista do anel
+      const thickness = (rand() - 0.5) * 0.055; // Anel muito fino e realista
 
       pos[i * 3] = Math.cos(angle) * radius;
       pos[i * 3 + 1] = thickness;
       pos[i * 3 + 2] = Math.sin(angle) * radius;
 
-      // Interpolação de cores quentes e frias de poeira estelar
       const choice = rand();
-      const tempColor = choice < 0.5 ? colorCyan : choice < 0.8 ? colorGold : colorPurple;
+      const tempColor = choice < 0.6 ? colorIce : choice < 0.85 ? colorIvory : colorSlate;
 
       col[i * 3] = tempColor.r;
       col[i * 3 + 1] = tempColor.g;
@@ -59,80 +72,76 @@ export default function PlanetaryRings({ scrollProgress }: PlanetaryRingsProps) 
   useFrame((state, delta) => {
     if (scrollProgress && scrollProgress.get() > 1.2) return;
 
-    // Rotação suave contínua do anel de poeira 3D
+    // Rotação orbital constante e realista do sistema de anéis
     if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.03;
-    }
-
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.05;
+      groupRef.current.rotation.y += delta * 0.025;
     }
 
     const time = state.clock.getElapsedTime();
 
-    // Satélite/Lua Orbitante 1 (trajetória suave com rastro brilhante)
+    // Satélite/Lua Orbitante 1 (trajetória suave com brilho gélido)
     if (moonRef1.current) {
-      const radius = 3.1;
-      const angle = time * 0.35;
+      const radius = 3.6;
+      const angle = time * 0.28;
       moonRef1.current.position.x = Math.cos(angle) * radius;
       moonRef1.current.position.z = Math.sin(angle) * radius;
-      moonRef1.current.position.y = Math.sin(angle * 1.8) * 0.35;
-      moonRef1.current.rotation.y += delta * 0.6;
+      moonRef1.current.position.y = Math.sin(angle * 1.5) * 0.25;
+      moonRef1.current.rotation.y += delta * 0.4;
     }
 
     // Satélite/Lua Orbitante 2
     if (moonRef2.current) {
-      const radius = 4.2;
-      const angle = -time * 0.22 + 2.0;
+      const radius = 4.8;
+      const angle = -time * 0.18 + 1.8;
       moonRef2.current.position.x = Math.cos(angle) * radius;
       moonRef2.current.position.z = Math.sin(angle) * radius;
-      moonRef2.current.position.y = Math.cos(angle * 1.4) * 0.5;
-      moonRef2.current.rotation.y += delta * 0.4;
+      moonRef2.current.position.y = Math.cos(angle * 1.2) * 0.4;
+      moonRef2.current.rotation.y += delta * 0.3;
     }
   });
 
   return (
-    <group ref={groupRef} position={[1.8, 0, 0]} rotation={[0.42, 0.15, 0.25]}>
-      {/* Anel de Poeira Estelar Realista (Points Particles) */}
-      <points ref={pointsRef}>
+    <group ref={groupRef} position={[1.8, 0, 0]} rotation={[0.48, 0.1, 0.2]}>
+      {/* Micro-poeira de gelo orbital (Partículas cintilantes ao longo das faixas) — só isso forma o anel, sem disco sólido */}
+      <points>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           <bufferAttribute attach="attributes-color" args={[colors, 3]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.035}
+          size={0.025}
           vertexColors
           transparent
-          opacity={0.75}
+          opacity={0.65}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </points>
 
-      {/* Satélite Orbitante 1 com Atmosfera Ciano */}
+      {/* Satélite / Lua Orbitante 1 (Gelo Prateado) */}
       <mesh ref={moonRef1}>
-        <sphereGeometry args={[0.08, 32, 32]} />
+        <sphereGeometry args={[0.07, 32, 32]} />
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#67e8f9"
-          emissiveIntensity={0.9}
-          roughness={0.1}
-          metalness={0.9}
+          color="#f8fafc"
+          emissive="#e2e8f0"
+          emissiveIntensity={0.6}
+          roughness={0.3}
+          metalness={0.8}
         />
-        <pointLight color="#67e8f9" intensity={1.2} distance={2.5} />
+        <pointLight color="#f8fafc" intensity={0.9} distance={2.0} />
       </mesh>
 
-      {/* Satélite Orbitante 2 com Atmosfera Ouro Champagne */}
+      {/* Satélite / Lua Orbitante 2 (Marfim sutil) */}
       <mesh ref={moonRef2}>
         <sphereGeometry args={[0.05, 24, 24]} />
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#fbbf24"
-          emissiveIntensity={0.95}
-          roughness={0.1}
-          metalness={0.9}
+          color="#fef3c7"
+          emissive="#fef3c7"
+          emissiveIntensity={0.5}
+          roughness={0.4}
+          metalness={0.7}
         />
-        <pointLight color="#fbbf24" intensity={0.9} distance={2.0} />
+        <pointLight color="#fef3c7" intensity={0.6} distance={1.8} />
       </mesh>
     </group>
   );

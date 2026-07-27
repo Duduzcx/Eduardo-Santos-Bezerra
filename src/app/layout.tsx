@@ -26,7 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
-      <head />
+      <head>
+        <link rel="preload" href="/models/hero-moon.glb" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/draco/draco_decoder.wasm" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/draco/draco_wasm_wrapper.js" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
       >

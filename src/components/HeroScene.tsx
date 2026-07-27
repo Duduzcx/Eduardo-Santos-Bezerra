@@ -6,6 +6,9 @@ import { useGLTF, Sparkles } from "@react-three/drei";
 import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
+import Asteroids from "./Asteroids";
+import Constellation from "./Constellation";
+import Meteors from "./Meteors";
 
 interface StardustProps {
   scrollProgress: MotionValue<number>;
@@ -46,8 +49,15 @@ function Moon() {
     });
   }, [scene]);
 
+  const scaleRef = useRef(0);
+
   useFrame((state, delta) => {
     if (!groupRef.current) return;
+    
+    // Escala progressiva suave (materialização) ao carregar
+    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, 0.16, 0.06);
+    groupRef.current.scale.setScalar(scaleRef.current);
+
     // Rotação lenta contínua (sempre "viva") + segue o mouse por cima, com inércia
     groupRef.current.rotation.y += delta * 0.05;
     const targetRotX = state.pointer.y * 0.25;
@@ -59,7 +69,7 @@ function Moon() {
   });
 
   return (
-    <group ref={groupRef} scale={0.16} position={[1.8, 0, 0]}>
+    <group ref={groupRef} scale={0} position={[1.8, 0, 0]}>
       <primitive object={scene} />
     </group>
   );
@@ -96,6 +106,8 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       className="!absolute !inset-0 !w-full !h-full"
       style={{ pointerEvents: "none" }}
+      eventSource={typeof document !== "undefined" ? document.body : undefined}
+      eventPrefix="client"
     >
       {/* Névoa sutil — profundidade volumétrica, dissolve o fundo em vez de cortar seco */}
       <fog attach="fog" args={["#0a0814", 6, 22]} />
@@ -106,6 +118,9 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       <directionalLight position={[-6, -2, 4]} intensity={0.4} color="#67e8f9" />
       <StarParticles />
       <Stardust scrollProgress={scrollProgress} />
+      <Asteroids scrollProgress={scrollProgress} />
+      <Constellation />
+      <Meteors />
       <Suspense fallback={null}>
         <Moon />
       </Suspense>

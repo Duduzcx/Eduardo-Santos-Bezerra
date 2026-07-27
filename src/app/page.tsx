@@ -7,18 +7,19 @@ import Laboratory from "@/components/Laboratory";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import SectionReveal from "@/components/SectionReveal";
+import LazyMount from "@/components/LazyMount";
 
 export default function Home() {
   return (
     <main className="w-full relative">
       <Hero />
       <SectionReveal variant="up"><About /></SectionReveal>
-      <Journey />
+      <LazyMount minHeight={800}><Journey /></LazyMount>
       <SectionReveal variant="left"><Process /></SectionReveal>
       <SectionReveal variant="scale"><Skills /></SectionReveal>
-      <SectionReveal variant="right"><Laboratory /></SectionReveal>
+      <LazyMount minHeight={1200}><SectionReveal variant="right"><Laboratory /></SectionReveal></LazyMount>
       <SectionReveal variant="left"><Projects /></SectionReveal>
-      <SectionReveal variant="scale"><Contact /></SectionReveal>
+      <LazyMount minHeight={700}><SectionReveal variant="scale"><Contact /></SectionReveal></LazyMount>
     </main>
   );
 }

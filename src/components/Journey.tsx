@@ -135,7 +135,7 @@ export default function Journey() {
   const headingClip = useTransform(scrollYProgress, [0, 0.15], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
 
   return (
-    <section ref={sectionRef} className="relative w-full bg-[var(--background)] py-24 md:py-32">
+    <section ref={sectionRef} className="relative w-full bg-transparent py-24 md:py-32">
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Minha história</p>
         <div className="relative mt-4 max-w-3xl">

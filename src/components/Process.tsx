@@ -60,7 +60,7 @@ export default function Process() {
   }
 
   return (
-    <section ref={sectionRef} id="process" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-[var(--background)] py-28 md:py-36 transition-colors duration-500">
+    <section ref={sectionRef} id="process" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-transparent py-28 md:py-36 transition-colors duration-500">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 opacity-30"><Starfield density={0.35} /></div>
       {/* Estrelas Cadentes (Cometas) no fundo */}
       <motion.div style={{ opacity: exitOpacity }} className="pointer-events-none absolute inset-0 overflow-hidden z-0">

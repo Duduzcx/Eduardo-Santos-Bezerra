@@ -27,7 +27,7 @@ export default function Contact() {
   }
 
   return (
-    <section ref={sectionRef} id="contact" className="relative w-full py-24 md:py-32 px-6 bg-[var(--background)] border-t border-[var(--border-subtle)] overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} id="contact" className="relative w-full py-24 md:py-32 px-6 bg-transparent border-t border-[var(--border-subtle)] overflow-hidden transition-colors duration-500">
       {/* Constelação de fundo que se desenha ao entrar em cena */}
       <motion.div
         style={{ opacity: exitOpacity }}

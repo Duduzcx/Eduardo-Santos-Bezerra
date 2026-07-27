@@ -118,7 +118,7 @@ export default function Laboratory() {
   const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.95]);
 
   return (
-    <section ref={sectionRef} className="relative w-full py-40 z-20 bg-[var(--background)] overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} className="relative w-full py-40 z-20 bg-transparent overflow-hidden transition-colors duration-500">
       {/* Galáxia Espiral / Buraco Negro Rotativo no Fundo */}
       <motion.div 
         style={{ opacity: exitOpacity, scale: exitScale }}

@@ -21,7 +21,7 @@ export default function About() {
   const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.95]);
 
   return (
-    <section ref={sectionRef} id="about" className="w-full py-32 relative z-20 bg-[var(--background)] overflow-hidden">
+    <section ref={sectionRef} id="about" className="w-full py-32 relative z-20 bg-transparent overflow-hidden">
       
       {/* Orrery Cósmico (Planetário de órbitas) */}
       <motion.div

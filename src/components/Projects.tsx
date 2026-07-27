@@ -19,19 +19,23 @@ type Project = (typeof REAL_PROJECTS)[number];
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const cardRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start 95%", "start 55%"] });
-  const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.94, 1]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], [6, 0]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [24, -24]);
   const [imageFailed, setImageFailed] = useState(false);
   const [forceReveal, setForceReveal] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Saída "sink 3D": quando o card passa pelo topo, cai pra trás no fundo escuro (rotateX + encolhe + some) — scroll separado da entrada
+  // Entrada suave (subida, escala, fade)
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start 95%", "start 60%"] });
+  const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
+
+  // Efeito paralaxe da imagem (deslocamento sutil no scroll)
+  const imageY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+
+  // Saída suave no topo da tela
   const { scrollYProgress: exitProgress } = useScroll({ target: cardRef, offset: ["start start", "end start"] });
-  const exitRotateX = useTransform(exitProgress, [0.5, 1], [0, 15]);
-  const exitScale = useTransform(exitProgress, [0.5, 1], [1, 0.8]);
-  const exitOpacity = useTransform(exitProgress, [0.5, 1], [1, 0]);
+  const exitScale = useTransform(exitProgress, [0.4, 0.9], [1, 0.92]);
+  const exitOpacity = useTransform(exitProgress, [0.4, 0.9], [1, 0]);
 
   useEffect(() => {
     const timer = setTimeout(() => setForceReveal(true), 900 + index * 100);
@@ -39,49 +43,76 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   }, [index]);
 
   return (
-    <motion.div style={{ opacity: exitOpacity, scale: exitScale, rotateX: exitRotateX, transformPerspective: 1000 }}>
-    <motion.article
-      ref={cardRef}
-      style={{ y, scale, rotateX, transformPerspective: 1200 }}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      animate={forceReveal ? { opacity: 1 } : undefined}
-      viewport={{ once: false, amount: 0.1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <motion.a href={project.url} target="_blank" rel="noopener noreferrer" whileHover={{ y: -10, transition: { duration: 0.25 } }} className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40">
-        <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-        <div className="flex h-full flex-col">
-          <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-cyan)]/15">
-            {imageFailed ? (
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-500">
-                <ImageOff className="h-6 w-6" />
-                <span className="text-xs">{project.name}</span>
-              </div>
-            ) : (
-              <motion.img
-                src={project.image}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                style={{ y: imageY }}
-                onError={() => setImageFailed(true)}
-                className="h-full w-full object-cover opacity-95 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
+    <motion.div style={{ opacity: exitOpacity, scale: exitScale }}>
+      <motion.article
+        ref={cardRef}
+        style={{ y, scale, opacity }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        animate={forceReveal ? { opacity: 1 } : undefined}
+        viewport={{ once: false, amount: 0.1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          whileHover={{ y: -6 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40"
+        >
+          <div className="absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[var(--color-cyan)]/10 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none" />
+          <div className="flex h-full flex-col">
+            <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-[var(--color-accent)]/20 to-[var(--color-cyan)]/10">
+              {imageFailed ? (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-neutral-500">
+                  <ImageOff className="h-6 w-6" />
+                  <span className="text-xs">{project.name}</span>
+                </div>
+              ) : (
+                <motion.img
+                  src={project.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  style={{ y: imageY }}
+                  animate={{ 
+                    scale: isHovered ? 1.1 : 1.02,
+                    opacity: isHovered ? 1 : 0.92
+                  }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  onError={() => setImageFailed(true)}
+                  className="absolute left-0 top-[-15%] h-[130%] w-full object-cover pointer-events-none"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-alt)]/80 via-transparent to-transparent z-10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/15 via-transparent to-[var(--color-cyan)]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-10 pointer-events-none" />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[250%] transition-transform duration-1000 ease-out group-hover:translate-x-[350%] z-20"
               />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-alt)] via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--color-accent)]/20 via-transparent to-[var(--color-cyan)]/15 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            </div>
+            <div className="relative z-10 flex flex-1 flex-col items-start p-6 md:p-8">
+              <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">{project.category}</span>
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">{project.name}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">{project.desc}</p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-auto pt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
+                <span>{project.status}</span>
+                <ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </div>
+            </div>
           </div>
-          <div className="relative z-10 flex flex-1 flex-col items-start p-6 md:p-8">
-            <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">{project.category}</span>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">{project.name}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">{project.desc}</p>
-            <div className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <span key={tag} className="rounded-full border border-[var(--border-subtle)] px-3 py-1 text-xs text-[var(--text-secondary)] transition-colors duration-300 group-hover:border-[var(--color-cyan)]/50">{tag}</span>)}</div>
-            <div className="mt-auto pt-7 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]"><span>{project.status}</span><ArrowUpRight className="h-4 w-4 text-[var(--color-cyan)] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" /></div>
-          </div>
-        </div>
-      </motion.a>
-    </motion.article>
+        </motion.a>
+      </motion.article>
     </motion.div>
   );
 }
@@ -93,7 +124,7 @@ export default function Projects() {
   const sceneRotate = useTransform(scrollYProgress, [0, 1], [-18, 24]);
 
   return (
-    <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-[var(--background-alt)] py-28 md:py-40 transition-colors duration-500">
+    <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden border-y border-[var(--border-subtle)] bg-transparent py-28 md:py-40 transition-colors duration-500">
       <motion.div aria-hidden="true" style={{ y: sceneY, rotate: sceneRotate }} className="pointer-events-none absolute right-[-16vw] top-[16%] h-[48vw] w-[48vw] rounded-full border border-[var(--color-cyan)]/20 shadow-[0_0_100px_rgba(103,232,249,0.07)]" />
       <motion.div aria-hidden="true" style={{ y: sceneY }} className="pointer-events-none absolute left-[-18vw] top-[42%] h-[38vw] w-[38vw] rounded-[3rem] border border-[var(--color-pink)]/10" />
       <div className="relative z-10 mx-auto max-w-7xl px-6">

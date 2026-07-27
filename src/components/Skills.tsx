@@ -51,7 +51,7 @@ export default function Skills() {
   const exitScale = useTransform(exitProgress, [0.55, 1], [1, 0.9]);
 
   return (
-    <section ref={sectionRef} id="skills" className="w-full py-32 bg-[var(--background)] relative overflow-hidden transition-colors duration-500">
+    <section ref={sectionRef} id="skills" className="w-full py-32 bg-transparent relative overflow-hidden transition-colors duration-500">
       
       {/* Sistema de Órbitas e Nebulosa de Fundo (Astronomia) */}
       <motion.div

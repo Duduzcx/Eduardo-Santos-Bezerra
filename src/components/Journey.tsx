@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import CinematicBackground from "./CinematicBackground";
 import GlassOrbs from "./GlassOrbs";
 import Starfield from "./Starfield";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const CHAPTERS = [
   {
@@ -12,6 +13,7 @@ const CHAPTERS = [
     title: "De onde eu vim",
     text: "Comecei mexendo em lógica e dados antes de mexer em interface. Hoje curso Engenharia de Software na Uniasselvi e Ciência de Dados na Fatec, duas frentes que se completam.",
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1600&auto=format&fit=crop",
+    video: "/videos/origem.mp4",
     tags: ["Engenharia de Software // Estrutura", "Ciência de Dados // Lógica Preditiva"],
   },
   {
@@ -19,6 +21,7 @@ const CHAPTERS = [
     title: "O que eu construo",
     text: "Sistemas web de ponta a ponta: banco de dados, back-end e a interface que o usuário final toca. Prefiro entender o problema inteiro a entregar só a parte visível.",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1600&auto=format&fit=crop",
+    video: "/videos/presente.mp4",
     stack: "Stack: React_ Next.js_ Node.js_ SQL_ Python_",
   },
   {
@@ -26,14 +29,19 @@ const CHAPTERS = [
     title: "Pra onde eu vou",
     text: "Dominar engenharia de ponta a ponta pra construir ecossistemas robustos e inteligentes — código com performance, dados bem estruturados, design que faz sentido.",
     image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1600&auto=format&fit=crop",
+    video: "/videos/direcao.mp4",
   },
 ];
 
-function Chapter({ chapter, index, total }: { chapter: (typeof CHAPTERS)[number]; index: number; total: number }) {
+function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTERS)[number]; index: number; total: number; isDesktop: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "start 25%"] });
   const { scrollYProgress: exitProgress } = useScroll({ target: ref, offset: ["center start", "end start"] });
   const [stackHovered, setStackHovered] = useState(false);
+
+  // Transição entre capítulos: próximo capítulo "abre" por um círculo que expande conforme entra em cena
+  const wipeSize = useTransform(scrollYProgress, [0, 1], ["0%", "150%"]);
+  const wipeClip = useTransform(wipeSize, (v) => `circle(${v} at 50% 50%)`);
 
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.15, 1]);
   const imageOpacity = useTransform(scrollYProgress, [0, 1], [0.3, 0.85]);
@@ -50,11 +58,19 @@ function Chapter({ chapter, index, total }: { chapter: (typeof CHAPTERS)[number]
 
   return (
     <div ref={ref} className="relative flex min-h-[70vh] md:min-h-[85vh] items-center justify-center overflow-hidden">
-      <CinematicBackground fallbackImage={chapter.image} scale={imageScale} opacity={imageOpacity} glow={index === 0} />
+      <motion.div style={{ clipPath: wipeClip }} className="absolute inset-0">
+        <CinematicBackground
+          videoSrc={isDesktop ? chapter.video : undefined}
+          fallbackImage={chapter.image}
+          scale={imageScale}
+          opacity={imageOpacity}
+          glow={index === 0}
+        />
+      </motion.div>
 
       {index === 0 && (
         <div aria-hidden="true" className="absolute inset-0 z-[1] opacity-40">
-          <Starfield />
+          <Starfield density={0.5} />
         </div>
       )}
       {index === 1 && <GlassOrbs />}
@@ -114,6 +130,7 @@ function Chapter({ chapter, index, total }: { chapter: (typeof CHAPTERS)[number]
 
 export default function Journey() {
   const sectionRef = useRef<HTMLElement>(null);
+  const isDesktop = useIsDesktop();
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const headingClip = useTransform(scrollYProgress, [0, 0.15], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
 
@@ -131,7 +148,7 @@ export default function Journey() {
 
       <div className="mt-16 flex flex-col gap-6 md:gap-10">
         {CHAPTERS.map((chapter, index) => (
-          <Chapter key={chapter.title} chapter={chapter} index={index} total={CHAPTERS.length} />
+          <Chapter key={chapter.title} chapter={chapter} index={index} total={CHAPTERS.length} isDesktop={isDesktop} />
         ))}
       </div>
     </section>

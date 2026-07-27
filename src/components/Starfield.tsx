@@ -24,14 +24,14 @@ function buildLayer(count: number, spread: number, size: number, seed: number): 
   return value;
 }
 
-export default function Starfield() {
+export default function Starfield({ density = 1 }: { density?: number }) {
   const layers = useMemo<Layer[]>(
     () => [
-      { shadow: buildLayer(190, 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
-      { shadow: buildLayer(95, 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
-      { shadow: buildLayer(45, 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
+      { shadow: buildLayer(Math.round(190 * density), 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
+      { shadow: buildLayer(Math.round(95 * density), 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
+      { shadow: buildLayer(Math.round(45 * density), 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
     ],
-    []
+    [density]
   );
 
   return (

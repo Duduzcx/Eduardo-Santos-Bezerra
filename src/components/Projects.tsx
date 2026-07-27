@@ -5,14 +5,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageOff } from "lucide-react";
 
 const REAL_PROJECTS = [
-  { name: "Plataforma Compromisso", url: "https://compromissose.com", category: "Ecossistema · Produção", desc: "Projeto de maior escala estrutural: arquitetura de banco de dados, gerenciamento de dados e lógica de negócio real por trás de cada tela.", tags: ["Next.js", "TypeScript", "Dados"], image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop", status: "compromissose.com" },
-  { name: "Estética Automotiva", url: "https://esteticaau.netlify.app", category: "Ecossistema · Nicho de mercado", desc: "Responsividade e entrega de valor real para um nicho específico — do agendamento à apresentação do serviço.", tags: ["React", "Responsivo", "UX"], image: "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=1200&auto=format&fit=crop", status: "esteticaau.netlify.app" },
+  { name: "Plataforma Compromisso", url: "https://compromissose.com", category: "Ecossistema · Produção", desc: "Projeto de maior escala estrutural: arquitetura de banco de dados, gerenciamento de dados e lógica de negócio real por trás de cada tela.", tags: ["Next.js", "TypeScript", "Dados"], image: "/projects/compromisso.jpg", status: "compromissose.com" },
+  { name: "Estética Automotiva", url: "https://esteticaau.netlify.app", category: "Ecossistema · Nicho de mercado", desc: "Responsividade e entrega de valor real para um nicho específico — do agendamento à apresentação do serviço.", tags: ["React", "Responsivo", "UX"], image: "/projects/estetica.jpg", status: "esteticaau.netlify.app" },
 ];
 
 const CONCEPT_PROJECTS = [
-  { name: "Sabor Nordestino", url: "https://sabornordestino.netlify.app", category: "UI/UX · Estudo de caso", desc: "Layout moderno e responsivo pensado pro setor gastronômico regional.", tags: ["UI/UX", "Responsivo"], image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop", status: "sabornordestino.netlify.app" },
-  { name: "Advocacia S.A", url: "https://advocaciasa.netlify.app", category: "UI/UX · Estudo de caso", desc: "Interface institucional, sóbria e responsiva, pra um escritório de advocacia.", tags: ["UI/UX", "Institucional"], image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200&auto=format&fit=crop", status: "advocaciasa.netlify.app" },
-  { name: "Dar Semijoias", url: "https://darsemijoias.netlify.app", category: "UI/UX · Estudo de caso", desc: "E-commerce visual pra semijoias, com foco em apresentação de produto.", tags: ["UI/UX", "E-commerce"], image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1200&auto=format&fit=crop", status: "darsemijoias.netlify.app" },
+  { name: "Sabor Nordestino", url: "https://sabornordestino.netlify.app", category: "UI/UX · Estudo de caso", desc: "Layout moderno e responsivo pensado pro setor gastronômico regional.", tags: ["UI/UX", "Responsivo"], image: "/projects/sabor.jpg", status: "sabornordestino.netlify.app" },
+  { name: "Advocacia S.A", url: "https://advocaciasa.netlify.app", category: "UI/UX · Estudo de caso", desc: "Interface institucional, sóbria e responsiva, pra um escritório de advocacia.", tags: ["UI/UX", "Institucional"], image: "/projects/advocacia.jpg", status: "advocaciasa.netlify.app" },
+  { name: "Dar Semijoias", url: "https://darsemijoias.netlify.app", category: "UI/UX · Estudo de caso", desc: "E-commerce visual pra semijoias, com foco em apresentação de produto.", tags: ["UI/UX", "E-commerce"], image: "/projects/semijoias.jpg", status: "darsemijoias.netlify.app" },
 ];
 
 type Project = (typeof REAL_PROJECTS)[number];

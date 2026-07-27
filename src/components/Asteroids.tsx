@@ -39,6 +39,9 @@ export default function Asteroids({ scrollProgress }: AsteroidsProps) {
   }, []);
 
   useFrame((_, delta) => {
+    // Se o usuário rolou além da seção Hero, pula a animação para poupar CPU/GPU
+    if (scrollProgress.get() > 1.1) return;
+
     if (groupRef.current) {
       groupRef.current.position.y = scrollProgress.get() * 3.5;
     }

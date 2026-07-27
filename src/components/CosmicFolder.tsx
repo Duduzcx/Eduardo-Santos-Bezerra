@@ -70,9 +70,9 @@ export default function CosmicFolder() {
     offset: ["start 80%", "end 30%"],
   });
 
-  // Tampa da pasta abre (rotaciona no eixo X em 3D)
-  const lidRotateX = useTransform(scrollYProgress, [0, 0.45], [0, -115]);
-  const lidOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0.9]);
+  // Tampa da pasta abre (rotaciona no eixo X em 3D) e desaparece de forma limpa sem mostrar verso espelhado
+  const lidRotateX = useTransform(scrollYProgress, [0, 0.35], [0, -90]);
+  const lidOpacity = useTransform(scrollYProgress, [0.2, 0.35], [1, 0]);
 
   // Fanning out dos arquivos (Desktop vs Mobile)
   const fX1 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -160 : -45]);
@@ -170,6 +170,8 @@ export default function CosmicFolder() {
             rotateX: lidRotateX,
             opacity: lidOpacity,
             transformOrigin: "bottom",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
           }}
           className="absolute inset-0 bg-[#221c3d]/90 border border-white/20 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-sm z-20 flex flex-col justify-between p-6 pointer-events-none select-none"
         >

@@ -6,8 +6,7 @@ import { useGLTF, Sparkles } from "@react-three/drei";
 import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
-import Asteroids from "./Asteroids";
-import Constellation from "./Constellation";
+import PlanetaryRings from "./PlanetaryRings";
 import Meteors from "./Meteors";
 
 interface StardustProps {
@@ -118,8 +117,7 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       <directionalLight position={[-6, -2, 4]} intensity={0.4} color="#67e8f9" />
       <StarParticles />
       <Stardust scrollProgress={scrollProgress} />
-      <Asteroids scrollProgress={scrollProgress} />
-      <Constellation />
+      <PlanetaryRings scrollProgress={scrollProgress} />
       <Meteors />
       <Suspense fallback={null}>
         <Moon />

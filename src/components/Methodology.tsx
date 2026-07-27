@@ -34,7 +34,7 @@ export default function Methodology() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/10 border border-blue-500/30 mb-6"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-blue-500">
@@ -46,7 +46,7 @@ export default function Methodology() {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="text-3xl md:text-5xl font-bold text-white tracking-tight"
           >
             Com esse método, nas próximas semanas você vai:
@@ -60,7 +60,7 @@ export default function Methodology() {
               key={idx}
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
               className="relative p-8 rounded-2xl bg-[#111111] border border-neutral-800 hover:border-neutral-600 transition-colors flex flex-col items-center text-center group"
             >

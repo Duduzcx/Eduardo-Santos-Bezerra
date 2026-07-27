@@ -66,7 +66,7 @@ function BentoCard({
       whileInView={{ opacity: 1, y: 0 }}
       animate={forceReveal ? { opacity: 1, y: 0 } : undefined}
       whileHover={{ scale: 1.015, zIndex: 10 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: false, margin: "-100px" }}
       transition={{ duration: 0.7, ease: "easeOut" }}
       style={{
         rotateX,
@@ -124,7 +124,7 @@ export default function Laboratory() {
         style={{ opacity: exitOpacity, scale: exitScale }}
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 0.22, scale: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, margin: "-100px" }}
         transition={{ duration: 1.8, ease: "easeOut" }}
         className="absolute left-[5%] top-[15%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] pointer-events-none z-0"
       >
@@ -147,7 +147,7 @@ export default function Laboratory() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="mt-4 text-3xl md:text-4xl font-light text-[var(--text-secondary)] tracking-tight"
           >

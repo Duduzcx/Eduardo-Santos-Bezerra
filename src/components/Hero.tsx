@@ -7,9 +7,9 @@ import { ArrowRight, MessageCircle } from "lucide-react";
 import TextReveal from "./TextReveal";
 import FloatingTechCards from "./FloatingTechCards";
 import LetterReveal from "./LetterReveal";
+import ScrollWord from "./ScrollWord";
 import Starfield from "./Starfield";
 import MagneticButton from "./MagneticButton";
-import MoonPreloader from "./MoonPreloader";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
@@ -21,10 +21,8 @@ export default function Hero() {
   // Texto principal recua e some logo nos primeiros pixels de scroll (0-35% do scroll da Hero), câmera "descendo pelo portfólio"
   const textExitOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const textExitY = useTransform(scrollYProgress, [0, 0.35], [0, -100]);
-  // Nome encolhe + borra levemente ao rolar, como se recuasse no espaço — além do fade+subida do bloco todo
-  const nameScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.8]);
-  const nameBlurPx = useTransform(scrollYProgress, [0, 0.35], [0, 6]);
-  const nameFilter = useTransform(nameBlurPx, (v) => `blur(${v}px)`);
+  // Nome encolhe levemente ao rolar (recuo no espaço) — o desfoque/sumiço já acontece palavra por palavra em ScrollWord
+  const nameScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.85]);
 
   const container: Variants = {
     hidden: { opacity: 0 },
@@ -63,7 +61,6 @@ export default function Hero() {
       <motion.div style={{ x: sceneSpringX, y: sceneSpringY }} className="absolute inset-0 z-[4] pointer-events-none">
         {isDesktop && <HeroScene scrollProgress={scrollYProgress} />}
       </motion.div>
-      {isDesktop && <MoonPreloader />}
 
       <FloatingTechCards />
 
@@ -77,27 +74,16 @@ export default function Hero() {
                 <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
               </motion.div>
 
-              {/* Mask reveal: nome sobe de trás de uma máscara + encolhe/borra ao rolar (recuo no espaço) */}
-              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
-                <span className="block overflow-hidden">
-                  <motion.span
-                    initial={{ clipPath: "inset(100% 0 0 0)" }}
-                    animate={{ clipPath: "inset(0% 0 0 0)" }}
-                    transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}
-                    className="block"
-                  >
-                    Eduardo
-                  </motion.span>
+              {/* Nome revela palavra por palavra ao carregar, e some/borra palavra por palavra ao rolar — em vez de sumir em bloco */}
+              <motion.h1 variants={item} style={{ scale: nameScale }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
+                <span className="block">
+                  <ScrollWord scrollProgress={scrollYProgress} index={0} revealDelay={0.25}>Eduardo</ScrollWord>
                 </span>
-                <span className="block overflow-hidden">
-                  <motion.span
-                    initial={{ clipPath: "inset(100% 0 0 0)" }}
-                    animate={{ clipPath: "inset(0% 0 0 0)" }}
-                    transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.4 }}
-                    className="block"
-                  >
-                    Santos Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
-                  </motion.span>
+                <span className="block">
+                  <ScrollWord scrollProgress={scrollYProgress} index={1} revealDelay={0.4}>Santos</ScrollWord>
+                  <ScrollWord scrollProgress={scrollYProgress} index={2} revealDelay={0.52}>
+                    Bezerra<span className="text-[var(--color-accent)] animate-pulse">_</span>
+                  </ScrollWord>
                 </span>
               </motion.h1>
 

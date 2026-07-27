@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
@@ -15,12 +14,6 @@ export default function SectionReveal({ children, variant = "up" }: SectionRevea
   const prefersReducedMotion = usePrefersReducedMotion();
   const x = variant === "left" ? -56 : variant === "right" ? 56 : 0;
   const y = variant === "scale" ? 32 : variant === "up" ? 64 : 0;
-  const [forceReveal, setForceReveal] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setForceReveal(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const revealed = { opacity: 1, x: 0, y: 0, scale: 1, clipPath: "inset(0 0 0% 0 round 0rem)" };
   const hidden = prefersReducedMotion
@@ -35,8 +28,7 @@ export default function SectionReveal({ children, variant = "up" }: SectionRevea
       className="w-full relative"
       initial={hidden}
       whileInView={revealed}
-      animate={forceReveal ? revealed : undefined}
-      viewport={{ once: true, amount: 0.12 }}
+      viewport={{ once: false, amount: 0.12 }}
       transition={transition}
     >
       <motion.div
@@ -44,7 +36,7 @@ export default function SectionReveal({ children, variant = "up" }: SectionRevea
         className="absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-[var(--color-cyan)] to-transparent pointer-events-none z-30"
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: [0, 0.9, 0] }}
-        viewport={{ once: true, amount: 0.15 }}
+        viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: prefersReducedMotion ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
       />
       {children}

@@ -41,10 +41,10 @@ export default function Navbar() {
 
         {/* Social Icons */}
         <div className="flex items-center gap-3">
-          <a href="https://github.com" target="_blank" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-400 hover:text-[var(--color-accent-light)] hover:border-[var(--color-accent)] transition-all">
+          <a href="https://github.com/Duduzcx" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-400 hover:text-[var(--color-accent-light)] hover:border-[var(--color-accent)] transition-all">
             <GithubIcon className="w-4 h-4" />
           </a>
-          <a href="https://linkedin.com" target="_blank" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-400 hover:text-[var(--color-cyan)] hover:border-[var(--color-cyan)] transition-all">
+          <a href="https://www.linkedin.com/in/eduardosantosbezerra/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-400 hover:text-[var(--color-cyan)] hover:border-[var(--color-cyan)] transition-all">
             <LinkedinIcon className="w-4 h-4" />
           </a>
         </div>

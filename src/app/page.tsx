@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Journey from "@/components/Journey";
 import Process from "@/components/Process";
 import Skills from "@/components/Skills";
 import Laboratory from "@/components/Laboratory";
@@ -12,6 +13,7 @@ export default function Home() {
     <main className="w-full relative">
       <Hero />
       <SectionReveal variant="up"><About /></SectionReveal>
+      <Journey />
       <SectionReveal variant="left"><Process /></SectionReveal>
       <SectionReveal variant="scale"><Skills /></SectionReveal>
       <SectionReveal variant="right"><Laboratory /></SectionReveal>

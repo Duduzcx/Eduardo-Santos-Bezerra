@@ -39,7 +39,7 @@ export default function LetterReveal({ text, className = "" }: LetterRevealProps
       initial="hidden"
       whileInView="visible"
       animate={forceReveal ? "visible" : undefined}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: false, margin: "-80px" }}
       aria-label={text}
     >
       {text.split("").map((char, i) => (

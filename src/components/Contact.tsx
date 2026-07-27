@@ -3,6 +3,7 @@
 import { FormEvent, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "./Icons";
 
 const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 
@@ -38,7 +39,7 @@ export default function Contact() {
             d="M 10,20 L 30,40 L 50,30 L 70,55 L 90,45 M 50,30 L 60,80 L 80,70"
             initial={{ pathLength: 0 }}
             whileInView={{ pathLength: 1 }}
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: false, margin: "-50px" }}
             transition={{ duration: 2.2, ease: "easeInOut" }}
           />
           {/* Estrela 1 */}
@@ -80,14 +81,14 @@ export default function Contact() {
       </motion.div>
 
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
-        <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
+        <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-cyan)] font-semibold">Vamos conversar</p>
           <h2 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.02] text-[var(--foreground)]">Tem um projeto em mente?</h2>
           <p className="mt-6 max-w-md text-base md:text-lg leading-relaxed text-[var(--text-secondary)]">Conte um pouco sobre o desafio. A conversa continua diretamente no WhatsApp, de forma rápida e sem compromisso.</p>
           <div className="mt-9 flex items-center gap-3 text-sm text-[var(--text-secondary)]"><MessageCircle className="w-5 h-5 text-[#25D366]" /> Atendimento pelo WhatsApp</div>
         </motion.div>
 
-        <motion.form initial={{ opacity: 0, x: 28, scale: 0.98 }} whileInView={{ opacity: 1, x: 0, scale: 1 }} whileHover={{ y: -4 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} onSubmit={openWhatsApp} className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/60 p-6 md:p-8">
+        <motion.form initial={{ opacity: 0, x: 28, scale: 0.98 }} whileInView={{ opacity: 1, x: 0, scale: 1 }} whileHover={{ y: -4 }} viewport={{ once: false, amount: 0.3 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }} onSubmit={openWhatsApp} className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/60 p-6 md:p-8">
           <div className="grid sm:grid-cols-2 gap-5">
             <label className="block text-sm text-[var(--text-secondary)]">Seu nome
               <input value={name} onChange={(event) => setName(event.target.value)} required placeholder="Como podemos te chamar?" className="mt-2 w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--background)]/40 px-4 py-3 text-[var(--foreground)] placeholder:text-[var(--text-tertiary)] outline-none focus:border-[var(--color-cyan)] transition-colors" />
@@ -103,9 +104,16 @@ export default function Contact() {
           {notice && <p role="status" className="mt-3 text-sm text-amber-300">{notice}</p>}
         </motion.form>
       </div>
-      <footer className="relative z-10 max-w-6xl mx-auto mt-20 pt-6 border-t border-[var(--border-subtle)] text-sm text-[var(--text-tertiary)]">
-        © {new Date().getFullYear()} Eduardo Santos Bezerra. Todos os direitos reservados.
-        <span className="block mt-1 text-xs opacity-70">Modelo 3D &quot;Astronaut&quot; do projeto google/model-viewer, licença Apache 2.0.</span>
+      <footer className="relative z-10 max-w-6xl mx-auto mt-20 pt-6 border-t border-[var(--border-subtle)] text-sm text-[var(--text-tertiary)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <span>© {new Date().getFullYear()} Eduardo Santos Bezerra. Todos os direitos reservados.</span>
+        <div className="flex items-center gap-3">
+          <a href="https://github.com/Duduzcx" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--border-subtle)] text-neutral-400 hover:text-[var(--color-accent-light)] hover:border-[var(--color-accent)] transition-all">
+            <GithubIcon className="w-4 h-4" />
+          </a>
+          <a href="https://www.linkedin.com/in/eduardosantosbezerra/" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-[var(--color-surface)] border border-[var(--border-subtle)] text-neutral-400 hover:text-[var(--color-cyan)] hover:border-[var(--color-cyan)] transition-all">
+            <LinkedinIcon className="w-4 h-4" />
+          </a>
+        </div>
       </footer>
     </section>
   );

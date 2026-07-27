@@ -102,7 +102,7 @@ export default function Skills() {
         <motion.div 
           initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
           className="text-center mb-20"
         >
@@ -119,7 +119,7 @@ export default function Skills() {
             <motion.div
               initial={{ opacity: 0, rotateX: 90, scale: 0.8 }}
               whileInView={{ opacity: 1, rotateX: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
               whileHover={{ scale: 1.1, y: -10, rotateZ: index % 2 === 0 ? 2 : -2 }}
               whileTap={{ scale: 0.96 }}

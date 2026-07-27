@@ -60,7 +60,7 @@ function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTE
     <div ref={ref} className="relative flex min-h-[70vh] md:min-h-[85vh] items-center justify-center overflow-hidden">
       <motion.div style={{ clipPath: wipeClip }} className="absolute inset-0">
         <CinematicBackground
-          videoSrc={isDesktop ? chapter.video : undefined}
+          videoSrc={chapter.video}
           fallbackImage={chapter.image}
           scale={imageScale}
           opacity={imageOpacity}

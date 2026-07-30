@@ -31,21 +31,27 @@ export default function LetterReveal({ text, className = "" }: LetterRevealProps
     },
   };
 
+  const words = text.split(" ");
+
   return (
     <motion.span
-      className={`inline-block ${className}`}
+      className={`inline-flex flex-wrap max-w-full ${className}`}
       style={{ perspective: 400 }}
       variants={container}
       initial="hidden"
       whileInView="visible"
       animate={forceReveal ? "visible" : undefined}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       aria-label={text}
     >
-      {text.split("").map((char, i) => (
-        <motion.span key={i} variants={letterVariant} className="inline-block origin-bottom" aria-hidden="true">
-          {char === " " ? NBSP : char}
-        </motion.span>
+      {words.map((word, wIdx) => (
+        <span key={wIdx} className="inline-block whitespace-nowrap mr-[0.28em]">
+          {word.split("").map((char, cIdx) => (
+            <motion.span key={cIdx} variants={letterVariant} className="inline-block origin-bottom" aria-hidden="true">
+              {char}
+            </motion.span>
+          ))}
+        </span>
       ))}
     </motion.span>
   );

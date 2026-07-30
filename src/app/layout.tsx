@@ -10,6 +10,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import NavigationTransition from "@/components/NavigationTransition";
 import CustomCursor from "@/components/CustomCursor";
 import IntroLoader from "@/components/IntroLoader";
+import BackToTop from "@/components/BackToTop";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-display" });
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ScrollProgress />
         <NavigationTransition />
         <ColorfulBackground />
+        <BackToTop />
 
         <SmoothScroll>
           <TransitionWrapper>

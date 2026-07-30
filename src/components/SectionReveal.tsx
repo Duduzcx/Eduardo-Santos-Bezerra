@@ -28,7 +28,7 @@ export default function SectionReveal({ children, variant = "up" }: SectionRevea
       className="w-full relative"
       initial={hidden}
       whileInView={revealed}
-      viewport={{ once: false, amount: 0.12 }}
+      viewport={{ once: true, amount: 0.12 }}
       transition={transition}
     >
       <motion.div
@@ -36,7 +36,7 @@ export default function SectionReveal({ children, variant = "up" }: SectionRevea
         className="absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-[var(--color-cyan)] to-transparent pointer-events-none z-30"
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: [0, 0.9, 0] }}
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: prefersReducedMotion ? 0 : 1.1, ease: [0.22, 1, 0.36, 1] }}
       />
       {children}

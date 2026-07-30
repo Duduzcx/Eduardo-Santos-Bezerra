@@ -36,6 +36,9 @@ export default function MagneticButton({ href, className, strength = 0.35, child
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ x: springX, y: springY }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 20 }}
       className={className}
     >
       {children}

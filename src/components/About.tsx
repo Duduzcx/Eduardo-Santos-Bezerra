@@ -31,7 +31,7 @@ export default function About() {
         <motion.div
           initial={{ opacity: 0, scale: 0.7, rotate: -45 }}
           whileInView={{ opacity: 0.12, scale: 1, rotate: 0 }}
-          viewport={{ once: false, margin: "-100px" }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="w-full h-full"
         >
@@ -102,7 +102,7 @@ export default function About() {
               <motion.div
                 initial={{ opacity: 0, scale: 1.2, rotateX: -45 }}
                 whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
-                viewport={{ once: false, margin: "-100px" }}
+                viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 1, type: "spring" }}
               >
                 <h2 className="fs-h1 font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight max-w-full">
@@ -117,7 +117,7 @@ export default function About() {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-100px" }}
+                viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6 }}
               >
                 Chega de sistemas <span className="text-[var(--foreground)] font-semibold">obsoletos</span> — eu construo o que sua empresa vai precisar nos próximos 10 anos.

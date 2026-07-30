@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, ImageOff } from "lucide-react";
 
 const REAL_PROJECTS = [
@@ -22,6 +22,24 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [imageFailed, setImageFailed] = useState(false);
   const [forceReveal, setForceReveal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Leve profundidade 3D seguindo o mouse — bem sutil, só uma pista de que o card "responde"
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const springConfig = { damping: 22, stiffness: 180 };
+  const rotateX = useSpring(useTransform(tiltY, [-0.5, 0.5], ["3deg", "-3deg"]), springConfig);
+  const rotateY = useSpring(useTransform(tiltX, [-0.5, 0.5], ["-3deg", "3deg"]), springConfig);
+
+  const handleTiltMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    tiltX.set((e.clientX - rect.left) / rect.width - 0.5);
+    tiltY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleTiltLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
 
   // Entrada suave (subida, escala, fade)
   const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start 95%", "start 60%"] });
@@ -50,7 +68,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         animate={forceReveal ? { opacity: 1 } : undefined}
-        viewport={{ once: false, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.6 }}
       >
         <motion.a
@@ -58,8 +76,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           target="_blank"
           rel="noopener noreferrer"
           onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          whileHover={{ y: -6 }}
+          onMouseMove={handleTiltMove}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            handleTiltLeave();
+          }}
+          style={{ rotateX, rotateY, transformPerspective: 1000 }}
+          whileHover={{ y: -6, scale: 1.015 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--color-surface)]/40 shadow-[0_24px_70px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--color-cyan)]/40"
         >
@@ -128,7 +151,7 @@ export default function Projects() {
       <motion.div aria-hidden="true" style={{ y: sceneY, rotate: sceneRotate }} className="pointer-events-none absolute right-[-16vw] top-[16%] h-[48vw] w-[48vw] rounded-full border border-[var(--color-cyan)]/20 shadow-[0_0_100px_rgba(103,232,249,0.07)]" />
       <motion.div aria-hidden="true" style={{ y: sceneY }} className="pointer-events-none absolute left-[-18vw] top-[42%] h-[38vw] w-[38vw] rounded-[3rem] border border-[var(--color-pink)]/10" />
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-16 max-w-2xl md:mb-20">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-16 max-w-2xl md:mb-20">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Meus projetos</p>
           <h2 className="fs-h2 font-semibold tracking-tight text-[var(--foreground)]">Produtos digitais que resolvem problemas reais.</h2>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">Role para explorar: cada projeto se aproxima e ganha profundidade conforme entra em cena.</p>

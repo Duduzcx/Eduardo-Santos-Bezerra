@@ -102,7 +102,7 @@ export default function Skills() {
         <motion.div 
           initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-100px" }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
           className="text-center mb-20"
         >
@@ -119,10 +119,10 @@ export default function Skills() {
             <motion.div
               initial={{ opacity: 0, rotateX: 90, scale: 0.8 }}
               whileInView={{ opacity: 1, rotateX: 0, scale: 1 }}
-              viewport={{ once: false, margin: "-50px" }}
+              viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
-              whileHover={{ scale: 1.1, y: -10, rotateZ: index % 2 === 0 ? 2 : -2 }}
-              whileTap={{ scale: 0.96 }}
+              whileHover={{ scale: 1.03, y: -4, boxShadow: "0 20px 40px rgba(0,0,0,0.35)" }}
+              whileTap={{ scale: 0.97 }}
               className={`group flex flex-col items-center justify-center p-4 sm:p-8 bg-[var(--color-surface)] border border-[var(--border-subtle)] rounded-2xl sm:rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
             >
               {/* Overlay com a cor original da tech no fundo quando dá hover */}

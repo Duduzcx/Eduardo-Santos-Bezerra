@@ -81,7 +81,7 @@ export default function Process() {
 
       <motion.div aria-hidden="true" style={{ opacity: exitOpacity }} animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-28 top-24 h-72 w-72 rounded-full border border-[var(--color-accent)]/15" />
       <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-14 max-w-2xl">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-14 max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Como eu trabalho</p>
           <h2 className="fs-h2 mt-4 font-semibold tracking-tight text-[var(--foreground)]">Uma jornada que evolui a cada etapa.</h2>
           <p className="mt-4 text-sm text-neutral-500 hidden md:block">Arraste a bolinha pela linha do tempo pra abrir cada etapa.</p>
@@ -114,7 +114,7 @@ export default function Process() {
                 initial={{ opacity: 0, x: index % 2 === 0 ? -34 : 34, y: 24 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
                 whileHover={{ x: 12 }}
-                viewport={{ once: false, amount: 0.45 }}
+                viewport={{ once: true, amount: 0.45 }}
                 transition={{ duration: 0.62, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className={`group relative grid gap-4 border-t py-9 pl-0 transition-colors duration-500 md:grid-cols-[120px_1fr] md:gap-8 md:pl-12 ${isActive ? "border-[var(--color-cyan)]/40" : "border-[var(--border-subtle)]"}`}
               >

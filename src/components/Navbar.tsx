@@ -16,6 +16,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState("");
 
   useEffect(() => {
     function onScroll() {
@@ -24,6 +25,21 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [menuOpen]);
+
+  // Destaca no menu a seção que está mais visível no momento (scrollspy)
+  useEffect(() => {
+    const sections = NAV_LINKS.map((link) => document.querySelector(link.href)).filter((el): el is Element => !!el);
+    if (sections.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visibleEntry) setActiveHref(`#${visibleEntry.target.id}`);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -50,8 +66,15 @@ export default function Navbar() {
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8 bg-[var(--color-surface)]/80 backdrop-blur-md px-8 py-3 rounded-full border border-[var(--color-border)] shadow-xl">
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors">
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`relative text-sm font-medium transition-colors ${activeHref === link.href ? "text-[var(--foreground)]" : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"}`}
+            >
               {link.label}
+              {activeHref === link.href && (
+                <motion.span layoutId="navbar-active-dot" className="absolute -bottom-1.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--color-cyan)]" transition={{ type: "spring", stiffness: 400, damping: 30 }} />
+              )}
             </Link>
           ))}
         </div>

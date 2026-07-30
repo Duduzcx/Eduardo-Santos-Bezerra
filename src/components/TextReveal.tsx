@@ -48,7 +48,7 @@ export default function TextReveal({ text, className = "" }: TextRevealProps) {
       initial="hidden"
       whileInView="visible"
       animate={forceReveal ? "visible" : undefined}
-      viewport={{ once: false, margin: "-100px" }}
+      viewport={{ once: true, margin: "-100px" }}
     >
       {words.map((word, index) => (
         <motion.span variants={child} key={index} className="mr-[0.25em]">

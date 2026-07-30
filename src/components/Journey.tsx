@@ -84,7 +84,7 @@ function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTE
           <motion.h3
             initial={{ clipPath: "inset(100% 0 0 0)" }}
             whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-            viewport={{ once: false, amount: 0.6 }}
+            viewport={{ once: true, amount: 0.6 }}
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
             className="fs-h1 mt-4 font-semibold tracking-tight text-white max-w-full"
           >

@@ -83,7 +83,7 @@ export default function Process() {
       <div className="relative z-10 mx-auto max-w-6xl px-6">
         <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-14 max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Como eu trabalho</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-5xl">Uma jornada que evolui a cada etapa.</h2>
+          <h2 className="fs-h2 mt-4 font-semibold tracking-tight text-[var(--foreground)]">Uma jornada que evolui a cada etapa.</h2>
           <p className="mt-4 text-sm text-neutral-500 hidden md:block">Arraste a bolinha pela linha do tempo pra abrir cada etapa.</p>
         </motion.div>
         <div className="relative" ref={trackRef}>

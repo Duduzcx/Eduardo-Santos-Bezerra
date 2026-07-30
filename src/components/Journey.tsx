@@ -86,7 +86,7 @@ function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTE
             whileInView={{ clipPath: "inset(0% 0 0 0)" }}
             viewport={{ once: false, amount: 0.6 }}
             transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-            className="mt-4 text-4xl font-semibold tracking-tight text-white md:text-6xl"
+            className="fs-h1 mt-4 font-semibold tracking-tight text-white max-w-full"
           >
             {chapter.title}
           </motion.h3>
@@ -139,8 +139,8 @@ export default function Journey() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Minha história</p>
         <div className="relative mt-4 max-w-3xl">
-          <h2 className="text-3xl font-semibold tracking-tight text-white/10 md:text-5xl">Uma trajetória em três capítulos.</h2>
-          <motion.h2 style={{ clipPath: headingClip }} className="absolute inset-0 text-3xl font-semibold tracking-tight text-white md:text-5xl">
+          <h2 className="fs-h2 font-semibold tracking-tight text-white/10">Uma trajetória em três capítulos.</h2>
+          <motion.h2 style={{ clipPath: headingClip }} className="fs-h2 absolute inset-0 font-semibold tracking-tight text-white">
             Uma trajetória em três capítulos.
           </motion.h2>
         </div>

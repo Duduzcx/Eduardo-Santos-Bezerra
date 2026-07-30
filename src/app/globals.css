@@ -22,6 +22,14 @@
 
   --font-mono: 'Fira Code', monospace;
 
+  /* Escala tipográfica fluida — cresce com o viewport em vez de saltar por breakpoint,
+     então nunca existe uma faixa de largura onde o texto "quase cabe" e corta. */
+  --fs-hero: clamp(2.25rem, 6vw + 1rem, 5.5rem);
+  --fs-h1: clamp(1.9rem, 4.2vw + 1rem, 3.75rem);
+  --fs-h2: clamp(1.5rem, 3vw + 1rem, 3rem);
+  --fs-h3: clamp(1.25rem, 2.2vw + 0.8rem, 2.25rem);
+  --fs-body-lg: clamp(1rem, 0.6vw + 0.85rem, 1.25rem);
+
   color-scheme: dark;
 }
 
@@ -40,6 +48,19 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
+
+/* Rede de segurança global contra corte de texto no mobile — nenhum heading/parágrafo
+   deve conseguir estourar a largura do viewport, independente do componente. */
+h1, h2, h3, h4, p {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+.fs-hero { font-size: var(--fs-hero); }
+.fs-h1 { font-size: var(--fs-h1); }
+.fs-h2 { font-size: var(--fs-h2); }
+.fs-h3 { font-size: var(--fs-h3); }
+.fs-body-lg { font-size: var(--fs-body-lg); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

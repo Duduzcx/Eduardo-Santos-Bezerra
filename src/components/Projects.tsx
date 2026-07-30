@@ -130,7 +130,7 @@ export default function Projects() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mb-16 max-w-2xl md:mb-20">
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-cyan)]">Meus projetos</p>
-          <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)] md:text-5xl">Produtos digitais que resolvem problemas reais.</h2>
+          <h2 className="fs-h2 font-semibold tracking-tight text-[var(--foreground)]">Produtos digitais que resolvem problemas reais.</h2>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] md:text-lg">Role para explorar: cada projeto se aproxima e ganha profundidade conforme entra em cena.</p>
         </motion.div>
         <p className="mb-6 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-secondary)]">Ecossistemas e projetos reais</p>

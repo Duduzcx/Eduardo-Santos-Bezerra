@@ -106,7 +106,7 @@ export default function Skills() {
           transition={{ duration: 0.8, type: "spring", bounce: 0.6 }}
           className="text-center mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-semibold text-[var(--foreground)] mb-6">
+          <h2 className="fs-h2 font-semibold text-[var(--foreground)] mb-6">
             <LetterReveal text="Stack " />
             <LetterReveal text="Principal" className="text-[var(--color-cyan)]" />
           </h2>
@@ -123,7 +123,7 @@ export default function Skills() {
               transition={{ duration: 0.8, delay: index * 0.1, type: "spring", bounce: 0.5 }}
               whileHover={{ scale: 1.1, y: -10, rotateZ: index % 2 === 0 ? 2 : -2 }}
               whileTap={{ scale: 0.96 }}
-              className={`group flex flex-col items-center justify-center p-8 bg-[var(--color-surface)] border border-[var(--border-subtle)] rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
+              className={`group flex flex-col items-center justify-center p-4 sm:p-8 bg-[var(--color-surface)] border border-[var(--border-subtle)] rounded-2xl sm:rounded-3xl transition-all cursor-pointer shadow-lg hover:border-transparent relative overflow-hidden`}
             >
               {/* Overlay com a cor original da tech no fundo quando dá hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${skill.bg}`} />

@@ -83,7 +83,7 @@ export default function Contact() {
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
         <motion.div initial={{ opacity: 0, x: -28 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false, amount: 0.4 }} transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}>
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-cyan)] font-semibold">Vamos conversar</p>
-          <h2 className="mt-5 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.02] text-[var(--foreground)]">Tem um projeto em mente?</h2>
+          <h2 className="fs-h1 mt-5 font-semibold tracking-tight leading-[1.02] text-[var(--foreground)] max-w-full">Tem um projeto em mente?</h2>
           <p className="mt-6 max-w-md text-base md:text-lg leading-relaxed text-[var(--text-secondary)]">Conte um pouco sobre o desafio. A conversa continua diretamente no WhatsApp, de forma rápida e sem compromisso.</p>
           <div className="mt-9 flex items-center gap-3 text-sm text-[var(--text-secondary)]"><MessageCircle className="w-5 h-5 text-[#25D366]" /> Atendimento pelo WhatsApp</div>
         </motion.div>

@@ -70,13 +70,13 @@ export default function Hero() {
         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
           <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[2] w-full flex flex-col items-center lg:items-start">
             <motion.div variants={container} initial="hidden" animate="show" className="w-full flex flex-col items-center lg:items-start">
-              <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
-                <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse" />
-                <span className="text-sm text-neutral-200 font-mono font-bold tracking-widest uppercase">Disponível para novos desafios</span>
+              <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 max-w-full">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-cyan)] animate-pulse shrink-0" />
+                <span className="text-xs sm:text-sm text-neutral-200 font-mono font-bold tracking-wider sm:tracking-widest uppercase truncate">Disponível para novos desafios</span>
               </motion.div>
 
               {/* Nome revela letra por letra ao carregar (LetterReveal), encolhe/borra em bloco suave ao rolar */}
-              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="animate-name-glow origin-left text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[0.95] font-[family-name:var(--font-display)]">
+              <motion.h1 variants={item} style={{ scale: nameScale, filter: nameFilter }} className="fs-hero animate-name-glow origin-center lg:origin-left font-bold tracking-tight text-white mb-6 leading-[1.05] sm:leading-[0.95] font-[family-name:var(--font-display)] max-w-full">
                 <span className="block"><LetterReveal text="Eduardo" /></span>
                 <span className="block">
                   <LetterReveal text="Santos Bezerra" />
@@ -84,21 +84,21 @@ export default function Hero() {
                 </span>
               </motion.h1>
 
-              <motion.h2 variants={item} className="text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-[0.16em] animate-gradient-x">
+              <motion.h2 variants={item} className="fs-h3 text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-wider sm:tracking-[0.16em] animate-gradient-x max-w-full">
                 <LetterReveal text="DESENVOLVEDOR FULL STACK" />
               </motion.h2>
 
               <div className="max-w-2xl mb-12">
                 <TextReveal
                   text="Construindo ecossistemas digitais de ponta a ponta com alta performance, design imersivo e arquiteturas escaláveis para impactar o seu negócio."
-                  className="text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center lg:justify-start"
+                  className="text-sm sm:text-lg md:text-xl text-neutral-300 leading-relaxed font-light justify-center lg:justify-start"
                 />
               </div>
             </motion.div>
           </motion.div>
 
           {/* Botões: profundidade própria, acima do Canvas (z-6 > z-4) — não fica preso no stacking context do bloco de texto acima */}
-          <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[6] flex flex-col sm:flex-row items-center gap-4 mt-2">
+          <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[6] flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-2 w-full sm:w-auto">
             <MagneticButton
               href="#projects"
               className="group relative px-6 py-3.5 rounded-full bg-white text-[#0a0814] font-semibold hover:bg-neutral-100 transition-colors flex items-center gap-2.5"

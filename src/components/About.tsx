@@ -93,7 +93,7 @@ export default function About() {
               {/* Texto de fundo gigante, revela progressivamente conforme o scroll passa pela seção */}
               <motion.div
                 style={{ clipPath: bgTextClip }}
-                className="absolute -top-6 md:-top-14 left-0 text-[16vw] md:text-[7vw] font-black text-white/5 leading-none whitespace-nowrap pointer-events-none select-none -z-10"
+                className="absolute -top-4 md:-top-14 left-0 text-[12vw] md:text-[7vw] font-black text-white/5 leading-none whitespace-nowrap pointer-events-none select-none -z-10 overflow-hidden"
                 aria-hidden="true"
               >
                 SOBRE MIM
@@ -105,13 +105,13 @@ export default function About() {
                 viewport={{ once: false, margin: "-100px" }}
                 transition={{ duration: 1, type: "spring" }}
               >
-                <h2 className="text-3xl md:text-5xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight">
+                <h2 className="fs-h1 font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-500 mb-6 tracking-tight max-w-full">
                   <LetterReveal text="Sobre mim" />
                 </h2>
               </motion.div>
             </div>
 
-            <div className="space-y-6 text-[var(--text-secondary)] text-xl leading-relaxed">
+            <div className="space-y-6 text-[var(--text-secondary)] text-base sm:text-xl leading-relaxed">
               <TextReveal text="Sou desenvolvedor e curso Engenharia de Software na Uniasselvi e Ciência de Dados na Fatec, o que me deu uma base técnica sólida e multidisciplinar para arquitetar sistemas web responsivos e experiências digitais de alto impacto. Minha atuação vai muito além da interface visual." />
               <TextReveal text="Gosto de unir performance de código, inteligência na estruturação de dados e um design imersivo. Estou sempre evoluindo tecnicamente, e meu foco é dominar a engenharia de ponta a ponta pra construir ecossistemas robustos, escaláveis e inteligentes como Desenvolvedor Full-Stack." />
               <motion.p

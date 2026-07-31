@@ -24,7 +24,7 @@
 
   /* Escala tipográfica fluida — cresce com o viewport em vez de saltar por breakpoint,
      então nunca existe uma faixa de largura onde o texto "quase cabe" e corta. */
-  --fs-hero: clamp(2.25rem, 6vw + 1rem, 5.5rem);
+  --fs-hero: clamp(2.25rem, 3.4vw + 1rem, 4.5rem);
   --fs-h1: clamp(1.9rem, 4.2vw + 1rem, 3.75rem);
   --fs-h2: clamp(1.5rem, 3vw + 1rem, 3rem);
   --fs-h3: clamp(1.25rem, 2.2vw + 0.8rem, 2.25rem);

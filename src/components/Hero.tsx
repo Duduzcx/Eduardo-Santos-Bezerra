@@ -65,9 +65,9 @@ export default function Hero() {
 
       <FloatingTechCards />
 
-      <div className="w-full max-w-7xl mx-auto px-6 relative flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-20 lg:pt-0">
-        {/* Coluna de texto: sem transform/z próprio aqui — os dois blocos abaixo controlam sua própria profundidade */}
-        <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+      <div className="w-full max-w-7xl mx-auto px-6 relative flex flex-col lg:flex-row items-center gap-12 lg:gap-6 pt-28">
+        {/* Coluna de texto: mais larga que a metade (flex-[1.3]) — nome de duas palavras precisa de fôlego pra não quebrar linha à toa */}
+        <div className="flex-1 lg:flex-[1.3] flex flex-col items-center lg:items-start text-center lg:text-left">
           <motion.div style={{ opacity: textExitOpacity, y: textExitY }} className="relative z-[2] w-full flex flex-col items-center lg:items-start">
             <motion.div variants={container} initial="hidden" animate="show" className="w-full flex flex-col items-center lg:items-start">
               <motion.div variants={item} animate={{ y: [0, -4, 0] }} transition={{ y: { duration: 2.8, repeat: Infinity, ease: "easeInOut" } }} className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 max-w-full">

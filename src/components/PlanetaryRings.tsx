@@ -118,30 +118,16 @@ export default function PlanetaryRings({ scrollProgress }: PlanetaryRingsProps) 
         />
       </points>
 
-      {/* Satélite / Lua Orbitante 1 (Gelo Prateado) */}
+      {/* Satélite / Lua Orbitante 1 (Gelo Prateado) — sem pointLight: o glow inflava e virava "estrela gigante", e cada luz dinâmica custa render extra */}
       <mesh ref={moonRef1}>
-        <sphereGeometry args={[0.07, 32, 32]} />
-        <meshStandardMaterial
-          color="#f8fafc"
-          emissive="#e2e8f0"
-          emissiveIntensity={0.6}
-          roughness={0.3}
-          metalness={0.8}
-        />
-        <pointLight color="#f8fafc" intensity={0.9} distance={2.0} />
+        <sphereGeometry args={[0.045, 24, 24]} />
+        <meshStandardMaterial color="#f8fafc" emissive="#e2e8f0" emissiveIntensity={0.25} roughness={0.4} metalness={0.6} />
       </mesh>
 
       {/* Satélite / Lua Orbitante 2 (Marfim sutil) */}
       <mesh ref={moonRef2}>
-        <sphereGeometry args={[0.05, 24, 24]} />
-        <meshStandardMaterial
-          color="#fef3c7"
-          emissive="#fef3c7"
-          emissiveIntensity={0.5}
-          roughness={0.4}
-          metalness={0.7}
-        />
-        <pointLight color="#fef3c7" intensity={0.6} distance={1.8} />
+        <sphereGeometry args={[0.032, 20, 20]} />
+        <meshStandardMaterial color="#fef3c7" emissive="#fef3c7" emissiveIntensity={0.2} roughness={0.4} metalness={0.6} />
       </mesh>
     </group>
   );

@@ -53,7 +53,7 @@ function Moon() {
     if (!groupRef.current) return;
     
     // Escala progressiva (materialização) ao carregar — mais rápida, não fica "entrando devagar"
-    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, 0.16, 0.15);
+    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, 0.16, 0.3);
     groupRef.current.scale.setScalar(scaleRef.current);
 
     // Rotação lenta contínua (sempre "viva") + segue o mouse por cima, com resposta mais rápida (menos "peso")

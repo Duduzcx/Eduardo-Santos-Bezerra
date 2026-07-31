@@ -64,10 +64,11 @@ export default function CosmicFolder() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
 
-  // Acoplado à rolagem do contêiner da pasta
+  // Acoplado à rolagem do contêiner da pasta — janela maior (end 5%) pra pasta não sumir
+  // antes dos arquivos terminarem de abrir, com folga de scroll depois do fan-out completo
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 80%", "end 30%"],
+    offset: ["start 80%", "end 5%"],
   });
 
   // Tampa da pasta abre (rotaciona no eixo X em 3D) e desaparece de forma limpa sem mostrar verso espelhado
@@ -75,22 +76,22 @@ export default function CosmicFolder() {
   const lidOpacity = useTransform(scrollYProgress, [0.2, 0.35], [1, 0]);
 
   // Fanning out dos arquivos (Desktop vs Mobile)
-  const fX1 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -160 : -45]);
-  const fY1 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -150 : -140]);
+  const fX1 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -160 : -15]);
+  const fY1 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -150 : -130]);
   const fR1 = useTransform(scrollYProgress, [0.25, 0.85], [0, -12]);
   const fO1 = useTransform(scrollYProgress, [0.2, 0.4], [0, 1]);
 
-  const fX2 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 160 : 45]);
-  const fY2 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -160 : -140]);
+  const fX2 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 160 : 15]);
+  const fY2 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -160 : -130]);
   const fR2 = useTransform(scrollYProgress, [0.25, 0.85], [0, 12]);
   const fO2 = useTransform(scrollYProgress, [0.2, 0.4], [0, 1]);
 
-  const fX3 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -180 : -55]);
+  const fX3 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? -180 : -18]);
   const fY3 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 80 : 35]);
   const fR3 = useTransform(scrollYProgress, [0.25, 0.85], [0, -6]);
   const fO3 = useTransform(scrollYProgress, [0.22, 0.45], [0, 1]);
 
-  const fX4 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 180 : 55]);
+  const fX4 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 180 : 18]);
   const fY4 = useTransform(scrollYProgress, [0.25, 0.85], [0, isDesktop ? 70 : 35]);
   const fR4 = useTransform(scrollYProgress, [0.25, 0.85], [0, 6]);
   const fO4 = useTransform(scrollYProgress, [0.22, 0.45], [0, 1]);
@@ -98,7 +99,7 @@ export default function CosmicFolder() {
   return (
     <div 
       ref={containerRef} 
-      className="relative w-full h-[580px] md:h-[620px] flex items-center justify-center z-10"
+      className="relative w-full h-[680px] md:h-[760px] flex items-center justify-center z-10"
       style={{ perspective: "1500px" }}
     >
       <div 

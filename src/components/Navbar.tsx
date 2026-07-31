@@ -89,27 +89,38 @@ export default function Navbar() {
           </a>
         </div>
 
-        {/* Botão hamburguer — só mobile */}
-        <button
+        {/* Botão hamburguer — só mobile, área de toque 48x48 */}
+        <motion.button
           type="button"
           onClick={() => setMenuOpen((v) => !v)}
+          whileTap={{ scale: 0.9 }}
           aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
           aria-expanded={menuOpen}
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-surface)]/80 backdrop-blur-md border border-[var(--color-border)] text-[var(--foreground)]"
+          className="md:hidden relative flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-surface)]/80 backdrop-blur-md border border-[var(--color-border)] text-[var(--foreground)] overflow-hidden"
         >
-          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+          <AnimatePresence mode="wait" initial={false}>
+            {menuOpen ? (
+              <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }} className="absolute">
+                <X className="w-5 h-5" />
+              </motion.span>
+            ) : (
+              <motion.span key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }} className="absolute">
+                <Menu className="w-5 h-5" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
 
-      {/* Painel mobile em tela cheia */}
+      {/* Painel mobile em tela cheia — abre/fecha com slide+fade suave */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-[var(--background)]/98 backdrop-blur-lg pointer-events-auto"
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="md:hidden fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-[var(--background)]/98 backdrop-blur-lg pointer-events-auto"
           >
             {NAV_LINKS.map((link, i) => (
               <motion.div
@@ -121,7 +132,7 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="text-3xl font-semibold text-[var(--foreground)] tracking-tight"
+                  className={`relative flex min-h-[48px] items-center justify-center px-6 text-3xl font-semibold tracking-tight transition-colors active:scale-95 ${activeHref === link.href ? "text-[var(--color-cyan)]" : "text-[var(--foreground)]"}`}
                 >
                   {link.label}
                 </Link>
@@ -131,12 +142,12 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 * NAV_LINKS.length, duration: 0.35 }}
-              className="flex items-center gap-4 mt-4"
+              className="flex items-center gap-4 mt-6"
             >
-              <a href="https://github.com/Duduzcx" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-300">
+              <a href="https://github.com/Duduzcx" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-300 active:scale-90 transition-transform">
                 <GithubIcon className="w-5 h-5" />
               </a>
-              <a href="https://www.linkedin.com/in/eduardosantosbezerra/" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-300">
+              <a href="https://www.linkedin.com/in/eduardosantosbezerra/" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-neutral-300 active:scale-90 transition-transform">
                 <LinkedinIcon className="w-5 h-5" />
               </a>
             </motion.div>

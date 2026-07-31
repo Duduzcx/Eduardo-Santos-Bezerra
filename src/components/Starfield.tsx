@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 
 interface Layer {
   shadow: string;
@@ -24,14 +24,30 @@ function buildLayer(count: number, spread: number, size: number, seed: number): 
   return value;
 }
 
+function subscribe(callback: () => void) {
+  const mq = window.matchMedia("(max-width: 767px)");
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+function getSnapshot() {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+function getServerSnapshot() {
+  return false;
+}
+
 export default function Starfield({ density = 1 }: { density?: number }) {
+  // Mobile ganha metade das estrelas — menos box-shadow pra pintar, mesma sensação visual
+  const isMobile = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const effectiveDensity = isMobile ? density * 0.5 : density;
+
   const layers = useMemo<Layer[]>(
     () => [
-      { shadow: buildLayer(Math.round(190 * density), 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
-      { shadow: buildLayer(Math.round(95 * density), 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
-      { shadow: buildLayer(Math.round(45 * density), 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
+      { shadow: buildLayer(Math.round(190 * effectiveDensity), 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
+      { shadow: buildLayer(Math.round(95 * effectiveDensity), 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
+      { shadow: buildLayer(Math.round(45 * effectiveDensity), 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
     ],
-    [density]
+    [effectiveDensity]
   );
 
   return (

@@ -29,7 +29,7 @@ export default function BackToTop() {
           whileHover={{ scale: 1.08, y: -2 }}
           whileTap={{ scale: 0.92 }}
           transition={{ type: "spring", stiffness: 350, damping: 24 }}
-          className="fixed bottom-6 right-6 z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/90 text-[var(--foreground)] backdrop-blur-md shadow-lg hover:border-[var(--color-cyan)]/50 hover:text-[var(--color-cyan)] transition-colors"
+          className="fixed bottom-5 right-5 z-[70] flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)]/90 text-[var(--foreground)] backdrop-blur-md shadow-lg hover:border-[var(--color-cyan)]/50 hover:text-[var(--color-cyan)] transition-colors"
         >
           <ArrowUp className="h-5 w-5" />
         </motion.button>

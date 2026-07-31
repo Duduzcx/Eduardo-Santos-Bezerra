@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import CinematicBackground from "./CinematicBackground";
 import GlassOrbs from "./GlassOrbs";
 import Starfield from "./Starfield";
-import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const CHAPTERS = [
   {
@@ -33,7 +32,7 @@ const CHAPTERS = [
   },
 ];
 
-function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTERS)[number]; index: number; total: number; isDesktop: boolean }) {
+function Chapter({ chapter, index, total }: { chapter: (typeof CHAPTERS)[number]; index: number; total: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "start 25%"] });
   const { scrollYProgress: exitProgress } = useScroll({ target: ref, offset: ["center start", "end start"] });
@@ -130,7 +129,6 @@ function Chapter({ chapter, index, total, isDesktop }: { chapter: (typeof CHAPTE
 
 export default function Journey() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isDesktop = useIsDesktop();
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const headingClip = useTransform(scrollYProgress, [0, 0.15], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
 
@@ -148,7 +146,7 @@ export default function Journey() {
 
       <div className="mt-16 flex flex-col gap-6 md:gap-10">
         {CHAPTERS.map((chapter, index) => (
-          <Chapter key={chapter.title} chapter={chapter} index={index} total={CHAPTERS.length} isDesktop={isDesktop} />
+          <Chapter key={chapter.title} chapter={chapter} index={index} total={CHAPTERS.length} />
         ))}
       </div>
     </section>

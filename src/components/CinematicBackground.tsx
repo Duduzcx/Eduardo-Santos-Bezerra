@@ -59,11 +59,13 @@ export default function CinematicBackground({ videoSrc, fallbackImage, alt = "",
   return (
     <motion.div ref={wrapperRef} onMouseMove={handleMouseMove} style={{ scale, opacity }} className="absolute inset-0">
       {videoSrc ? (
-        <video ref={videoRef} src={videoSrc} autoPlay muted loop playsInline preload="auto" poster={fallbackImage} className="h-full w-full object-cover" />
+        <video ref={videoRef} src={videoSrc} muted loop playsInline preload="none" poster={fallbackImage} className="h-full w-full object-cover" />
       ) : (
         <img src={fallbackImage} alt={alt} loading="lazy" decoding="async" className="h-full w-full object-cover grayscale" />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-transparent to-[var(--background)]/40 pointer-events-none" />
+      {/* Overlay escuro uniforme (não só nas bordas) — texto precisa de contraste em cima do vídeo inteiro, não só nas pontas */}
+      <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] via-[var(--background)]/25 to-[var(--background)]/55 pointer-events-none" />
       {glow && <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: glowBg }} />}
     </motion.div>
   );

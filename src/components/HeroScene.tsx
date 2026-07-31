@@ -7,7 +7,6 @@ import { type MotionValue } from "framer-motion";
 import * as THREE from "three";
 import StarParticles from "./StarParticles";
 import PlanetaryRings from "./PlanetaryRings";
-import Asteroids from "./Asteroids";
 
 interface StardustProps {
   scrollProgress: MotionValue<number>;
@@ -118,7 +117,6 @@ export default function HeroScene({ scrollProgress }: HeroSceneProps) {
       <StarParticles />
       <Stardust scrollProgress={scrollProgress} />
       <PlanetaryRings scrollProgress={scrollProgress} />
-      <Asteroids scrollProgress={scrollProgress} />
       <Suspense fallback={null}>
         <Moon />
       </Suspense>

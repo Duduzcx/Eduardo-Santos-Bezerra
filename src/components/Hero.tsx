@@ -84,7 +84,7 @@ export default function Hero() {
                 </span>
               </motion.h1>
 
-              <motion.h2 variants={item} className="fs-h3 text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-7 tracking-wider sm:tracking-[0.16em] animate-gradient-x max-w-full">
+              <motion.h2 variants={item} className="fs-h3 text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-cyan)] via-[var(--color-accent)] to-[var(--color-pink)] font-bold mb-6 tracking-wider sm:tracking-[0.16em] animate-gradient-x max-w-full">
                 <LetterReveal text="DESENVOLVEDOR FULL STACK" />
               </motion.h2>
 

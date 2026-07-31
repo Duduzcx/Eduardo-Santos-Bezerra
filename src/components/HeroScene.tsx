@@ -23,7 +23,7 @@ function Stardust({ scrollProgress }: StardustProps) {
 
   return (
     <group ref={groupRef}>
-      <Sparkles count={80} scale={[10, 6, 8]} size={2} speed={0.15} opacity={0.35} color="#a855f7" noise={1} />
+      <Sparkles count={80} scale={[10, 6, 8]} size={1.1} speed={0.15} opacity={0.3} color="#a855f7" noise={1} />
     </group>
   );
 }
@@ -52,18 +52,18 @@ function Moon() {
   useFrame((state, delta) => {
     if (!groupRef.current) return;
     
-    // Escala progressiva suave (materialização) ao carregar
-    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, 0.16, 0.06);
+    // Escala progressiva (materialização) ao carregar — mais rápida, não fica "entrando devagar"
+    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, 0.16, 0.15);
     groupRef.current.scale.setScalar(scaleRef.current);
 
-    // Rotação lenta contínua (sempre "viva") + segue o mouse por cima, com inércia
+    // Rotação lenta contínua (sempre "viva") + segue o mouse por cima, com resposta mais rápida (menos "peso")
     groupRef.current.rotation.y += delta * 0.05;
     const targetRotX = state.pointer.y * 0.25;
     const targetPosX = 1.8 + state.pointer.x * 0.4;
     const targetPosY = state.pointer.y * 0.25;
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.04);
-    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetPosX, 0.03);
-    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetPosY, 0.03);
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, 0.09);
+    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetPosX, 0.08);
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetPosY, 0.08);
   });
 
   return (

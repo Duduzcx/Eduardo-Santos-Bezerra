@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CinematicBackground from "./CinematicBackground";
-import GlassOrbs from "./GlassOrbs";
 import Starfield from "./Starfield";
 
 const CHAPTERS = [
@@ -72,7 +71,6 @@ function Chapter({ chapter, index, total }: { chapter: (typeof CHAPTERS)[number]
           <Starfield density={0.5} />
         </div>
       )}
-      {index === 1 && <GlassOrbs />}
 
       <motion.div
         style={{ y: textY, opacity: useTransform([textOpacity, exitTextOpacity], ([a, b]: number[]) => Math.min(a, b)) }}

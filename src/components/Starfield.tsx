@@ -45,7 +45,7 @@ export default function Starfield({ density = 1 }: { density?: number }) {
     () => [
       { shadow: buildLayer(Math.round(190 * effectiveDensity), 2000, 1, 11), size: 1, twinkleDuration: 6, driftDuration: 70 },
       { shadow: buildLayer(Math.round(95 * effectiveDensity), 2000, 2, 47), size: 2, twinkleDuration: 4.5, driftDuration: 95 },
-      { shadow: buildLayer(Math.round(45 * effectiveDensity), 2000, 3, 91), size: 3, twinkleDuration: 8, driftDuration: 55 },
+      { shadow: buildLayer(Math.round(45 * effectiveDensity), 2000, 2, 91), size: 2, twinkleDuration: 8, driftDuration: 55 },
     ],
     [effectiveDensity]
   );

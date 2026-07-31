@@ -8,7 +8,6 @@ import Navbar from "@/components/Navbar";
 import ColorfulBackground from "@/components/ColorfulBackground";
 import ScrollProgress from "@/components/ScrollProgress";
 import NavigationTransition from "@/components/NavigationTransition";
-import CustomCursor from "@/components/CustomCursor";
 import IntroLoader from "@/components/IntroLoader";
 import BackToTop from "@/components/BackToTop";
 
@@ -36,7 +35,6 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable} font-sans bg-transparent text-[var(--foreground)] antialiased overflow-x-hidden selection:bg-white selection:text-black`}
       >
         <IntroLoader />
-        <CustomCursor />
         <StarTrail />
         <ScrollProgress />
         <NavigationTransition />
